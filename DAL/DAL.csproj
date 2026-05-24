@@ -52,6 +52,7 @@
     <Compile Include="TraduccionDAL.cs" />
     <Compile Include="UsuarioDAL.cs" />
     <Compile Include="VersionUsuarioDAL.cs" />
+    <Compile Include="DigitoVerificadorDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE.csproj">

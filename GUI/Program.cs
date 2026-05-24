@@ -13,7 +13,6 @@ namespace GUI
             Application.SetCompatibleTextRenderingDefault(false);
 
             ConexionServicio conexionServicio = new ConexionServicio();
-
             if (!conexionServicio.VerificarConexion())
             {
                 MessageBox.Show(
@@ -24,7 +23,23 @@ namespace GUI
                 return;
             }
 
-            Application.Run(new LoginForm());
+            DigitoVerificadorServicio dvServicio = new DigitoVerificadorServicio();
+            System.Collections.Generic.List<string> errores;
+            if (!dvServicio.VerificarIntegridad(out errores))
+            {
+                MessageBox.Show("Se ha detectado un fallo de integridad en el sistema. Se abrira el panel de restauracion.", "Fallo de Integridad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                RestauracionForm restForm = new RestauracionForm(errores);
+                Application.Run(restForm);
+
+                if (restForm.RestauradoExitosamente)
+                {
+                    Application.Run(new LoginForm());
+                }
+            }
+            else
+            {
+                Application.Run(new LoginForm());
+            }
         }
     }
 }

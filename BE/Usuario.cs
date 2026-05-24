@@ -15,5 +15,6 @@ namespace BE
         public int CantidadBloqueos { get; set; }
         public DateTime? FechaBloqueo { get; set; }
         public List<ComponentePermiso> Permisos { get; set; } = new List<ComponentePermiso>();
+        public string DVH { get; set; }
     }
 }

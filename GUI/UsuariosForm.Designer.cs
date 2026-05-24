@@ -38,6 +38,7 @@ namespace GUI
             this.tblBotones = new System.Windows.Forms.TableLayoutPanel();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
+            this.btnCorromper = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitPrincipal)).BeginInit();
             this.splitPrincipal.Panel1.SuspendLayout();
             this.splitPrincipal.Panel2.SuspendLayout();
@@ -235,10 +236,12 @@ namespace GUI
             this.tblGestion.Controls.Add(this.lblEstado, 0, 7);
             this.tblGestion.Controls.Add(this.cboEstado, 0, 8);
             this.tblGestion.Controls.Add(this.tblBotones, 0, 9);
+            this.tblGestion.Controls.Add(this.btnCorromper, 0, 10);
             this.tblGestion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblGestion.Location = new System.Drawing.Point(9, 31);
             this.tblGestion.Name = "tblGestion";
-            this.tblGestion.RowCount = 11;
+            this.tblGestion.RowCount = 12;
+            this.tblGestion.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblGestion.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblGestion.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblGestion.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -424,6 +427,25 @@ namespace GUI
             this.btnLimpiar.UseVisualStyleBackColor = false;
             this.btnLimpiar.Click += new System.EventHandler(this.BtnLimpiar_Click);
             // 
+            // btnCorromper
+            // 
+            this.btnCorromper.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(83)))), ((int)(((byte)(80)))));
+            this.btnCorromper.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCorromper.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCorromper.FlatAppearance.BorderSize = 0;
+            this.btnCorromper.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(57)))), ((int)(((byte)(53)))));
+            this.btnCorromper.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCorromper.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnCorromper.ForeColor = System.Drawing.Color.White;
+            this.btnCorromper.Location = new System.Drawing.Point(3, 304);
+            this.btnCorromper.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.btnCorromper.Name = "btnCorromper";
+            this.btnCorromper.Size = new System.Drawing.Size(300, 29);
+            this.btnCorromper.TabIndex = 6;
+            this.btnCorromper.Text = "Simular Fallo DVV";
+            this.btnCorromper.UseVisualStyleBackColor = false;
+            this.btnCorromper.Click += new System.EventHandler(this.BtnCorromper_Click);
+            // 
             // UsuariosForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -475,5 +497,6 @@ namespace GUI
         private System.Windows.Forms.TableLayoutPanel tblBotones;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.Button btnCorromper;
     }
 }

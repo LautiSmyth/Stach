@@ -42,5 +42,15 @@ namespace Seguridad
                 return true;
             }
         }
+
+        public static string HashSHA256(string input)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
+                byte[] hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
+        }
     }
 }

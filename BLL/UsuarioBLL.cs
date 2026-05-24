@@ -62,6 +62,7 @@ namespace BLL
                     usuario.IntentosFallidos = 0;
                     usuario.FechaBloqueo = null;
                     _dal.Actualizar(usuario);
+                    ActualizarIntegridad();
                 }
                 else
                 {
@@ -101,6 +102,7 @@ namespace BLL
                 throw new ArgumentException("El nombre de usuario ya existe.");
 
             _dal.Insertar(usuario);
+            ActualizarIntegridad();
         }
 
         public void Modificar(Usuario usuario, string nuevoUsername, string nuevoPasswordHash, EstadoUsuario nuevoEstado)
@@ -136,6 +138,7 @@ namespace BLL
             }
 
             _dal.Actualizar(usuario);
+            ActualizarIntegridad();
         }
 
         public void RestaurarVersion(Usuario usuario, string username, string passwordHash, EstadoUsuario estado)
@@ -146,6 +149,7 @@ namespace BLL
             usuario.PasswordHash = passwordHash;
             usuario.Estado = estado;
             _dal.Actualizar(usuario);
+            ActualizarIntegridad();
         }
 
         public void CambiarEstado(Usuario usuario, EstadoUsuario nuevoEstado)
@@ -163,6 +167,7 @@ namespace BLL
                 usuario.CantidadBloqueos++;
             }
             _dal.Actualizar(usuario);
+            ActualizarIntegridad();
         }
 
         public void RegistrarIntentoFallido(Usuario usuario)
@@ -175,6 +180,7 @@ namespace BLL
                 usuario.CantidadBloqueos++;
             }
             _dal.Actualizar(usuario);
+            ActualizarIntegridad();
         }
 
         public void RegistrarLoginExitoso(Usuario usuario)
@@ -182,6 +188,12 @@ namespace BLL
             usuario.IntentosFallidos = 0;
             usuario.UltimoLogin = DateTime.Now;
             _dal.Actualizar(usuario);
+            ActualizarIntegridad();
+        }
+
+        private void ActualizarIntegridad()
+        {
+            new DigitoVerificadorBLL().InicializarDVs();
         }
     }
 }

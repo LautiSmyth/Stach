@@ -38,6 +38,7 @@ namespace DAL
             AgregarMock("UsuariosForm.btnGuardar", "Crear usuario", "Create user");
             AgregarMock("UsuariosForm.btnModificar", "Guardar cambios", "Save changes");
             AgregarMock("UsuariosForm.btnLimpiar", "Limpiar", "Clear");
+            AgregarMock("UsuariosForm.btnCorromper", "Simular Fallo DVV", "Simulate DVV Failure");
 
             AgregarMock("BitacoraForm.lblBuscar", "Buscar:", "Search:");
             AgregarMock("BitacoraForm.lblCriticidad", "Criticidad:", "Severity:");

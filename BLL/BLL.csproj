@@ -50,6 +50,7 @@
     <Compile Include="TraduccionBLL.cs" />
     <Compile Include="UsuarioBLL.cs" />
     <Compile Include="VersionUsuarioBLL.cs" />
+    <Compile Include="DigitoVerificadorBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE.csproj">
@@ -59,6 +60,10 @@
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{730b3fc4-ffd4-4865-a871-73f82208e93b}</Project>
       <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Seguridad\Seguridad.csproj">
+      <Project>{a7847e90-c42c-44b4-852f-2a941f107631}</Project>
+      <Name>Seguridad</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
