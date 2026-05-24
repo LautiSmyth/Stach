@@ -99,6 +99,7 @@ namespace GUI
 
         private void CargarVersiones()
         {
+            LimpiarCampos();
             if (cboUsuarios.SelectedItem is Usuario u)
             {
                 _versiones = _versionServicio.ObtenerPorUsuario(u.IdUsuario);
@@ -109,7 +110,6 @@ namespace GUI
             {
                 dgvVersiones.DataSource = null;
             }
-            LimpiarCampos();
         }
 
         private void DgvVersiones_SelectionChanged(object sender, EventArgs e)
