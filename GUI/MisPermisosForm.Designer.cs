@@ -139,9 +139,11 @@ namespace GUI
             this.btnCerrar.UseVisualStyleBackColor = false;
             this.btnCerrar.Click += new System.EventHandler(this.BtnCerrar_Click);
 
+            this.AcceptButton = this.btnCerrar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
+            this.CancelButton = this.btnCerrar;
             this.ClientSize = new System.Drawing.Size(600, 450);
             this.Controls.Add(this.tblRaiz);
             this.Controls.Add(this.pnlBottom);

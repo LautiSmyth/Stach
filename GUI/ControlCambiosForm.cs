@@ -29,6 +29,7 @@ namespace GUI
             dgvVersiones.SelectionChanged += DgvVersiones_SelectionChanged;
             btnRollback.Click += BtnRollback_Click;
             CargarVersiones();
+            DesactivarTabStopReadOnly(this);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -177,6 +178,21 @@ namespace GUI
                 dgvVersiones.Columns[1].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.colFecha") ?? "Fecha y Hora";
                 dgvVersiones.Columns[2].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.colActor") ?? "Modificado Por";
                 dgvVersiones.Columns[3].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.colDetalle") ?? "Detalle del Cambio";
+            }
+        }
+
+        private void DesactivarTabStopReadOnly(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c is TextBox txt && txt.ReadOnly)
+                {
+                    txt.TabStop = false;
+                }
+                if (c.HasChildren)
+                {
+                    DesactivarTabStopReadOnly(c);
+                }
             }
         }
     }

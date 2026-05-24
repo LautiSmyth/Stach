@@ -80,7 +80,7 @@ namespace GUI
             this.chkDefault.Location = new System.Drawing.Point(18, 385);
             this.chkDefault.Name = "chkDefault";
             this.chkDefault.Size = new System.Drawing.Size(95, 21);
-            this.chkDefault.TabIndex = 8;
+            this.chkDefault.TabIndex = 4;
             this.chkDefault.Text = "Por defecto";
             this.chkDefault.UseVisualStyleBackColor = true;
             // 
@@ -93,7 +93,7 @@ namespace GUI
             this.btnEliminarIdioma.Location = new System.Drawing.Point(18, 235);
             this.btnEliminarIdioma.Name = "btnEliminarIdioma";
             this.btnEliminarIdioma.Size = new System.Drawing.Size(278, 30);
-            this.btnEliminarIdioma.TabIndex = 7;
+            this.btnEliminarIdioma.TabIndex = 1;
             this.btnEliminarIdioma.Text = "Eliminar seleccionado";
             this.btnEliminarIdioma.UseVisualStyleBackColor = false;
             // 
@@ -106,7 +106,7 @@ namespace GUI
             this.btnAgregarIdioma.Location = new System.Drawing.Point(18, 415);
             this.btnAgregarIdioma.Name = "btnAgregarIdioma";
             this.btnAgregarIdioma.Size = new System.Drawing.Size(278, 32);
-            this.btnAgregarIdioma.TabIndex = 6;
+            this.btnAgregarIdioma.TabIndex = 5;
             this.btnAgregarIdioma.Text = "Agregar idioma";
             this.btnAgregarIdioma.UseVisualStyleBackColor = false;
             // 
@@ -116,7 +116,7 @@ namespace GUI
             this.txtCodigo.Location = new System.Drawing.Point(18, 350);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(278, 24);
-            this.txtCodigo.TabIndex = 5;
+            this.txtCodigo.TabIndex = 3;
             // 
             // lblCodigo
             // 
@@ -135,7 +135,7 @@ namespace GUI
             this.txtNombre.Location = new System.Drawing.Point(18, 295);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(278, 24);
-            this.txtNombre.TabIndex = 3;
+            this.txtNombre.TabIndex = 2;
             // 
             // lblNombre
             // 
@@ -157,7 +157,7 @@ namespace GUI
             this.lstIdiomas.Location = new System.Drawing.Point(18, 48);
             this.lstIdiomas.Name = "lstIdiomas";
             this.lstIdiomas.Size = new System.Drawing.Size(278, 174);
-            this.lstIdiomas.TabIndex = 1;
+            this.lstIdiomas.TabIndex = 0;
             // 
             // lblIdiomasTitulo
             // 
@@ -194,7 +194,7 @@ namespace GUI
             this.btnGuardarTraducciones.Location = new System.Drawing.Point(18, 445);
             this.btnGuardarTraducciones.Name = "btnGuardarTraducciones";
             this.btnGuardarTraducciones.Size = new System.Drawing.Size(438, 32);
-            this.btnGuardarTraducciones.TabIndex = 4;
+            this.btnGuardarTraducciones.TabIndex = 2;
             this.btnGuardarTraducciones.Text = "Guardar traducciones";
             this.btnGuardarTraducciones.UseVisualStyleBackColor = false;
             // 
@@ -205,7 +205,7 @@ namespace GUI
             this.dgvTraducciones.Location = new System.Drawing.Point(18, 90);
             this.dgvTraducciones.Name = "dgvTraducciones";
             this.dgvTraducciones.Size = new System.Drawing.Size(438, 345);
-            this.dgvTraducciones.TabIndex = 3;
+            this.dgvTraducciones.TabIndex = 1;
             // 
             // cboIdiomaDestino
             // 
@@ -215,7 +215,7 @@ namespace GUI
             this.cboIdiomaDestino.Location = new System.Drawing.Point(150, 48);
             this.cboIdiomaDestino.Name = "cboIdiomaDestino";
             this.cboIdiomaDestino.Size = new System.Drawing.Size(306, 25);
-            this.cboIdiomaDestino.TabIndex = 2;
+            this.cboIdiomaDestino.TabIndex = 0;
             // 
             // lblIdiomaDestino
             // 

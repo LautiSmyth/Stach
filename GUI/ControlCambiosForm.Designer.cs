@@ -126,6 +126,7 @@ namespace GUI
             this.txtDetEstado.ReadOnly = true;
             this.txtDetEstado.Size = new System.Drawing.Size(271, 24);
             this.txtDetEstado.TabIndex = 4;
+            this.txtDetEstado.TabStop = false;
 
             this.lblDetEstado.AutoSize = true;
             this.lblDetEstado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -142,6 +143,7 @@ namespace GUI
             this.txtDetUsername.ReadOnly = true;
             this.txtDetUsername.Size = new System.Drawing.Size(271, 24);
             this.txtDetUsername.TabIndex = 2;
+            this.txtDetUsername.TabStop = false;
 
             this.lblDetUsername.AutoSize = true;
             this.lblDetUsername.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);

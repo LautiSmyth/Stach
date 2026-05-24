@@ -41,6 +41,7 @@ namespace GUI
                 LimpiarFiltros();
                 SuscribirFiltros();
                 ActualizarIdioma();
+                DesactivarTabStopReadOnly(this);
             }
             catch (Exception ex)
             {
@@ -404,6 +405,21 @@ namespace GUI
             lblDetDetalle.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetDetalle");
             lblDetError.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetError");
             lblFiltrarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblFiltrarUsuario") ?? "Usuario:";
+        }
+
+        private void DesactivarTabStopReadOnly(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c is TextBox txt && txt.ReadOnly)
+                {
+                    txt.TabStop = false;
+                }
+                if (c.HasChildren)
+                {
+                    DesactivarTabStopReadOnly(c);
+                }
+            }
         }
     }
 

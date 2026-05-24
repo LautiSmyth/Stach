@@ -93,7 +93,7 @@ namespace GUI
             this.btnEliminarPermiso.Location = new System.Drawing.Point(18, 545);
             this.btnEliminarPermiso.Name = "btnEliminarPermiso";
             this.btnEliminarPermiso.Size = new System.Drawing.Size(354, 28);
-            this.btnEliminarPermiso.TabIndex = 8;
+            this.btnEliminarPermiso.TabIndex = 5;
             this.btnEliminarPermiso.Text = "Eliminar Seleccionado";
             this.btnEliminarPermiso.UseVisualStyleBackColor = false;
 
@@ -104,7 +104,7 @@ namespace GUI
             this.btnCrearFamilia.Location = new System.Drawing.Point(198, 505);
             this.btnCrearFamilia.Name = "btnCrearFamilia";
             this.btnCrearFamilia.Size = new System.Drawing.Size(174, 28);
-            this.btnCrearFamilia.TabIndex = 7;
+            this.btnCrearFamilia.TabIndex = 4;
             this.btnCrearFamilia.Text = "Nueva Familia";
             this.btnCrearFamilia.UseVisualStyleBackColor = false;
 
@@ -115,7 +115,7 @@ namespace GUI
             this.btnCrearPatente.Location = new System.Drawing.Point(18, 505);
             this.btnCrearPatente.Name = "btnCrearPatente";
             this.btnCrearPatente.Size = new System.Drawing.Size(174, 28);
-            this.btnCrearPatente.TabIndex = 6;
+            this.btnCrearPatente.TabIndex = 3;
             this.btnCrearPatente.Text = "Nueva Patente";
             this.btnCrearPatente.UseVisualStyleBackColor = false;
 
@@ -123,7 +123,7 @@ namespace GUI
             this.txtClavePermiso.Location = new System.Drawing.Point(18, 470);
             this.txtClavePermiso.Name = "txtClavePermiso";
             this.txtClavePermiso.Size = new System.Drawing.Size(354, 24);
-            this.txtClavePermiso.TabIndex = 5;
+            this.txtClavePermiso.TabIndex = 2;
 
             this.lblClavePermiso.AutoSize = true;
             this.lblClavePermiso.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -138,7 +138,7 @@ namespace GUI
             this.txtNombrePermiso.Location = new System.Drawing.Point(18, 415);
             this.txtNombrePermiso.Name = "txtNombrePermiso";
             this.txtNombrePermiso.Size = new System.Drawing.Size(354, 24);
-            this.txtNombrePermiso.TabIndex = 3;
+            this.txtNombrePermiso.TabIndex = 1;
 
             this.lblNombrePermiso.AutoSize = true;
             this.lblNombrePermiso.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -153,7 +153,7 @@ namespace GUI
             this.tvEstructura.Location = new System.Drawing.Point(18, 45);
             this.tvEstructura.Name = "tvEstructura";
             this.tvEstructura.Size = new System.Drawing.Size(354, 335);
-            this.tvEstructura.TabIndex = 1;
+            this.tvEstructura.TabIndex = 0;
 
             this.lblCol1Titulo.AutoSize = true;
             this.lblCol1Titulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
@@ -292,7 +292,7 @@ namespace GUI
             this.btnQuitarUsuario.Location = new System.Drawing.Point(198, 385);
             this.btnQuitarUsuario.Name = "btnQuitarUsuario";
             this.btnQuitarUsuario.Size = new System.Drawing.Size(174, 28);
-            this.btnQuitarUsuario.TabIndex = 7;
+            this.btnQuitarUsuario.TabIndex = 3;
             this.btnQuitarUsuario.Text = "<< Quitar de Usuario";
             this.btnQuitarUsuario.UseVisualStyleBackColor = false;
 
@@ -302,7 +302,8 @@ namespace GUI
             this.lstPatentesPlanas.Location = new System.Drawing.Point(18, 445);
             this.lstPatentesPlanas.Name = "lstPatentesPlanas";
             this.lstPatentesPlanas.Size = new System.Drawing.Size(354, 124);
-            this.lstPatentesPlanas.TabIndex = 6;
+            this.lstPatentesPlanas.TabIndex = 4;
+            this.lstPatentesPlanas.TabStop = false;
 
             this.lblPatentesPlanas.AutoSize = true;
             this.lblPatentesPlanas.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -320,7 +321,7 @@ namespace GUI
             this.btnAsignarUsuario.Location = new System.Drawing.Point(18, 385);
             this.btnAsignarUsuario.Name = "btnAsignarUsuario";
             this.btnAsignarUsuario.Size = new System.Drawing.Size(174, 28);
-            this.btnAsignarUsuario.TabIndex = 4;
+            this.btnAsignarUsuario.TabIndex = 2;
             this.btnAsignarUsuario.Text = "Asignar a Usuario >>";
             this.btnAsignarUsuario.UseVisualStyleBackColor = false;
 
@@ -328,7 +329,7 @@ namespace GUI
             this.tvUsuarioPermisos.Location = new System.Drawing.Point(18, 120);
             this.tvUsuarioPermisos.Name = "tvUsuarioPermisos";
             this.tvUsuarioPermisos.Size = new System.Drawing.Size(354, 255);
-            this.tvUsuarioPermisos.TabIndex = 3;
+            this.tvUsuarioPermisos.TabIndex = 1;
 
             this.lblUserPerms.AutoSize = true;
             this.lblUserPerms.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
@@ -345,7 +346,7 @@ namespace GUI
             this.cboUsuarios.Location = new System.Drawing.Point(18, 65);
             this.cboUsuarios.Name = "cboUsuarios";
             this.cboUsuarios.Size = new System.Drawing.Size(354, 25);
-            this.cboUsuarios.TabIndex = 1;
+            this.cboUsuarios.TabIndex = 0;
 
             this.lblCol3Titulo.AutoSize = true;
             this.lblCol3Titulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);

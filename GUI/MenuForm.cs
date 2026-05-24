@@ -174,6 +174,59 @@ namespace GUI
             Application.Exit();
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.U))
+            {
+                if (btnUsuarios.Enabled)
+                {
+                    BtnUsuarios_Click(this, EventArgs.Empty);
+                    return true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.B))
+            {
+                if (btnBitacora.Enabled)
+                {
+                    BtnBitacora_Click(this, EventArgs.Empty);
+                    return true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.K))
+            {
+                if (btnBackup.Enabled)
+                {
+                    BtnBackup_Click(this, EventArgs.Empty);
+                    return true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.P))
+            {
+                if (btnPermisos.Enabled)
+                {
+                    BtnPermisos_Click(this, EventArgs.Empty);
+                    return true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.I))
+            {
+                if (btnIdiomas.Enabled)
+                {
+                    BtnIdiomas_Click(this, EventArgs.Empty);
+                    return true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.H))
+            {
+                if (btnCambios.Enabled)
+                {
+                    BtnCambios_Click(this, EventArgs.Empty);
+                    return true;
+                }
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void CerrarSesion()
         {
             if (MessageBox.Show("¿Esta seguro que desea cerrar la sesion?", "Cerrar sesion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)

@@ -116,7 +116,7 @@ namespace GUI
             this.btnVerDetalles.Location = new System.Drawing.Point(5, 12);
             this.btnVerDetalles.Name = "btnVerDetalles";
             this.btnVerDetalles.Size = new System.Drawing.Size(110, 35);
-            this.btnVerDetalles.TabIndex = 3;
+            this.btnVerDetalles.TabIndex = 0;
             this.btnVerDetalles.Text = "Ver Detalles";
             this.btnVerDetalles.UseVisualStyleBackColor = false;
             this.btnVerDetalles.Click += new System.EventHandler(this.BtnVerDetalles_Click);
@@ -133,7 +133,7 @@ namespace GUI
             this.btnRestaurarBackup.Location = new System.Drawing.Point(125, 12);
             this.btnRestaurarBackup.Name = "btnRestaurarBackup";
             this.btnRestaurarBackup.Size = new System.Drawing.Size(150, 35);
-            this.btnRestaurarBackup.TabIndex = 2;
+            this.btnRestaurarBackup.TabIndex = 1;
             this.btnRestaurarBackup.Text = "Restaurar Backup";
             this.btnRestaurarBackup.UseVisualStyleBackColor = false;
             this.btnRestaurarBackup.Click += new System.EventHandler(this.BtnRestaurarBackup_Click);
@@ -150,7 +150,7 @@ namespace GUI
             this.btnRecalcular.Location = new System.Drawing.Point(285, 12);
             this.btnRecalcular.Name = "btnRecalcular";
             this.btnRecalcular.Size = new System.Drawing.Size(150, 35);
-            this.btnRecalcular.TabIndex = 0;
+            this.btnRecalcular.TabIndex = 2;
             this.btnRecalcular.Text = "Recalcular Digitos";
             this.btnRecalcular.UseVisualStyleBackColor = false;
             this.btnRecalcular.Click += new System.EventHandler(this.BtnRecalcular_Click);
@@ -167,16 +167,18 @@ namespace GUI
             this.btnSalir.Location = new System.Drawing.Point(465, 12);
             this.btnSalir.Name = "btnSalir";
             this.btnSalir.Size = new System.Drawing.Size(120, 35);
-            this.btnSalir.TabIndex = 1;
+            this.btnSalir.TabIndex = 3;
             this.btnSalir.Text = "Cerrar Aplicacion";
             this.btnSalir.UseVisualStyleBackColor = false;
             this.btnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
+            // 
             // 
             // RestauracionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
+            this.CancelButton = this.btnSalir;
             this.ClientSize = new System.Drawing.Size(600, 400);
             this.Controls.Add(this.tblRaiz);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
