@@ -192,7 +192,8 @@ namespace DAL
             }
             else
             {
-                var dt = _acceso.Leer("INSERT INTO Componente (Nombre) OUTPUT INSERTED.IdComponente VALUES (@Nombre)", pSel);
+                var pIns = new SqlParameter[] { new SqlParameter("@Nombre", nombreComponente) };
+                var dt = _acceso.Leer("INSERT INTO Componente (Nombre) OUTPUT INSERTED.IdComponente VALUES (@Nombre)", pIns);
                 idComp = Convert.ToInt32(dt.Rows[0][0]);
             }
             Action<int, string> insTrad = (idIdioma, texto) =>
