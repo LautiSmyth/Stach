@@ -20,6 +20,7 @@ namespace GUI
             this.lblTitulo = new System.Windows.Forms.Label();
             this.lstErrores = new System.Windows.Forms.ListBox();
             this.tblBotones = new System.Windows.Forms.TableLayoutPanel();
+            this.btnVerDetalles = new System.Windows.Forms.Button();
             this.btnRestaurarBackup = new System.Windows.Forms.Button();
             this.btnRecalcular = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
@@ -171,5 +172,6 @@ namespace GUI
         private System.Windows.Forms.Button btnRecalcular;
         private System.Windows.Forms.Button btnSalir;
         private System.Windows.Forms.Button btnRestaurarBackup;
+        private System.Windows.Forms.Button btnVerDetalles;
     }
 }

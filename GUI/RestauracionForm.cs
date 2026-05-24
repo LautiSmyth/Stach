@@ -23,9 +23,26 @@ namespace GUI
         private void RestauracionForm_Load(object sender, EventArgs e)
         {
             lstErrores.Items.Clear();
-            foreach (var err in _errores)
+            lstErrores.Items.Add("Se ha detectado un fallo de integridad en los datos del sistema (Dígitos Verificadores).");
+            lstErrores.Items.Add("El acceso de inicio de sesión ha sido bloqueado preventivamente por seguridad.");
+            lstErrores.Items.Add("");
+            lstErrores.Items.Add("Para ver los registros específicos que fallaron, presione el botón 'Ver Detalles' e ingrese");
+            lstErrores.Items.Add("las credenciales de un Administrador del sistema.");
+        }
+
+        private void BtnVerDetalles_Click(object sender, EventArgs e)
+        {
+            using (ConfirmarAdminForm loginForm = new ConfirmarAdminForm())
             {
-                lstErrores.Items.Add(err);
+                if (loginForm.ShowDialog() == DialogResult.OK && loginForm.Autorizado)
+                {
+                    lstErrores.Items.Clear();
+                    foreach (var err in _errores)
+                    {
+                        lstErrores.Items.Add(err);
+                    }
+                    btnVerDetalles.Enabled = false;
+                }
             }
         }
 
