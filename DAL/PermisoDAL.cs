@@ -75,10 +75,12 @@ namespace DAL
 
         public void Eliminar(int idPermiso)
         {
-            var p = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };
-            _acceso.Escribir("DELETE FROM PermisoRelacion WHERE IdPadre = @IdPermiso OR IdHijo = @IdPermiso", p);
-            _acceso.Escribir("DELETE FROM UsuarioPermiso WHERE IdPermiso = @IdPermiso", p);
-            _acceso.Escribir("DELETE FROM Permiso WHERE IdPermiso = @IdPermiso", p);
+            var p1 = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };
+            _acceso.Escribir("DELETE FROM PermisoRelacion WHERE IdPadre = @IdPermiso OR IdHijo = @IdPermiso", p1);
+            var p2 = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };
+            _acceso.Escribir("DELETE FROM UsuarioPermiso WHERE IdPermiso = @IdPermiso", p2);
+            var p3 = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };
+            _acceso.Escribir("DELETE FROM Permiso WHERE IdPermiso = @IdPermiso", p3);
         }
 
         public void GuardarRelaciones(Familia familia)

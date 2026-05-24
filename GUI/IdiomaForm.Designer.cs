@@ -37,7 +37,9 @@ namespace GUI
             this.pnlRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTraducciones)).BeginInit();
             this.SuspendLayout();
-
+            // 
+            // tblLayout
+            // 
             this.tblLayout.ColumnCount = 2;
             this.tblLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tblLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
@@ -50,8 +52,10 @@ namespace GUI
             this.tblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayout.Size = new System.Drawing.Size(800, 500);
             this.tblLayout.TabIndex = 0;
-
-            this.pnlLeft.BackColor = System.Drawing.Color.FromArgb(248, 244, 255);
+            // 
+            // pnlLeft
+            // 
+            this.pnlLeft.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.pnlLeft.Controls.Add(this.chkDefault);
             this.pnlLeft.Controls.Add(this.btnEliminarIdioma);
             this.pnlLeft.Controls.Add(this.btnAgregarIdioma);
@@ -67,18 +71,22 @@ namespace GUI
             this.pnlLeft.Padding = new System.Windows.Forms.Padding(15);
             this.pnlLeft.Size = new System.Drawing.Size(314, 494);
             this.pnlLeft.TabIndex = 0;
-
+            // 
+            // chkDefault
+            // 
             this.chkDefault.AutoSize = true;
             this.chkDefault.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.chkDefault.ForeColor = System.Drawing.Color.FromArgb(38, 20, 70);
+            this.chkDefault.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
             this.chkDefault.Location = new System.Drawing.Point(18, 385);
             this.chkDefault.Name = "chkDefault";
-            this.chkDefault.Size = new System.Drawing.Size(103, 21);
+            this.chkDefault.Size = new System.Drawing.Size(95, 21);
             this.chkDefault.TabIndex = 8;
             this.chkDefault.Text = "Por defecto";
             this.chkDefault.UseVisualStyleBackColor = true;
-
-            this.btnEliminarIdioma.BackColor = System.Drawing.Color.FromArgb(229, 115, 115);
+            // 
+            // btnEliminarIdioma
+            // 
+            this.btnEliminarIdioma.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(115)))), ((int)(((byte)(115)))));
             this.btnEliminarIdioma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEliminarIdioma.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnEliminarIdioma.ForeColor = System.Drawing.Color.White;
@@ -88,8 +96,10 @@ namespace GUI
             this.btnEliminarIdioma.TabIndex = 7;
             this.btnEliminarIdioma.Text = "Eliminar seleccionado";
             this.btnEliminarIdioma.UseVisualStyleBackColor = false;
-
-            this.btnAgregarIdioma.BackColor = System.Drawing.Color.FromArgb(126, 87, 194);
+            // 
+            // btnAgregarIdioma
+            // 
+            this.btnAgregarIdioma.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnAgregarIdioma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAgregarIdioma.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnAgregarIdioma.ForeColor = System.Drawing.Color.White;
@@ -99,55 +109,69 @@ namespace GUI
             this.btnAgregarIdioma.TabIndex = 6;
             this.btnAgregarIdioma.Text = "Agregar idioma";
             this.btnAgregarIdioma.UseVisualStyleBackColor = false;
-
+            // 
+            // txtCodigo
+            // 
             this.txtCodigo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.txtCodigo.Location = new System.Drawing.Point(18, 350);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(278, 24);
             this.txtCodigo.TabIndex = 5;
-
+            // 
+            // lblCodigo
+            // 
             this.lblCodigo.AutoSize = true;
             this.lblCodigo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblCodigo.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
+            this.lblCodigo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(85)))), ((int)(((byte)(150)))));
             this.lblCodigo.Location = new System.Drawing.Point(18, 330);
             this.lblCodigo.Name = "lblCodigo";
-            this.lblCodigo.Size = new System.Drawing.Size(46, 15);
+            this.lblCodigo.Size = new System.Drawing.Size(45, 15);
             this.lblCodigo.TabIndex = 4;
             this.lblCodigo.Text = "Código";
-
+            // 
+            // txtNombre
+            // 
             this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.txtNombre.Location = new System.Drawing.Point(18, 295);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(278, 24);
             this.txtNombre.TabIndex = 3;
-
+            // 
+            // lblNombre
+            // 
             this.lblNombre.AutoSize = true;
             this.lblNombre.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
+            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(85)))), ((int)(((byte)(150)))));
             this.lblNombre.Location = new System.Drawing.Point(18, 275);
             this.lblNombre.Name = "lblNombre";
             this.lblNombre.Size = new System.Drawing.Size(53, 15);
             this.lblNombre.TabIndex = 2;
             this.lblNombre.Text = "Nombre";
-
+            // 
+            // lstIdiomas
+            // 
             this.lstIdiomas.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lstIdiomas.ForeColor = System.Drawing.Color.FromArgb(38, 20, 70);
+            this.lstIdiomas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
             this.lstIdiomas.FormattingEnabled = true;
             this.lstIdiomas.ItemHeight = 17;
             this.lstIdiomas.Location = new System.Drawing.Point(18, 48);
             this.lstIdiomas.Name = "lstIdiomas";
             this.lstIdiomas.Size = new System.Drawing.Size(278, 174);
             this.lstIdiomas.TabIndex = 1;
-
+            // 
+            // lblIdiomasTitulo
+            // 
             this.lblIdiomasTitulo.AutoSize = true;
             this.lblIdiomasTitulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblIdiomasTitulo.ForeColor = System.Drawing.Color.FromArgb(94, 58, 160);
+            this.lblIdiomasTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(58)))), ((int)(((byte)(160)))));
             this.lblIdiomasTitulo.Location = new System.Drawing.Point(15, 15);
             this.lblIdiomasTitulo.Name = "lblIdiomasTitulo";
             this.lblIdiomasTitulo.Size = new System.Drawing.Size(71, 21);
             this.lblIdiomasTitulo.TabIndex = 0;
             this.lblIdiomasTitulo.Text = "Idiomas";
-
+            // 
+            // pnlRight
+            // 
             this.pnlRight.BackColor = System.Drawing.Color.White;
             this.pnlRight.Controls.Add(this.btnGuardarTraducciones);
             this.pnlRight.Controls.Add(this.dgvTraducciones);
@@ -160,8 +184,10 @@ namespace GUI
             this.pnlRight.Padding = new System.Windows.Forms.Padding(15);
             this.pnlRight.Size = new System.Drawing.Size(474, 494);
             this.pnlRight.TabIndex = 1;
-
-            this.btnGuardarTraducciones.BackColor = System.Drawing.Color.FromArgb(126, 87, 194);
+            // 
+            // btnGuardarTraducciones
+            // 
+            this.btnGuardarTraducciones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnGuardarTraducciones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardarTraducciones.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardarTraducciones.ForeColor = System.Drawing.Color.White;
@@ -171,14 +197,18 @@ namespace GUI
             this.btnGuardarTraducciones.TabIndex = 4;
             this.btnGuardarTraducciones.Text = "Guardar traducciones";
             this.btnGuardarTraducciones.UseVisualStyleBackColor = false;
-
-            this.dgvTraducciones.BackgroundColor = System.Drawing.Color.FromArgb(248, 244, 255);
+            // 
+            // dgvTraducciones
+            // 
+            this.dgvTraducciones.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.dgvTraducciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTraducciones.Location = new System.Drawing.Point(18, 90);
             this.dgvTraducciones.Name = "dgvTraducciones";
             this.dgvTraducciones.Size = new System.Drawing.Size(438, 345);
             this.dgvTraducciones.TabIndex = 3;
-
+            // 
+            // cboIdiomaDestino
+            // 
             this.cboIdiomaDestino.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboIdiomaDestino.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.cboIdiomaDestino.FormattingEnabled = true;
@@ -186,25 +216,31 @@ namespace GUI
             this.cboIdiomaDestino.Name = "cboIdiomaDestino";
             this.cboIdiomaDestino.Size = new System.Drawing.Size(306, 25);
             this.cboIdiomaDestino.TabIndex = 2;
-
+            // 
+            // lblIdiomaDestino
+            // 
             this.lblIdiomaDestino.AutoSize = true;
             this.lblIdiomaDestino.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblIdiomaDestino.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
+            this.lblIdiomaDestino.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(85)))), ((int)(((byte)(150)))));
             this.lblIdiomaDestino.Location = new System.Drawing.Point(18, 51);
             this.lblIdiomaDestino.Name = "lblIdiomaDestino";
-            this.lblIdiomaDestino.Size = new System.Drawing.Size(107, 17);
+            this.lblIdiomaDestino.Size = new System.Drawing.Size(114, 17);
             this.lblIdiomaDestino.TabIndex = 1;
             this.lblIdiomaDestino.Text = "Idioma a traducir";
-
+            // 
+            // lblTraduccionesTitulo
+            // 
             this.lblTraduccionesTitulo.AutoSize = true;
             this.lblTraduccionesTitulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblTraduccionesTitulo.ForeColor = System.Drawing.Color.FromArgb(94, 58, 160);
+            this.lblTraduccionesTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(58)))), ((int)(((byte)(160)))));
             this.lblTraduccionesTitulo.Location = new System.Drawing.Point(15, 15);
             this.lblTraduccionesTitulo.Name = "lblTraduccionesTitulo";
-            this.lblTraduccionesTitulo.Size = new System.Drawing.Size(111, 21);
+            this.lblTraduccionesTitulo.Size = new System.Drawing.Size(110, 21);
             this.lblTraduccionesTitulo.TabIndex = 0;
             this.lblTraduccionesTitulo.Text = "Traducciones";
-
+            // 
+            // IdiomaForm
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 500);
@@ -215,6 +251,7 @@ namespace GUI
             this.Name = "IdiomaForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gestión de Idiomas";
+            this.Load += new System.EventHandler(this.IdiomaForm_Load);
             this.tblLayout.ResumeLayout(false);
             this.pnlLeft.ResumeLayout(false);
             this.pnlLeft.PerformLayout();
@@ -222,6 +259,7 @@ namespace GUI
             this.pnlRight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTraducciones)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.TableLayoutPanel tblLayout;

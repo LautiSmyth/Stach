@@ -12,8 +12,23 @@ namespace BLL
 
         public string CalcularDVH(Usuario usuario)
         {
-            string data = usuario.IdUsuario.ToString() + usuario.Username + usuario.PasswordHash + ((int)usuario.Estado).ToString();
-            return Seguridad.Encriptador.HashSHA256(data);
+            long sumTotal = 0;
+            sumTotal += CalcularValorAtributo(usuario.IdUsuario.ToString(), 1);
+            sumTotal += CalcularValorAtributo(usuario.Username, 2);
+            sumTotal += CalcularValorAtributo(usuario.PasswordHash, 3);
+            sumTotal += CalcularValorAtributo(((int)usuario.Estado).ToString(), 4);
+            return Seguridad.Encriptador.HashSHA256(sumTotal.ToString());
+        }
+
+        private long CalcularValorAtributo(string valor, int posicionAtributo)
+        {
+            if (string.IsNullOrEmpty(valor)) return 0;
+            long suma = 0;
+            for (int i = 0; i < valor.Length; i++)
+            {
+                suma += (int)valor[i] * (i + 1) * posicionAtributo;
+            }
+            return suma;
         }
 
         public string CalcularDVV(List<Usuario> usuarios)
