@@ -1,38 +1,74 @@
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace DAL
 {
     public class DigitoVerificadorDAL
     {
-        private static readonly Dictionary<int, string> _dvhStore = new Dictionary<int, string>();
-        private static string _dvvStore = string.Empty;
+        private readonly Acceso _acceso = Acceso.GetInstance();
 
         public Dictionary<int, string> ObtenerDVHs()
         {
-            return new Dictionary<int, string>(_dvhStore);
+            var dict = new Dictionary<int, string>();
+            var dt = _acceso.Leer("SELECT IdUsuario, DVH FROM Usuario", null);
+            foreach (DataRow r in dt.Rows)
+            {
+                int id = System.Convert.ToInt32(r["IdUsuario"]);
+                string dvh = r["DVH"] == System.DBNull.Value ? string.Empty : r["DVH"].ToString();
+                dict[id] = dvh;
+            }
+            return dict;
         }
 
         public string ObtenerDVV()
         {
-            return _dvvStore;
+            var p = new SqlParameter[] { new SqlParameter("@Tabla", "Usuario") };
+            var dt = _acceso.Leer("SELECT DVV FROM VerificacionVertical WHERE Tabla = @Tabla", p);
+            return dt.Rows.Count == 0 ? string.Empty : dt.Rows[0]["DVV"].ToString();
         }
 
         public void GuardarDV(Dictionary<int, string> dvhs, string dvv)
         {
-            _dvhStore.Clear();
             foreach (var kvp in dvhs)
             {
-                _dvhStore[kvp.Key] = kvp.Value;
+                var p = new SqlParameter[]
+                {
+                    new SqlParameter("@IdUsuario", kvp.Key),
+                    new SqlParameter("@DVH", (object)kvp.Value ?? System.DBNull.Value)
+                };
+                _acceso.Escribir("UPDATE Usuario SET DVH = @DVH WHERE IdUsuario = @IdUsuario", p);
             }
-            _dvvStore = dvv;
+
+            var pDvv = new SqlParameter[]
+            {
+                new SqlParameter("@Tabla", "Usuario"),
+                new SqlParameter("@DVV", dvv)
+            };
+            var rows = _acceso.Escribir("UPDATE VerificacionVertical SET DVV = @DVV WHERE Tabla = @Tabla", pDvv);
+            if (rows == 0)
+            {
+                var pIns = new SqlParameter[]
+                {
+                    new SqlParameter("@Tabla", "Usuario"),
+                    new SqlParameter("@DVV", dvv)
+                };
+                _acceso.Escribir("INSERT INTO VerificacionVertical (Tabla, DVV) VALUES (@Tabla, @DVV)", pIns);
+            }
         }
 
         public void Corromper()
         {
-            if (_dvhStore.Count > 0)
+            var dt = _acceso.Leer("SELECT TOP 1 IdUsuario FROM Usuario ORDER BY IdUsuario", null);
+            if (dt.Rows.Count > 0)
             {
-                List<int> keys = new List<int>(_dvhStore.Keys);
-                _dvhStore[keys[0]] = "CORRUPTO";
+                int id = System.Convert.ToInt32(dt.Rows[0]["IdUsuario"]);
+                var p = new SqlParameter[]
+                {
+                    new SqlParameter("@IdUsuario", id),
+                    new SqlParameter("@DVH", "CORRUPTO")
+                };
+                _acceso.Escribir("UPDATE Usuario SET DVH = @DVH WHERE IdUsuario = @IdUsuario", p);
             }
         }
     }

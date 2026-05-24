@@ -37,8 +37,8 @@ namespace DAL
         public void Insertar(Usuario usuario)
         {
             const string consulta =
-                "INSERT INTO Usuario (Username, PasswordHash, Estado, FechaAlta, IntentosFallidos, CantidadBloqueos) " +
-                "VALUES (@Username, @PasswordHash, @Estado, @FechaAlta, @IntentosFallidos, @CantidadBloqueos)";
+                "INSERT INTO Usuario (Username, PasswordHash, Estado, FechaAlta, IntentosFallidos, CantidadBloqueos, DVH) " +
+                "VALUES (@Username, @PasswordHash, @Estado, @FechaAlta, @IntentosFallidos, @CantidadBloqueos, @DVH)";
 
             SqlParameter[] p = new SqlParameter[]
             {
@@ -47,7 +47,8 @@ namespace DAL
                 new SqlParameter("@Estado", (int)usuario.Estado),
                 new SqlParameter("@FechaAlta", usuario.FechaAlta),
                 new SqlParameter("@IntentosFallidos", usuario.IntentosFallidos),
-                new SqlParameter("@CantidadBloqueos", usuario.CantidadBloqueos)
+                new SqlParameter("@CantidadBloqueos", usuario.CantidadBloqueos),
+                new SqlParameter("@DVH", (object)usuario.DVH ?? DBNull.Value)
             };
             _acceso.Escribir(consulta, p);
         }
@@ -57,7 +58,7 @@ namespace DAL
             const string consulta =
                 "UPDATE Usuario SET Username = @Username, PasswordHash = @PasswordHash, Estado = @Estado, " +
                 "IntentosFallidos = @IntentosFallidos, CantidadBloqueos = @CantidadBloqueos, " +
-                "FechaBloqueo = @FechaBloqueo, UltimoLogin = @UltimoLogin " +
+                "FechaBloqueo = @FechaBloqueo, UltimoLogin = @UltimoLogin, DVH = @DVH " +
                 "WHERE IdUsuario = @IdUsuario";
 
             SqlParameter[] p = new SqlParameter[]
@@ -69,7 +70,8 @@ namespace DAL
                 new SqlParameter("@IntentosFallidos", usuario.IntentosFallidos),
                 new SqlParameter("@CantidadBloqueos", usuario.CantidadBloqueos),
                 new SqlParameter("@FechaBloqueo", (object)usuario.FechaBloqueo ?? DBNull.Value),
-                new SqlParameter("@UltimoLogin", (object)usuario.UltimoLogin ?? DBNull.Value)
+                new SqlParameter("@UltimoLogin", (object)usuario.UltimoLogin ?? DBNull.Value),
+                new SqlParameter("@DVH", (object)usuario.DVH ?? DBNull.Value)
             };
             _acceso.Escribir(consulta, p);
         }
@@ -90,6 +92,8 @@ namespace DAL
                 u.UltimoLogin = Convert.ToDateTime(fila["UltimoLogin"]);
             if (fila["FechaBloqueo"] != DBNull.Value)
                 u.FechaBloqueo = Convert.ToDateTime(fila["FechaBloqueo"]);
+            if (fila.Table.Columns.Contains("DVH") && fila["DVH"] != DBNull.Value)
+                u.DVH = fila["DVH"].ToString();
             return u;
         }
     }

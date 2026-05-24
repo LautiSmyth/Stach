@@ -1,108 +1,111 @@
 using BE;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace DAL
 {
     public class PermisoDAL
     {
-        private static readonly List<ComponentePermiso> _permisos = new List<ComponentePermiso>();
-        private static readonly Dictionary<int, List<int>> _usuarioPermisos = new Dictionary<int, List<int>>();
-        private static int _nextId = 10;
-
-        static PermisoDAL()
-        {
-            var pUsuarios = new Patente { IdPermiso = 1, Nombre = "Gestión de Usuarios", PermisoKey = "Usuarios" };
-            var pBitacora = new Patente { IdPermiso = 2, Nombre = "Ver Bitácora", PermisoKey = "Bitacora" };
-            var pIdiomas = new Patente { IdPermiso = 3, Nombre = "Gestión de Idiomas", PermisoKey = "Idiomas" };
-            var pPermisos = new Patente { IdPermiso = 4, Nombre = "Gestión de Permisos", PermisoKey = "Permisos" };
-            var pCambios = new Patente { IdPermiso = 5, Nombre = "Control de Cambios", PermisoKey = "ControlCambios" };
-            var pDV = new Patente { IdPermiso = 6, Nombre = "Restauración DV", PermisoKey = "RestauracionDV" };
-
-            _permisos.Add(pUsuarios);
-            _permisos.Add(pBitacora);
-            _permisos.Add(pIdiomas);
-            _permisos.Add(pPermisos);
-            _permisos.Add(pCambios);
-            _permisos.Add(pDV);
-
-            var fAdmin = new Familia { IdPermiso = 100, Nombre = "Administrador", PermisoKey = "FamiliaAdmin" };
-            fAdmin.Agregar(pUsuarios);
-            fAdmin.Agregar(pBitacora);
-            fAdmin.Agregar(pIdiomas);
-            fAdmin.Agregar(pPermisos);
-            fAdmin.Agregar(pCambios);
-            fAdmin.Agregar(pDV);
-
-            var fSuper = new Familia { IdPermiso = 101, Nombre = "Supervisor", PermisoKey = "FamiliaSupervisor" };
-            fSuper.Agregar(pBitacora);
-            fSuper.Agregar(pIdiomas);
-            fSuper.Agregar(pCambios);
-
-            var fOper = new Familia { IdPermiso = 102, Nombre = "Operador", PermisoKey = "FamiliaOperador" };
-            fOper.Agregar(pBitacora);
-
-            _permisos.Add(fAdmin);
-            _permisos.Add(fSuper);
-            _permisos.Add(fOper);
-
-            _usuarioPermisos[1] = new List<int> { 100 };
-            _usuarioPermisos[2] = new List<int> { 102 };
-        }
+        private readonly Acceso _acceso = Acceso.GetInstance();
 
         public List<ComponentePermiso> ObtenerTodos()
         {
-            return new List<ComponentePermiso>(_permisos);
+            var dt = _acceso.Leer("SELECT IdPermiso, Nombre, PermisoKey, EsFamilia FROM Permiso", null);
+            var nodes = new Dictionary<int, ComponentePermiso>();
+
+            foreach (DataRow r in dt.Rows)
+            {
+                int id = Convert.ToInt32(r["IdPermiso"]);
+                string nombre = r["Nombre"].ToString();
+                string key = r["PermisoKey"] == DBNull.Value ? null : r["PermisoKey"].ToString();
+                bool esFamilia = Convert.ToBoolean(r["EsFamilia"]);
+
+                if (esFamilia)
+                {
+                    nodes[id] = new Familia { IdPermiso = id, Nombre = nombre, PermisoKey = key };
+                }
+                else
+                {
+                    nodes[id] = new Patente { IdPermiso = id, Nombre = nombre, PermisoKey = key };
+                }
+            }
+
+            var rels = _acceso.Leer("SELECT IdPadre, IdHijo FROM PermisoRelacion", null);
+            foreach (DataRow r in rels.Rows)
+            {
+                int idPadre = Convert.ToInt32(r["IdPadre"]);
+                int idHijo = Convert.ToInt32(r["IdHijo"]);
+
+                if (nodes.ContainsKey(idPadre) && nodes.ContainsKey(idHijo))
+                {
+                    var padre = nodes[idPadre] as Familia;
+                    var hijo = nodes[idHijo];
+                    if (padre != null && hijo != null)
+                    {
+                        padre.Agregar(hijo);
+                    }
+                }
+            }
+
+            return new List<ComponentePermiso>(nodes.Values);
         }
 
         public void Insertar(ComponentePermiso permiso)
         {
-            permiso.IdPermiso = _nextId++;
-            _permisos.Add(permiso);
+            if (permiso == null) throw new ArgumentNullException(nameof(permiso));
+            bool esFamilia = permiso is Familia;
+            var p = new SqlParameter[]
+            {
+                new SqlParameter("@Nombre", permiso.Nombre),
+                new SqlParameter("@PermisoKey", (object)permiso.PermisoKey ?? DBNull.Value),
+                new SqlParameter("@EsFamilia", esFamilia)
+            };
+            _acceso.Escribir("INSERT INTO Permiso (Nombre, PermisoKey, EsFamilia) VALUES (@Nombre, @PermisoKey, @EsFamilia)", p);
+
+            var dt = _acceso.Leer("SELECT @@IDENTITY", null);
+            permiso.IdPermiso = Convert.ToInt32(dt.Rows[0][0]);
         }
 
         public void Eliminar(int idPermiso)
         {
-            var p = _permisos.FirstOrDefault(x => x.IdPermiso == idPermiso);
-            if (p != null)
-            {
-                _permisos.Remove(p);
-                foreach (var f in _permisos.OfType<Familia>())
-                {
-                    f.Quitar(p);
-                }
-                foreach (var kvp in _usuarioPermisos)
-                {
-                    kvp.Value.Remove(idPermiso);
-                }
-            }
+            var p = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };
+            _acceso.Escribir("DELETE FROM PermisoRelacion WHERE IdPadre = @IdPermiso OR IdHijo = @IdPermiso", p);
+            _acceso.Escribir("DELETE FROM UsuarioPermiso WHERE IdPermiso = @IdPermiso", p);
+            _acceso.Escribir("DELETE FROM Permiso WHERE IdPermiso = @IdPermiso", p);
         }
 
         public void GuardarRelaciones(Familia familia)
         {
-            var fExistente = _permisos.OfType<Familia>().FirstOrDefault(x => x.IdPermiso == familia.IdPermiso);
-            if (fExistente != null)
+            if (familia == null) throw new ArgumentNullException(nameof(familia));
+            var pDel = new SqlParameter[] { new SqlParameter("@IdPadre", familia.IdPermiso) };
+            _acceso.Escribir("DELETE FROM PermisoRelacion WHERE IdPadre = @IdPadre", pDel);
+
+            foreach (var hijo in familia.Hijos)
             {
-                fExistente.Hijos.Clear();
-                foreach (var hijo in familia.Hijos)
+                var pIns = new SqlParameter[]
                 {
-                    fExistente.Agregar(hijo);
-                }
+                    new SqlParameter("@IdPadre", familia.IdPermiso),
+                    new SqlParameter("@IdHijo", hijo.IdPermiso)
+                };
+                _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (@IdPadre, @IdHijo)", pIns);
             }
         }
 
         public List<ComponentePermiso> ObtenerPermisosUsuario(int idUsuario)
         {
+            var todos = ObtenerTodos();
+            var p = new SqlParameter[] { new SqlParameter("@IdUsuario", idUsuario) };
+            var dt = _acceso.Leer("SELECT IdPermiso FROM UsuarioPermiso WHERE IdUsuario = @IdUsuario", p);
             var list = new List<ComponentePermiso>();
-            if (_usuarioPermisos.TryGetValue(idUsuario, out List<int> ids))
+            foreach (DataRow r in dt.Rows)
             {
-                foreach (var id in ids)
+                int id = Convert.ToInt32(r["IdPermiso"]);
+                var found = todos.Find(x => x.IdPermiso == id);
+                if (found != null)
                 {
-                    var p = _permisos.FirstOrDefault(x => x.IdPermiso == id);
-                    if (p != null)
-                    {
-                        list.Add(p);
-                    }
+                    list.Add(found);
                 }
             }
             return list;
@@ -110,7 +113,18 @@ namespace DAL
 
         public void GuardarPermisosUsuario(int idUsuario, List<ComponentePermiso> permisos)
         {
-            _usuarioPermisos[idUsuario] = permisos.Select(x => x.IdPermiso).ToList();
+            var pDel = new SqlParameter[] { new SqlParameter("@IdUsuario", idUsuario) };
+            _acceso.Escribir("DELETE FROM UsuarioPermiso WHERE IdUsuario = @IdUsuario", pDel);
+
+            foreach (var perm in permisos)
+            {
+                var pIns = new SqlParameter[]
+                {
+                    new SqlParameter("@IdUsuario", idUsuario),
+                    new SqlParameter("@IdPermiso", perm.IdPermiso)
+                };
+                _acceso.Escribir("INSERT INTO UsuarioPermiso (IdUsuario, IdPermiso) VALUES (@IdUsuario, @IdPermiso)", pIns);
+            }
         }
     }
 }

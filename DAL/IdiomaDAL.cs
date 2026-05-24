@@ -1,50 +1,54 @@
 using BE;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace DAL
 {
     public class IdiomaDAL
     {
-        private static readonly List<Idioma> _idiomas = new List<Idioma>
-        {
-            new Idioma { IdIdioma = 1, Nombre = "Español", Codigo = "es", Default = true },
-            new Idioma { IdIdioma = 2, Nombre = "English", Codigo = "en", Default = false }
-        };
-
-        private static int _nextId = 3;
+        private readonly Acceso _acceso = Acceso.GetInstance();
 
         public List<Idioma> ObtenerTodos()
         {
-            return new List<Idioma>(_idiomas);
+            var dt = _acceso.Leer("SELECT IdIdioma, Nombre, Codigo, [Default] FROM Idioma", null);
+            var lista = new List<Idioma>();
+            foreach (DataRow r in dt.Rows)
+            {
+                lista.Add(new Idioma
+                {
+                    IdIdioma = Convert.ToInt32(r["IdIdioma"]),
+                    Nombre = r["Nombre"].ToString(),
+                    Codigo = r["Codigo"].ToString(),
+                    Default = Convert.ToBoolean(r["Default"])
+                });
+            }
+            return lista;
         }
 
         public void Insertar(Idioma idioma)
         {
             if (idioma == null) throw new ArgumentNullException(nameof(idioma));
-            if (_idiomas.Any(i => i.Nombre.Equals(idioma.Nombre, StringComparison.OrdinalIgnoreCase)))
-                throw new ArgumentException("El idioma ya existe.");
-            if (_idiomas.Any(i => i.Codigo.Equals(idioma.Codigo, StringComparison.OrdinalIgnoreCase)))
-                throw new ArgumentException("El código de idioma ya existe.");
 
-            idioma.IdIdioma = _nextId++;
             if (idioma.Default)
             {
-                foreach (var i in _idiomas) i.Default = false;
+                _acceso.Escribir("UPDATE Idioma SET [Default] = 0", null);
             }
-            _idiomas.Add(idioma);
+
+            var p = new SqlParameter[]
+            {
+                new SqlParameter("@Nombre", idioma.Nombre),
+                new SqlParameter("@Codigo", idioma.Codigo),
+                new SqlParameter("@Default", idioma.Default)
+            };
+            _acceso.Escribir("INSERT INTO Idioma (Nombre, Codigo, [Default]) VALUES (@Nombre, @Codigo, @Default)", p);
         }
 
         public void Eliminar(int idIdioma)
         {
-            var idioma = _idiomas.FirstOrDefault(i => i.IdIdioma == idIdioma);
-            if (idioma != null)
-            {
-                if (idioma.Default)
-                    throw new InvalidOperationException("No se puede eliminar el idioma por defecto.");
-                _idiomas.Remove(idioma);
-            }
+            var p = new SqlParameter[] { new SqlParameter("@IdIdioma", idIdioma) };
+            _acceso.Escribir("DELETE FROM Idioma WHERE IdIdioma = @IdIdioma", p);
         }
     }
 }

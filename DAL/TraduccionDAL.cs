@@ -1,131 +1,54 @@
 using BE;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace DAL
 {
     public class TraduccionDAL
     {
-        private static readonly List<Componente> _componentes = new List<Componente>();
-        private static readonly List<Traduccion> _traducciones = new List<Traduccion>();
-        private static int _nextComponenteId = 1;
-
-        static TraduccionDAL()
-        {
-            AgregarMock("LoginForm.lblUsername", "Usuario:", "Username:");
-            AgregarMock("LoginForm.lblPassword", "Contraseña:", "Password:");
-            AgregarMock("LoginForm.btnIngresar", "Ingresar", "Login");
-
-            AgregarMock("MenuForm.btnUsuarios", "👤 Usuarios", "👤 Users");
-            AgregarMock("MenuForm.btnBitacora", "📜 Bitácora", "📜 Audit Trail");
-            AgregarMock("MenuForm.btnIdiomas", "🌐 Idiomas", "🌐 Languages");
-            AgregarMock("MenuForm.btnPermisos", "🔑 Permisos", "🔑 Permissions");
-            AgregarMock("MenuForm.btnCambios", "📜 Cambios", "📜 Changes");
-            AgregarMock("MenuForm.btnCerrarSesion", "❌ Cerrar sesión", "❌ Log Out");
-            AgregarMock("MenuForm.lblSesionInfo", "👤 Sesión:", "👤 Session:");
-            AgregarMock("MenuForm.lblServidorInfo", "🖳 Servidor / BD:", "🖳 Server / DB:");
-
-            AgregarMock("UsuariosForm.lblTituloGrilla", "Usuarios", "Users");
-            AgregarMock("UsuariosForm.lblBuscarUsuario", "🔍 Buscar:", "🔍 Search:");
-            AgregarMock("UsuariosForm.btnRefrescar", "↻ Actualizar", "↻ Refresh");
-            AgregarMock("UsuariosForm.grpGestion", "Gestión de Usuario", "User Management");
-            AgregarMock("UsuariosForm.lblUsername", "Nombre de usuario", "Username");
-            AgregarMock("UsuariosForm.lblPassword", "Contraseña", "Password");
-            AgregarMock("UsuariosForm.lblConfirmarPassword", "Confirmar contraseña", "Confirm password");
-            AgregarMock("UsuariosForm.lblRequisitos", "Para modificar, deje vacío para mantener la contraseña.\nDebe tener al menos 6 caracteres, 1 mayúscula y 1 número.", "To modify, leave empty to keep password.\nMust have at least 6 characters, 1 uppercase and 1 number.");
-            AgregarMock("UsuariosForm.lblEstado", "Estado", "Status");
-            AgregarMock("UsuariosForm.btnGuardar", "Crear usuario", "Create user");
-            AgregarMock("UsuariosForm.btnModificar", "Guardar cambios", "Save changes");
-            AgregarMock("UsuariosForm.btnLimpiar", "Limpiar", "Clear");
-            AgregarMock("UsuariosForm.btnCorromper", "Simular Fallo DVV", "Simulate DVV Failure");
-
-            AgregarMock("BitacoraForm.lblBuscar", "Buscar:", "Search:");
-            AgregarMock("BitacoraForm.lblCriticidad", "Criticidad:", "Severity:");
-            AgregarMock("BitacoraForm.lblActividad", "Actividad:", "Activity:");
-            AgregarMock("BitacoraForm.lblLimite", "Límite:", "Limit:");
-            AgregarMock("BitacoraForm.btnBuscar", "Buscar", "Search");
-            AgregarMock("BitacoraForm.btnLimpiar", "Limpiar", "Clear");
-            AgregarMock("BitacoraForm.btnExportar", "📥 CSV", "📥 CSV");
-            AgregarMock("BitacoraForm.grpDetalle", "Detalle del Registro", "Log Details");
-            AgregarMock("BitacoraForm.lblDetFecha", "Fecha y Hora", "Date & Time");
-            AgregarMock("BitacoraForm.lblDetUsuario", "Usuario", "User");
-            AgregarMock("BitacoraForm.lblDetModulo", "Módulo", "Module");
-            AgregarMock("BitacoraForm.lblDetActividad", "Actividad", "Activity");
-            AgregarMock("BitacoraForm.lblDetCriticidad", "Criticidad", "Severity");
-            AgregarMock("BitacoraForm.lblDetResultado", "Resultado", "Result");
-            AgregarMock("BitacoraForm.lblDetDetalle", "Detalle", "Details");
-            AgregarMock("BitacoraForm.lblDetError", "Detalle del Error", "Error Details");
-
-            AgregarMock("IdiomaForm.Text", "Gestión de Idiomas", "Language Management");
-            AgregarMock("IdiomaForm.lblIdiomasTitulo", "Idiomas", "Languages");
-            AgregarMock("IdiomaForm.lblNombre", "Nombre", "Name");
-            AgregarMock("IdiomaForm.lblCodigo", "Código", "Code");
-            AgregarMock("IdiomaForm.chkDefault", "Por defecto", "Default");
-            AgregarMock("IdiomaForm.btnAgregarIdioma", "Agregar idioma", "Add language");
-            AgregarMock("IdiomaForm.btnEliminarIdioma", "Eliminar seleccionado", "Delete selected");
-            AgregarMock("IdiomaForm.lblTraduccionesTitulo", "Traducciones", "Translations");
-            AgregarMock("IdiomaForm.lblIdiomaDestino", "Idioma a traducir", "Language to translate");
-            AgregarMock("IdiomaForm.btnGuardarTraducciones", "Guardar traducciones", "Save translations");
-            AgregarMock("IdiomaForm.colComponente", "Componente", "Component");
-            AgregarMock("IdiomaForm.colTexto", "Texto / Traducción", "Translation text");
-
-            AgregarMock("PermisosForm.Text", "Gestión de Perfiles y Permisos", "Role & Permission Management");
-            AgregarMock("PermisosForm.lblCol1Titulo", "Estructura de Permisos", "Permission Structure");
-            AgregarMock("PermisosForm.lblNombrePermiso", "Nombre", "Name");
-            AgregarMock("PermisosForm.lblClavePermiso", "Clave", "Key");
-            AgregarMock("PermisosForm.btnCrearPatente", "Nueva Patente", "New Patent/Permission");
-            AgregarMock("PermisosForm.btnCrearFamilia", "Nueva Familia", "New Family/Role");
-            AgregarMock("PermisosForm.btnEliminarPermiso", "Eliminar Seleccionado", "Delete Selected");
-            AgregarMock("PermisosForm.lblCol2Titulo", "Configurador de Relaciones", "Relationship Configurator");
-            AgregarMock("PermisosForm.lblDisponibles", "Permisos Disponibles", "Available Permissions");
-            AgregarMock("PermisosForm.lblMiembros", "Miembros del Rol", "Role Members");
-            AgregarMock("PermisosForm.btnGuardarRelaciones", "Guardar Relaciones del Rol", "Save Role Relationships");
-            AgregarMock("PermisosForm.lblCol3Titulo", "Gestión de Usuarios", "User Management");
-            AgregarMock("PermisosForm.lblUserPerms", "Permisos del Usuario", "User Permissions");
-            AgregarMock("PermisosForm.lblPatentesPlanas", "Patentes Resultantes", "Resulting Patents/Permissions");
-            AgregarMock("PermisosForm.btnAsignarUsuario", "Asignar a Usuario >>", "Assign to User >>");
-            AgregarMock("PermisosForm.btnQuitarUsuario", "<< Quitar de Usuario", "<< Remove from User");
-
-            AgregarMock("ControlCambiosForm.Text", "Historial de Cambios y Rollback", "Change History & Rollback");
-            AgregarMock("ControlCambiosForm.lblSeleccionarUsuario", "Usuario a auditar:", "User to audit:");
-            AgregarMock("ControlCambiosForm.lblDetalleTitulo", "Detalle de la Versión", "Version Details");
-            AgregarMock("ControlCambiosForm.lblDetUsername", "Nombre de Usuario", "Username");
-            AgregarMock("ControlCambiosForm.lblDetEstado", "Estado", "Status");
-            AgregarMock("ControlCambiosForm.btnRollback", "Revertir a esta versión", "Restore to this version");
-            AgregarMock("ControlCambiosForm.colId", "ID", "ID");
-            AgregarMock("ControlCambiosForm.colFecha", "Fecha y Hora", "Date & Time");
-            AgregarMock("ControlCambiosForm.colActor", "Modificado Por", "Modified By");
-            AgregarMock("ControlCambiosForm.colDetalle", "Detalle del Cambio", "Change Details");
-        }
-
-        private static void AgregarMock(string nombreComponente, string textoEs, string textoEn)
-        {
-            var comp = new Componente { IdComponente = _nextComponenteId++, Nombre = nombreComponente };
-            _componentes.Add(comp);
-
-            _traducciones.Add(new Traduccion { IdIdioma = 1, IdComponente = comp.IdComponente, Texto = textoEs });
-            _traducciones.Add(new Traduccion { IdIdioma = 2, IdComponente = comp.IdComponente, Texto = textoEn });
-        }
+        private readonly Acceso _acceso = Acceso.GetInstance();
 
         public List<Componente> ObtenerComponentes()
         {
-            return new List<Componente>(_componentes);
+            InicializarBaseDatosSiVacio();
+            var dt = _acceso.Leer("SELECT IdComponente, Nombre FROM Componente", null);
+            var lista = new List<Componente>();
+            foreach (DataRow r in dt.Rows)
+            {
+                lista.Add(new Componente
+                {
+                    IdComponente = Convert.ToInt32(r["IdComponente"]),
+                    Nombre = r["Nombre"].ToString()
+                });
+            }
+            return lista;
         }
 
         public void InsertarComponente(Componente componente)
         {
             if (componente == null) throw new ArgumentNullException(nameof(componente));
-            if (_componentes.Any(c => c.Nombre.Equals(componente.Nombre, StringComparison.OrdinalIgnoreCase)))
-                throw new ArgumentException("El componente ya existe.");
-
-            componente.IdComponente = _nextComponenteId++;
-            _componentes.Add(componente);
+            var p = new SqlParameter[] { new SqlParameter("@Nombre", componente.Nombre) };
+            _acceso.Escribir("INSERT INTO Componente (Nombre) VALUES (@Nombre)", p);
         }
 
         public List<Traduccion> ObtenerTraduccionesPorIdioma(int idIdioma)
         {
-            return _traducciones.Where(t => t.IdIdioma == idIdioma).ToList();
+            InicializarBaseDatosSiVacio();
+            var p = new SqlParameter[] { new SqlParameter("@IdIdioma", idIdioma) };
+            var dt = _acceso.Leer("SELECT IdIdioma, IdComponente, Texto FROM Traduccion WHERE IdIdioma = @IdIdioma", p);
+            var lista = new List<Traduccion>();
+            foreach (DataRow r in dt.Rows)
+            {
+                lista.Add(new Traduccion
+                {
+                    IdIdioma = Convert.ToInt32(r["IdIdioma"]),
+                    IdComponente = Convert.ToInt32(r["IdComponente"]),
+                    Texto = r["Texto"].ToString()
+                });
+            }
+            return lista;
         }
 
         public void GuardarTraducciones(List<Traduccion> traducciones)
@@ -133,16 +56,135 @@ namespace DAL
             if (traducciones == null) throw new ArgumentNullException(nameof(traducciones));
             foreach (var t in traducciones)
             {
-                var existente = _traducciones.FirstOrDefault(tr => tr.IdIdioma == t.IdIdioma && tr.IdComponente == t.IdComponente);
-                if (existente != null)
+                var p = new SqlParameter[]
                 {
-                    existente.Texto = t.Texto;
-                }
-                else
+                    new SqlParameter("@IdIdioma", t.IdIdioma),
+                    new SqlParameter("@IdComponente", t.IdComponente),
+                    new SqlParameter("@Texto", t.Texto)
+                };
+                var rows = _acceso.Escribir("UPDATE Traduccion SET Texto = @Texto WHERE IdIdioma = @IdIdioma AND IdComponente = @IdComponente", p);
+                if (rows == 0)
                 {
-                    _traducciones.Add(t);
+                    _acceso.Escribir("INSERT INTO Traduccion (IdIdioma, IdComponente, Texto) VALUES (@IdIdioma, @IdComponente, @Texto)", p);
                 }
             }
+        }
+
+        private void InicializarBaseDatosSiVacio()
+        {
+            var dt = _acceso.Leer("SELECT COUNT(*) FROM Componente", null);
+            if (Convert.ToInt32(dt.Rows[0][0]) == 0)
+            {
+                AgregarSeed("LoginForm.lblUsername", "Usuario:", "Username:");
+                AgregarSeed("LoginForm.lblPassword", "Contraseña:", "Password:");
+                AgregarSeed("LoginForm.btnIngresar", "Ingresar", "Login");
+
+                AgregarSeed("MenuForm.btnUsuarios", "👤 Usuarios", "👤 Users");
+                AgregarSeed("MenuForm.btnBitacora", "📜 Bitácora", "📜 Audit Trail");
+                AgregarSeed("MenuForm.btnIdiomas", "🌐 Idiomas", "🌐 Languages");
+                AgregarSeed("MenuForm.btnPermisos", "🔑 Permisos", "🔑 Permissions");
+                AgregarSeed("MenuForm.btnCambios", "📜 Cambios", "📜 Changes");
+                AgregarSeed("MenuForm.btnCerrarSesion", "❌ Cerrar sesión", "❌ Log Out");
+                AgregarSeed("MenuForm.lblSesionInfo", "👤 Sesión:", "👤 Session:");
+                AgregarSeed("MenuForm.lblServidorInfo", "🖳 Servidor / BD:", "🖳 Server / DB:");
+
+                AgregarSeed("UsuariosForm.lblTituloGrilla", "Usuarios", "Users");
+                AgregarSeed("UsuariosForm.lblBuscarUsuario", "🔍 Buscar:", "🔍 Search:");
+                AgregarSeed("UsuariosForm.btnRefrescar", "↻ Actualizar", "↻ Refresh");
+                AgregarSeed("UsuariosForm.grpGestion", "Gestión de Usuario", "User Management");
+                AgregarSeed("UsuariosForm.lblUsername", "Nombre de usuario", "Username");
+                AgregarSeed("UsuariosForm.lblPassword", "Contraseña", "Password");
+                AgregarSeed("UsuariosForm.lblConfirmarPassword", "Confirmar contraseña", "Confirm password");
+                AgregarSeed("UsuariosForm.lblRequisitos", "Para modificar, deje vacío para mantener la contraseña.\nDebe tener al menos 6 caracteres, 1 mayúscula y 1 número.", "To modify, leave empty to keep password.\nMust have at least 6 characters, 1 uppercase and 1 number.");
+                AgregarSeed("UsuariosForm.lblEstado", "Estado", "Status");
+                AgregarSeed("UsuariosForm.btnGuardar", "Crear usuario", "Create user");
+                AgregarSeed("UsuariosForm.btnModificar", "Guardar cambios", "Save changes");
+                AgregarSeed("UsuariosForm.btnLimpiar", "Limpiar", "Clear");
+                AgregarSeed("UsuariosForm.btnCorromper", "Simular Fallo DVV", "Simulate DVV Failure");
+
+                AgregarSeed("BitacoraForm.lblBuscar", "Buscar:", "Search:");
+                AgregarSeed("BitacoraForm.lblCriticidad", "Criticidad:", "Severity:");
+                AgregarSeed("BitacoraForm.lblActividad", "Actividad:", "Activity:");
+                AgregarSeed("BitacoraForm.lblLimite", "Límite:", "Limit:");
+                AgregarSeed("BitacoraForm.btnBuscar", "Buscar", "Search");
+                AgregarSeed("BitacoraForm.btnLimpiar", "Limpiar", "Clear");
+                AgregarSeed("BitacoraForm.btnExportar", "📥 CSV", "📥 CSV");
+                AgregarSeed("BitacoraForm.grpDetalle", "Detalle del Registro", "Log Details");
+                AgregarSeed("BitacoraForm.lblDetFecha", "Fecha y Hora", "Date & Time");
+                AgregarSeed("BitacoraForm.lblDetUsuario", "Usuario", "User");
+                AgregarSeed("BitacoraForm.lblDetModulo", "Módulo", "Module");
+                AgregarSeed("BitacoraForm.lblDetActividad", "Actividad", "Activity");
+                AgregarSeed("BitacoraForm.lblDetCriticidad", "Criticidad", "Severity");
+                AgregarSeed("BitacoraForm.lblDetResultado", "Resultado", "Result");
+                AgregarSeed("BitacoraForm.lblDetDetalle", "Detalle", "Details");
+                AgregarSeed("BitacoraForm.lblDetError", "Detalle del Error", "Error Details");
+
+                AgregarSeed("IdiomaForm.Text", "Gestión de Idiomas", "Language Management");
+                AgregarSeed("IdiomaForm.lblIdiomasTitulo", "Idiomas", "Languages");
+                AgregarSeed("IdiomaForm.lblNombre", "Nombre", "Name");
+                AgregarSeed("IdiomaForm.lblCodigo", "Código", "Code");
+                AgregarSeed("IdiomaForm.chkDefault", "Por defecto", "Default");
+                AgregarSeed("IdiomaForm.btnAgregarIdioma", "Agregar idioma", "Add language");
+                AgregarSeed("IdiomaForm.btnEliminarIdioma", "Eliminar seleccionado", "Delete selected");
+                AgregarSeed("IdiomaForm.lblTraduccionesTitulo", "Traducciones", "Translations");
+                AgregarSeed("IdiomaForm.lblIdiomaDestino", "Idioma a traducir", "Language to translate");
+                AgregarSeed("IdiomaForm.btnGuardarTraducciones", "Guardar traducciones", "Save translations");
+                AgregarSeed("IdiomaForm.colComponente", "Componente", "Component");
+                AgregarSeed("IdiomaForm.colTexto", "Texto / Traducción", "Translation text");
+
+                AgregarSeed("PermisosForm.Text", "Gestión de Perfiles y Permisos", "Role & Permission Management");
+                AgregarSeed("PermisosForm.lblCol1Titulo", "Estructura de Permisos", "Permission Structure");
+                AgregarSeed("PermisosForm.lblNombrePermiso", "Nombre", "Name");
+                AgregarSeed("PermisosForm.lblClavePermiso", "Clave", "Key");
+                AgregarSeed("PermisosForm.btnCrearPatente", "Nueva Patente", "New Patent/Permission");
+                AgregarSeed("PermisosForm.btnCrearFamilia", "Nueva Familia", "New Family/Role");
+                AgregarSeed("PermisosForm.btnEliminarPermiso", "Eliminar Seleccionado", "Delete Selected");
+                AgregarSeed("PermisosForm.lblCol2Titulo", "Configurador de Relaciones", "Relationship Configurator");
+                AgregarSeed("PermisosForm.lblDisponibles", "Permisos Disponibles", "Available Permissions");
+                AgregarSeed("PermisosForm.lblMiembros", "Miembros del Rol", "Role Members");
+                AgregarSeed("PermisosForm.btnGuardarRelaciones", "Guardar Relaciones del Rol", "Save Role Relationships");
+                AgregarSeed("PermisosForm.lblCol3Titulo", "Gestión de Usuarios", "User Management");
+                AgregarSeed("PermisosForm.lblUserPerms", "Permisos del Usuario", "User Permissions");
+                AgregarSeed("PermisosForm.lblPatentesPlanas", "Patentes Resultantes", "Resulting Patents/Permissions");
+                AgregarSeed("PermisosForm.btnAsignarUsuario", "Asignar a Usuario >>", "Assign to User >>");
+                AgregarSeed("PermisosForm.btnQuitarUsuario", "<< Quitar de Usuario", "<< Remove from User");
+
+                AgregarSeed("ControlCambiosForm.Text", "Historial de Cambios y Rollback", "Change History & Rollback");
+                AgregarSeed("ControlCambiosForm.lblSeleccionarUsuario", "Usuario a auditar:", "User to audit:");
+                AgregarSeed("ControlCambiosForm.lblDetalleTitulo", "Detalle de la Versión", "Version Details");
+                AgregarSeed("ControlCambiosForm.lblDetUsername", "Nombre de Usuario", "Username");
+                AgregarSeed("ControlCambiosForm.lblDetEstado", "Estado", "Status");
+                AgregarSeed("ControlCambiosForm.btnRollback", "Revertir a esta versión", "Restore to this version");
+                AgregarSeed("ControlCambiosForm.colId", "ID", "ID");
+                AgregarSeed("ControlCambiosForm.colFecha", "Fecha y Hora", "Date & Time");
+                AgregarSeed("ControlCambiosForm.colActor", "Modificado Por", "Modified By");
+                AgregarSeed("ControlCambiosForm.colDetalle", "Detalle del Cambio", "Change Details");
+            }
+        }
+
+        private void AgregarSeed(string nombreComponente, string textoEs, string textoEn)
+        {
+            var pComp = new SqlParameter[] { new SqlParameter("@Nombre", nombreComponente) };
+            _acceso.Escribir("INSERT INTO Componente (Nombre) VALUES (@Nombre)", pComp);
+
+            var dt = _acceso.Leer("SELECT @@IDENTITY", null);
+            int idComp = Convert.ToInt32(dt.Rows[0][0]);
+
+            var pEs = new SqlParameter[]
+            {
+                new SqlParameter("@IdIdioma", 1),
+                new SqlParameter("@IdComponente", idComp),
+                new SqlParameter("@Texto", textoEs)
+            };
+            _acceso.Escribir("INSERT INTO Traduccion (IdIdioma, IdComponente, Texto) VALUES (@IdIdioma, @IdComponente, @Texto)", pEs);
+
+            var pEn = new SqlParameter[]
+            {
+                new SqlParameter("@IdIdioma", 2),
+                new SqlParameter("@IdComponente", idComp),
+                new SqlParameter("@Texto", textoEn)
+            };
+            _acceso.Escribir("INSERT INTO Traduccion (IdIdioma, IdComponente, Texto) VALUES (@IdIdioma, @IdComponente, @Texto)", pEn);
         }
     }
 }
