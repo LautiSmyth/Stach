@@ -95,10 +95,5 @@ namespace BLL
 
             return todoOk;
         }
-
-        public void CorromperParaPrueba()
-        {
-            _dal.Corromper();
-        }
     }
 }

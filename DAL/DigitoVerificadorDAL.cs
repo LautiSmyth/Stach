@@ -56,20 +56,5 @@ namespace DAL
                 _acceso.Escribir("INSERT INTO VerificacionVertical (Tabla, DVV) VALUES (@Tabla, @DVV)", pIns);
             }
         }
-
-        public void Corromper()
-        {
-            var dt = _acceso.Leer("SELECT TOP 1 IdUsuario FROM Usuario ORDER BY IdUsuario", null);
-            if (dt.Rows.Count > 0)
-            {
-                int id = System.Convert.ToInt32(dt.Rows[0]["IdUsuario"]);
-                var p = new SqlParameter[]
-                {
-                    new SqlParameter("@IdUsuario", id),
-                    new SqlParameter("@DVH", "CORRUPTO")
-                };
-                _acceso.Escribir("UPDATE Usuario SET DVH = @DVH WHERE IdUsuario = @IdUsuario", p);
-            }
-        }
     }
 }

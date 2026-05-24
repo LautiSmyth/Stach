@@ -29,24 +29,21 @@ namespace GUI
 
         private void BtnCrear_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog sfd = new SaveFileDialog())
+            try
             {
-                sfd.Filter = "Copia de Seguridad SQL (*.bak)|*.bak";
-                sfd.Title = "Guardar Copia de Seguridad";
-                sfd.FileName = $"Stach_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.bak";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
+                string dirBackups = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backups");
+                if (!Directory.Exists(dirBackups))
                 {
-                    try
-                    {
-                        _backupServicio.RealizarBackup(this.Text, sfd.FileName);
-                        MessageBox.Show("Copia de seguridad generada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error al generar copia de seguridad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    Directory.CreateDirectory(dirBackups);
                 }
+                string filename = string.Format("Stach_Backup_{0:yyyyMMdd_HHmmss}.bak", DateTime.Now);
+                string fullPath = Path.Combine(dirBackups, filename);
+                _backupServicio.RealizarBackup(this.Text, fullPath);
+                MessageBox.Show(string.Format("Copia de seguridad generada con éxito en:\n{0}", fullPath), "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Error al generar copia de seguridad: {0}", ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -56,13 +53,16 @@ namespace GUI
             {
                 ofd.Filter = "Copia de Seguridad SQL (*.bak)|*.bak";
                 ofd.Title = "Seleccionar Copia de Seguridad para Restaurar";
-
+                string dirBackups = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backups");
+                if (Directory.Exists(dirBackups))
+                {
+                    ofd.InitialDirectory = dirBackups;
+                }
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     string confirmMsg = "¿Está seguro de restaurar la base de datos? " +
                                        "Esta operación cerrará las sesiones activas, sobrescribirá todos los datos actuales " +
                                        "y reiniciará la aplicación.";
-
                     if (MessageBox.Show(confirmMsg, "Confirmar Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
                         try
@@ -73,7 +73,7 @@ namespace GUI
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Error al restaurar la base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(string.Format("Error al restaurar la base de datos: {0}", ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }

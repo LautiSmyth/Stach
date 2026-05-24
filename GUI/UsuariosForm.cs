@@ -259,12 +259,6 @@ namespace GUI
             base.OnFormClosed(e);
         }
 
-        private void BtnCorromper_Click(object sender, EventArgs e)
-        {
-            new DigitoVerificadorServicio().CorromperParaPrueba();
-            MessageBox.Show("Integridad corrompida. Al reiniciar el sistema se detectara el fallo.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-
         public void ActualizarIdioma()
         {
             lblTituloGrilla.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblTituloGrilla");
@@ -278,7 +272,6 @@ namespace GUI
             lblEstado.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblEstado");
             btnGuardar.Text = _seleccionado == null ? ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnGuardar") : ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnModificar");
             btnLimpiar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnLimpiar");
-            btnCorromper.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnCorromper") ?? "Simular Fallo DVV";
         }
     }
 }

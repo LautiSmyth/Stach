@@ -24,10 +24,5 @@ namespace Aplicacion
             _bll.InicializarDVs();
             _bitacora.RegistrarSinSesion("Sistema", "Seguridad", "RestauracionDVs", "Digitos verificadores recalculados y restaurados.", true);
         }
-
-        public void CorromperParaPrueba()
-        {
-            _bll.CorromperParaPrueba();
-        }
     }
 }
