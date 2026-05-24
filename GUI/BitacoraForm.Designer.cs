@@ -16,6 +16,8 @@ namespace GUI
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.lblFiltrarUsuario = new System.Windows.Forms.Label();
+            this.cboFiltrarUsuario = new System.Windows.Forms.ComboBox();
             this.pnlFiltros = new System.Windows.Forms.Panel();
             this.tlpFiltros = new System.Windows.Forms.TableLayoutPanel();
             this.lblBuscar = new System.Windows.Forms.Label();
@@ -266,6 +268,8 @@ namespace GUI
             // flpExitoso
             // 
             this.flpExitoso.Controls.Add(this.chkExitoso);
+            this.flpExitoso.Controls.Add(this.lblFiltrarUsuario);
+            this.flpExitoso.Controls.Add(this.cboFiltrarUsuario);
             this.flpExitoso.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpExitoso.Location = new System.Drawing.Point(83, 39);
             this.flpExitoso.Margin = new System.Windows.Forms.Padding(0);
@@ -289,6 +293,35 @@ namespace GUI
             this.chkExitoso.TabIndex = 0;
             this.chkExitoso.ThreeState = true;
             this.chkExitoso.UseVisualStyleBackColor = false;
+            // 
+            // lblFiltrarUsuario
+            // 
+            this.lblFiltrarUsuario.AutoSize = true;
+            this.lblFiltrarUsuario.BackColor = System.Drawing.Color.Transparent;
+            this.lblFiltrarUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblFiltrarUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
+            this.lblFiltrarUsuario.Location = new System.Drawing.Point(36, 8);
+            this.lblFiltrarUsuario.Margin = new System.Windows.Forms.Padding(15, 8, 3, 0);
+            this.lblFiltrarUsuario.Name = "lblFiltrarUsuario";
+            this.lblFiltrarUsuario.Size = new System.Drawing.Size(56, 17);
+            this.lblFiltrarUsuario.Text = "Usuario:";
+            this.lblFiltrarUsuario.Visible = false;
+            // 
+            // cboFiltrarUsuario
+            // 
+            this.cboFiltrarUsuario.BackColor = System.Drawing.Color.White;
+            this.cboFiltrarUsuario.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.cboFiltrarUsuario.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboFiltrarUsuario.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboFiltrarUsuario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboFiltrarUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.cboFiltrarUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
+            this.cboFiltrarUsuario.Location = new System.Drawing.Point(98, 4);
+            this.cboFiltrarUsuario.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.cboFiltrarUsuario.Name = "cboFiltrarUsuario";
+            this.cboFiltrarUsuario.Size = new System.Drawing.Size(120, 25);
+            this.cboFiltrarUsuario.TabIndex = 1;
+            this.cboFiltrarUsuario.Visible = false;
             // 
             // flpFechas
             // 
@@ -900,5 +933,7 @@ namespace GUI
         private System.Windows.Forms.Panel pnlEstado;
         private System.Windows.Forms.Label lblContador;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblFiltrarUsuario;
+        private System.Windows.Forms.ComboBox cboFiltrarUsuario;
     }
 }

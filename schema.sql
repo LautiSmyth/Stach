@@ -27,6 +27,7 @@ BEGIN
     SET IDENTITY_INSERT Idioma ON;
     INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (1, N'Español', 'es', 1);
     INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (2, N'English', 'en', 0);
+    INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (3, N'Português', 'pt', 0);
     SET IDENTITY_INSERT Idioma OFF;
 END
 
@@ -58,6 +59,7 @@ BEGIN
     INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (4, N'Gestión de Permisos', 'Permisos', 0);
     INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (5, N'Control de Cambios', 'ControlCambios', 0);
     INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (6, N'Restauración DV', 'RestauracionDV', 0);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (7, N'Ver Bitácora de Todos', 'BitacoraTodos', 0);
 
     INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (100, N'Administrador', 'FamiliaAdmin', 1);
     INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (101, N'Supervisor', 'FamiliaSupervisor', 1);
@@ -70,10 +72,12 @@ BEGIN
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 4);
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 5);
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 6);
+    INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 7);
 
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (101, 2);
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (101, 3);
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (101, 5);
+    INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (101, 7);
 
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (102, 2);
 

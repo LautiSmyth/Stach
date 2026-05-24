@@ -12,6 +12,7 @@ namespace GUI
     {
         private readonly BitacoraServicio _bitacoraServicio = new BitacoraServicio();
         private readonly CriticidadServicio _criticidadServicio = new CriticidadServicio();
+        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
         private List<Bitacora> _listaCompleta = new List<Bitacora>();
         private readonly Timer _timerBusqueda = new Timer();
 
@@ -25,18 +26,50 @@ namespace GUI
 
         private void BitacoraForm_Load(object sender, EventArgs e)
         {
-            cboLimite.Items.Clear();
-            cboLimite.Items.Add("50");
-            cboLimite.Items.Add("100");
-            cboLimite.Items.Add("500");
-            cboLimite.Items.Add("Todos");
-            cboLimite.SelectedIndex = 1;
+            try
+            {
+                cboLimite.Items.Clear();
+                cboLimite.Items.Add("50");
+                cboLimite.Items.Add("100");
+                cboLimite.Items.Add("500");
+                cboLimite.Items.Add("Todos");
+                cboLimite.SelectedIndex = 1;
 
-            DesuscribirFiltros();
-            CargarComboCriticidad();
-            LimpiarFiltros();
-            SuscribirFiltros();
-            ActualizarIdioma();
+                DesuscribirFiltros();
+                CargarComboCriticidad();
+                CargarComboUsuarios();
+                LimpiarFiltros();
+                SuscribirFiltros();
+                ActualizarIdioma();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al inicializar el formulario: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CargarComboUsuarios()
+        {
+            bool tienePermisoTodos = _usuarioServicio.UsuarioLogueadoTienePermiso("BitacoraTodos");
+            if (tienePermisoTodos)
+            {
+                lblFiltrarUsuario.Visible = true;
+                cboFiltrarUsuario.Visible = true;
+                cboFiltrarUsuario.Items.Clear();
+                string todosText = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
+                cboFiltrarUsuario.Items.Add(todosText);
+                var usuarios = _usuarioServicio.ObtenerTodos();
+                foreach (var u in usuarios)
+                {
+                    cboFiltrarUsuario.Items.Add(u.Username);
+                }
+                cboFiltrarUsuario.SelectedIndex = 0;
+            }
+            else
+            {
+                lblFiltrarUsuario.Visible = false;
+                cboFiltrarUsuario.Visible = false;
+            }
         }
 
         private void BitacoraForm_Shown(object sender, EventArgs e)
@@ -65,6 +98,7 @@ namespace GUI
             dtpDesde.ValueChanged += Filtro_Changed;
             dtpHasta.ValueChanged += Filtro_Changed;
             cboLimite.SelectedIndexChanged += Filtro_Changed;
+            cboFiltrarUsuario.TextChanged += Filtro_Changed;
         }
 
         private void DesuscribirFiltros()
@@ -79,6 +113,7 @@ namespace GUI
             dtpDesde.ValueChanged -= Filtro_Changed;
             dtpHasta.ValueChanged -= Filtro_Changed;
             cboLimite.SelectedIndexChanged -= Filtro_Changed;
+            cboFiltrarUsuario.TextChanged -= Filtro_Changed;
         }
 
         private void TxtBuscar_TextChanged(object sender, EventArgs e)
@@ -151,8 +186,24 @@ namespace GUI
 
             List<Bitacora> resultado = new List<Bitacora>();
 
+            bool tienePermisoTodos = _usuarioServicio.UsuarioLogueadoTienePermiso("BitacoraTodos");
+            string filtroUsuario = "";
+            if (tienePermisoTodos)
+            {
+                filtroUsuario = cboFiltrarUsuario.Text.Trim();
+            }
+            else
+            {
+                filtroUsuario = _usuarioServicio.ObtenerUsernameEnSesion();
+            }
+            string todosText = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
+
             foreach (Bitacora b in _listaCompleta)
             {
+                if (!string.IsNullOrEmpty(filtroUsuario) && !filtroUsuario.Equals("Todos", StringComparison.OrdinalIgnoreCase) && !filtroUsuario.Equals(todosText, StringComparison.OrdinalIgnoreCase) && !b.Username.Equals(filtroUsuario, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 if (hayBusqueda)
                 {
                     bool ok = false;
@@ -239,6 +290,10 @@ namespace GUI
             dtpDesde.Value = DateTime.Today.AddMonths(-1);
             dtpHasta.Value = DateTime.Today;
             if (cboLimite.Items.Count > 0) cboLimite.SelectedIndex = 1;
+            if (cboFiltrarUsuario.Visible && cboFiltrarUsuario.Items.Count > 0)
+            {
+                cboFiltrarUsuario.SelectedIndex = 0;
+            }
         }
 
         private void Filtro_Changed(object sender, EventArgs e)
@@ -346,6 +401,7 @@ namespace GUI
             lblDetResultado.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetResultado");
             lblDetDetalle.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetDetalle");
             lblDetError.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetError");
+            lblFiltrarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblFiltrarUsuario") ?? "Usuario:";
         }
     }
 

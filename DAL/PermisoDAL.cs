@@ -12,6 +12,13 @@ namespace DAL
 
         public List<ComponentePermiso> ObtenerTodos()
         {
+            var dtCount = _acceso.Leer("SELECT COUNT(*) FROM Permiso WHERE IdPermiso = 7", null);
+            if (Convert.ToInt32(dtCount.Rows[0][0]) == 0)
+            {
+                _acceso.Escribir("SET IDENTITY_INSERT Permiso ON; INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (7, N'Ver Bitácora de Todos', 'BitacoraTodos', 0); SET IDENTITY_INSERT Permiso OFF;", null);
+                _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 7);", null);
+                _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (101, 7);", null);
+            }
             var dt = _acceso.Leer("SELECT IdPermiso, Nombre, PermisoKey, EsFamilia FROM Permiso", null);
             var nodes = new Dictionary<int, ComponentePermiso>();
 

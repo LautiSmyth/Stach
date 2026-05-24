@@ -12,6 +12,7 @@ namespace DAL
 
         public List<Idioma> ObtenerTodos()
         {
+            new TraduccionDAL().InicializarBaseDatosSiVacio();
             var dt = _acceso.Leer("SELECT IdIdioma, Nombre, Codigo, [Default] FROM Idioma", null);
             var lista = new List<Idioma>();
             foreach (DataRow r in dt.Rows)
