@@ -20,6 +20,9 @@ namespace GUI
             this.sepNavegacion = new System.Windows.Forms.ToolStripSeparator();
             this.btnBitacora = new System.Windows.Forms.ToolStripButton();
             this.btnUsuarios = new System.Windows.Forms.ToolStripButton();
+            this.sepIdiomas = new System.Windows.Forms.ToolStripSeparator();
+            this.cboIdioma = new System.Windows.Forms.ToolStripComboBox();
+            this.btnIdiomas = new System.Windows.Forms.ToolStripButton();
             this.btnCerrarSesion = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblBaseDatos = new System.Windows.Forms.ToolStripStatusLabel();
@@ -41,6 +44,9 @@ namespace GUI
             this.sepNavegacion,
             this.btnBitacora,
             this.btnUsuarios,
+            this.sepIdiomas,
+            this.cboIdioma,
+            this.btnIdiomas,
             this.btnCerrarSesion});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
@@ -83,9 +89,22 @@ namespace GUI
             this.btnUsuarios.Size = new System.Drawing.Size(105, 29);
             this.btnUsuarios.Text = "👤 Usuarios";
             this.btnUsuarios.Click += new System.EventHandler(this.BtnUsuarios_Click);
-            // 
-            // btnCerrarSesion
-            // 
+            this.sepIdiomas.Name = "sepIdiomas";
+            this.sepIdiomas.Size = new System.Drawing.Size(6, 32);
+
+            this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboIdioma.Name = "cboIdioma";
+            this.cboIdioma.Size = new System.Drawing.Size(120, 32);
+
+            this.btnIdiomas.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnIdiomas.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.btnIdiomas.ForeColor = System.Drawing.Color.White;
+            this.btnIdiomas.Name = "btnIdiomas";
+            this.btnIdiomas.Padding = new System.Windows.Forms.Padding(10, 4, 10, 4);
+            this.btnIdiomas.Size = new System.Drawing.Size(101, 29);
+            this.btnIdiomas.Text = "🌐 Idiomas";
+            this.btnIdiomas.Click += new System.EventHandler(this.BtnIdiomas_Click);
+
             this.btnCerrarSesion.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.btnCerrarSesion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnCerrarSesion.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -165,6 +184,9 @@ namespace GUI
         private System.Windows.Forms.ToolStripSeparator sepNavegacion;
         private System.Windows.Forms.ToolStripButton btnBitacora;
         private System.Windows.Forms.ToolStripButton btnUsuarios;
+        private System.Windows.Forms.ToolStripSeparator sepIdiomas;
+        private System.Windows.Forms.ToolStripComboBox cboIdioma;
+        private System.Windows.Forms.ToolStripButton btnIdiomas;
         private System.Windows.Forms.ToolStripButton btnCerrarSesion;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblBaseDatos;

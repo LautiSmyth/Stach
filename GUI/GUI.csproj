@@ -52,6 +52,12 @@
     <Compile Include="BitacoraForm.Designer.cs">
       <DependentUpon>BitacoraForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IdiomaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IdiomaForm.Designer.cs">
+      <DependentUpon>IdiomaForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

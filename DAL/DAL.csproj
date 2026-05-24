@@ -46,7 +46,9 @@
     <Compile Include="BitacoraDAL.cs" />
     <Compile Include="ConexionDAL.cs" />
     <Compile Include="CriticidadDAL.cs" />
+    <Compile Include="IdiomaDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TraduccionDAL.cs" />
     <Compile Include="UsuarioDAL.cs" />
   </ItemGroup>
   <ItemGroup>

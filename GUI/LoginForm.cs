@@ -1,4 +1,5 @@
 using Aplicacion;
+using BE;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -6,7 +7,7 @@ using System.Windows.Forms;
 
 namespace GUI
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : Form, IObserver
     {
         private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
         private readonly ConexionServicio _conexionServicio = new ConexionServicio();
@@ -16,6 +17,8 @@ namespace GUI
             InitializeComponent();
             txtUsername.TextChanged += TxtInput_TextChanged;
             txtPassword.TextChanged += TxtInput_TextChanged;
+            ManejadorIdioma.Instancia.Attach(this);
+            ActualizarIdioma();
         }
 
         private void TxtInput_TextChanged(object sender, EventArgs e)
@@ -126,6 +129,7 @@ namespace GUI
                 e.Cancel = true;
                 Salir();
             }
+            ManejadorIdioma.Instancia.Detach(this);
         }
 
         private void Salir()
@@ -149,6 +153,13 @@ namespace GUI
         {
             if (e.KeyCode == Keys.Enter)
                 BtnIngresar_Click(sender, e);
+        }
+
+        public void ActualizarIdioma()
+        {
+            lblUsername.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblUsername");
+            lblPassword.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblPassword");
+            btnIngresar.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.btnIngresar");
         }
     }
 }

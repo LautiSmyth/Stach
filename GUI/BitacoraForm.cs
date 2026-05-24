@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace GUI
 {
-    public partial class BitacoraForm : Form
+    public partial class BitacoraForm : Form, IObserver
     {
         private readonly BitacoraServicio _bitacoraServicio = new BitacoraServicio();
         private readonly CriticidadServicio _criticidadServicio = new CriticidadServicio();
@@ -20,6 +20,7 @@ namespace GUI
             InitializeComponent();
             _timerBusqueda.Interval = 300;
             _timerBusqueda.Tick += TimerBusqueda_Tick;
+            ManejadorIdioma.Instancia.Attach(this);
         }
 
         private void BitacoraForm_Load(object sender, EventArgs e)
@@ -35,6 +36,7 @@ namespace GUI
             CargarComboCriticidad();
             LimpiarFiltros();
             SuscribirFiltros();
+            ActualizarIdioma();
         }
 
         private void BitacoraForm_Shown(object sender, EventArgs e)
@@ -47,6 +49,7 @@ namespace GUI
         {
             _timerBusqueda.Stop();
             _timerBusqueda.Dispose();
+            ManejadorIdioma.Instancia.Detach(this);
             base.OnFormClosed(e);
         }
 
@@ -323,6 +326,26 @@ namespace GUI
                     }
                 }
             }
+        }
+
+        public void ActualizarIdioma()
+        {
+            lblBuscar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblBuscar");
+            lblCriticidad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblCriticidad");
+            lblActividad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblActividad");
+            lblLimite.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblLimite");
+            btnBuscar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.btnBuscar");
+            btnLimpiar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.btnLimpiar");
+            btnExportar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.btnExportar");
+            grpDetalle.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.grpDetalle");
+            lblDetFecha.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetFecha");
+            lblDetUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetUsuario");
+            lblDetModulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetModulo");
+            lblDetActividad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetActividad");
+            lblDetCriticidad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetCriticidad");
+            lblDetResultado.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetResultado");
+            lblDetDetalle.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetDetalle");
+            lblDetError.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetError");
         }
     }
 

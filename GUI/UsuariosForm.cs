@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace GUI
 {
-    public partial class UsuariosForm : Form
+    public partial class UsuariosForm : Form, IObserver
     {
         private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
         private List<Usuario> _usuarios;
@@ -19,12 +19,14 @@ namespace GUI
         public UsuariosForm()
         {
             InitializeComponent();
+            ManejadorIdioma.Instancia.Attach(this);
         }
 
         private void UsuariosForm_Load(object sender, EventArgs e)
         {
             cboEstado.DataSource = Enum.GetValues(typeof(EstadoUsuario));
             CargarDatos();
+            ActualizarIdioma();
         }
 
         private void UsuariosForm_Shown(object sender, EventArgs e)
@@ -116,7 +118,7 @@ namespace GUI
                 txtPassword.Clear();
                 txtConfirmarPassword.Clear();
                 cboEstado.SelectedIndex = 0;
-                btnGuardar.Text = "Crear usuario";
+                btnGuardar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnGuardar");
             }
             finally
             {
@@ -134,7 +136,7 @@ namespace GUI
                 txtPassword.Clear();
                 txtConfirmarPassword.Clear();
                 cboEstado.SelectedItem = _seleccionado.Estado;
-                btnGuardar.Text = "Guardar cambios";
+                btnGuardar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnModificar");
             }
             finally
             {
@@ -238,6 +240,27 @@ namespace GUI
         private void TxtBuscarUsuario_TextChanged(object sender, EventArgs e)
         {
             FiltrarGrilla();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            ManejadorIdioma.Instancia.Detach(this);
+            base.OnFormClosed(e);
+        }
+
+        public void ActualizarIdioma()
+        {
+            lblTituloGrilla.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblTituloGrilla");
+            lblBuscarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblBuscarUsuario");
+            btnRefrescar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnRefrescar");
+            grpGestion.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.grpGestion");
+            lblUsername.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblUsername");
+            lblPassword.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblPassword");
+            lblConfirmarPassword.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblConfirmarPassword");
+            lblRequisitos.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblRequisitos");
+            lblEstado.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblEstado");
+            btnGuardar.Text = _seleccionado == null ? ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnGuardar") : ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnModificar");
+            btnLimpiar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnLimpiar");
         }
     }
 }

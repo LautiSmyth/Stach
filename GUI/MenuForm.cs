@@ -1,18 +1,21 @@
 using Aplicacion;
+using BE;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace GUI
 {
-    public partial class MenuForm : Form
+    public partial class MenuForm : Form, IObserver
     {
         private readonly ConexionServicio _conexionServicio = new ConexionServicio();
         private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
+        private bool _cargandoIdioma = false;
 
         public MenuForm()
         {
             InitializeComponent();
+            ManejadorIdioma.Instancia.Attach(this);
         }
 
         private void MenuForm_Load(object sender, EventArgs e)
@@ -23,13 +26,58 @@ namespace GUI
                     c.BackColor = System.Drawing.Color.FromArgb(248, 244, 255);
             }
 
-            lblUsuario.Text = $"👤 Sesión: {_usuarioServicio.ObtenerUsernameEnSesion()}";
-            lblBaseDatos.Text = $"🖳 Servidor / BD: {_conexionServicio.ObtenerNombreBaseDatos()}";
+            cboIdioma.SelectedIndexChanged += CboIdioma_SelectedIndexChanged;
+            ActualizarIdioma();
 
             _timer.Interval = 1000;
             _timer.Tick += Timer_Tick;
             _timer.Start();
             ActualizarHora();
+        }
+
+        private void CboIdioma_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_cargandoIdioma) return;
+            if (cboIdioma.SelectedItem is Idioma idioma)
+            {
+                ManejadorIdioma.Instancia.CambiarIdioma(idioma);
+            }
+        }
+
+        private void CargarComboIdioma()
+        {
+            _cargandoIdioma = true;
+            try
+            {
+                var idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
+                var actual = ManejadorIdioma.Instancia.IdiomaActual;
+
+                cboIdioma.ComboBox.DataSource = null;
+                cboIdioma.ComboBox.DataSource = idiomas;
+                cboIdioma.ComboBox.DisplayMember = "Nombre";
+
+                if (actual != null)
+                {
+                    for (int i = 0; i < cboIdioma.Items.Count; i++)
+                    {
+                        if (cboIdioma.Items[i] is Idioma id && id.IdIdioma == actual.IdIdioma)
+                        {
+                            cboIdioma.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                _cargandoIdioma = false;
+            }
+        }
+
+        private void BtnIdiomas_Click(object sender, EventArgs e)
+        {
+            var form = new IdiomaForm();
+            form.ShowDialog();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -81,6 +129,7 @@ namespace GUI
                 e.Cancel = true;
                 SalirAplicacion();
             }
+            ManejadorIdioma.Instancia.Detach(this);
         }
 
         private void CerrarSesion()
@@ -101,6 +150,17 @@ namespace GUI
                 _timer.Stop();
                 Environment.Exit(0);
             }
+        }
+
+        public void ActualizarIdioma()
+        {
+            btnUsuarios.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnUsuarios");
+            btnBitacora.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnBitacora");
+            btnIdiomas.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnIdiomas") ?? "🌐 Idiomas";
+            btnCerrarSesion.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnCerrarSesion");
+            lblUsuario.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblSesionInfo")} {_usuarioServicio.ObtenerUsernameEnSesion()}";
+            lblBaseDatos.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblServidorInfo")} {_conexionServicio.ObtenerNombreBaseDatos()}";
+            CargarComboIdioma();
         }
 
         private class EstiloProfesionalMenu : ProfessionalColorTable
