@@ -29,6 +29,7 @@ namespace GUI
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
+            txtUsername.MaxLength = 100;
             ConfigurarEventosPaint();
             CargarComboIdioma();
         }

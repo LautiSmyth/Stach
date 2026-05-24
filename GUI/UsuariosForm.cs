@@ -24,9 +24,19 @@ namespace GUI
 
         private void UsuariosForm_Load(object sender, EventArgs e)
         {
+            txtUsername.MaxLength = 100;
+            txtUsername.KeyPress += TxtUsername_KeyPress;
             cboEstado.DataSource = Enum.GetValues(typeof(EstadoUsuario));
             CargarDatos();
             ActualizarIdioma();
+        }
+
+        private void TxtUsername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
 
         private void UsuariosForm_Shown(object sender, EventArgs e)

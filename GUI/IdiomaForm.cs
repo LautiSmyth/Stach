@@ -26,6 +26,10 @@ namespace GUI
                 CargarTraduccionesGrilla();
                 ActualizarIdioma();
 
+                txtNombre.MaxLength = 100;
+                txtCodigo.MaxLength = 10;
+                txtCodigo.KeyPress += TxtCodigo_KeyPress;
+
                 lstIdiomas.SelectedIndexChanged += LstIdiomas_SelectedIndexChanged;
                 cboIdiomaDestino.SelectedIndexChanged += CboIdiomaDestino_SelectedIndexChanged;
                 btnAgregarIdioma.Click += BtnAgregarIdioma_Click;
@@ -35,6 +39,14 @@ namespace GUI
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TxtCodigo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
             }
         }
 

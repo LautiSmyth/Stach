@@ -26,6 +26,10 @@ namespace GUI
             CargarDatos();
             ActualizarIdioma();
 
+            txtNombrePermiso.MaxLength = 100;
+            txtClavePermiso.MaxLength = 100;
+            txtClavePermiso.KeyPress += TxtClavePermiso_KeyPress;
+
             tvEstructura.AfterSelect += TvEstructura_AfterSelect;
             btnCrearPatente.Click += BtnCrearPatente_Click;
             btnCrearFamilia.Click += BtnCrearFamilia_Click;
@@ -38,6 +42,14 @@ namespace GUI
             cboUsuarios.SelectedIndexChanged += CboUsuarios_SelectedIndexChanged;
             btnAsignarUsuario.Click += BtnAsignarUsuario_Click;
             btnQuitarUsuario.Click += BtnQuitarUsuario_Click;
+        }
+
+        private void TxtClavePermiso_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != '_')
+            {
+                e.Handled = true;
+            }
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
