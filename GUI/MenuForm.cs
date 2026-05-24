@@ -125,6 +125,12 @@ namespace GUI
             AbrirOActivar<BackupForm>();
         }
 
+        private void LblUsuario_Click(object sender, EventArgs e)
+        {
+            MisPermisosForm form = new MisPermisosForm();
+            form.ShowDialog();
+        }
+
         private void AbrirOActivar<T>() where T : Form, new()
         {
             foreach (Form form in this.MdiChildren)

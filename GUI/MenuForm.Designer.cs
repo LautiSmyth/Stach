@@ -68,6 +68,11 @@ namespace GUI
             this.lblUsuario.Padding = new System.Windows.Forms.Padding(10, 4, 10, 4);
             this.lblUsuario.Size = new System.Drawing.Size(83, 29);
             this.lblUsuario.Text = "  Usuario";
+            this.lblUsuario.IsLink = true;
+            this.lblUsuario.LinkColor = System.Drawing.Color.White;
+            this.lblUsuario.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
+            this.lblUsuario.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.lblUsuario.Click += new System.EventHandler(this.LblUsuario_Click);
             // 
             // sepNavegacion
             // 

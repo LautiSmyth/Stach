@@ -186,5 +186,10 @@ namespace Aplicacion
             }
             return false;
         }
+
+        public Usuario ObtenerUsuarioLogueado()
+        {
+            return SessionManager.GetInstance().Usuario;
+        }
     }
 }

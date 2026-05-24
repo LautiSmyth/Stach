@@ -193,6 +193,11 @@ namespace DAL
             seed("BackupForm.btnCrear", "Generar Copia de Seguridad (.bak)", "Generate Backup (.bak)", "Gerar Cópia de Segurança (.bak)");
             seed("BackupForm.btnRestaurar", "Restaurar Copia de Seguridad (.bak)", "Restore Backup (.bak)", "Restaurar Cópia de Segurança (.bak)");
             seed("BackupForm.lblInfo", "Nota: La restauración cerrará las conexiones activas temporalmente para poder sobrescribir la base de datos.", "Note: Restoration will temporarily close active connections to overwrite the database.", "Nota: A restauração fechará as conexões ativas temporariamente para poder sobrescrever a base de datos.");
+            seed("MisPermisosForm.Text", "Mis Permisos y Roles", "My Permissions & Roles", "Minhas Permissões e Perfis");
+            seed("MisPermisosForm.lblTitulo", "Mis Roles y Permisos", "My Roles & Permissions", "Minhas Permissões e Perfis");
+            seed("MisPermisosForm.lblDirectos", "Roles y Permisos Asignados", "Assigned Roles & Permissions", "Perfis e Permissões Atribuídos");
+            seed("MisPermisosForm.lblResueltos", "Permisos Finales (Resueltos)", "Final Permissions (Resolved)", "Permissões Finais (Resolvidas)");
+            seed("MisPermisosForm.btnCerrar", "Cerrar", "Close", "Fechar");
         }
 
         private void AgregarSeed(string nombreComponente, string textoEs, string textoEn, string textoPt)
