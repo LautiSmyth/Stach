@@ -28,11 +28,20 @@ namespace GUI
 
             cboIdioma.SelectedIndexChanged += CboIdioma_SelectedIndexChanged;
             ActualizarIdioma();
+            ValidarPermisosMenu();
 
             _timer.Interval = 1000;
             _timer.Tick += Timer_Tick;
             _timer.Start();
             ActualizarHora();
+        }
+
+        private void ValidarPermisosMenu()
+        {
+            btnUsuarios.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Usuarios");
+            btnBitacora.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Bitacora");
+            btnPermisos.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Permisos");
+            btnIdiomas.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Idiomas");
         }
 
         private void CboIdioma_SelectedIndexChanged(object sender, EventArgs e)
@@ -100,6 +109,11 @@ namespace GUI
             AbrirOActivar<UsuariosForm>();
         }
 
+        private void BtnPermisos_Click(object sender, EventArgs e)
+        {
+            AbrirOActivar<PermisosForm>();
+        }
+
         private void AbrirOActivar<T>() where T : Form, new()
         {
             foreach (Form form in this.MdiChildren)
@@ -156,6 +170,7 @@ namespace GUI
         {
             btnUsuarios.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnUsuarios");
             btnBitacora.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnBitacora");
+            btnPermisos.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnPermisos") ?? "🔑 Permisos";
             btnIdiomas.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnIdiomas") ?? "🌐 Idiomas";
             btnCerrarSesion.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnCerrarSesion");
             lblUsuario.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblSesionInfo")} {_usuarioServicio.ObtenerUsernameEnSesion()}";

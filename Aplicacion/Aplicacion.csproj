@@ -45,6 +45,7 @@
     <Compile Include="ConexionServicio.cs" />
     <Compile Include="CriticidadServicio.cs" />
     <Compile Include="ManejadorIdioma.cs" />
+    <Compile Include="PermisoServicio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsuarioServicio.cs" />
   </ItemGroup>

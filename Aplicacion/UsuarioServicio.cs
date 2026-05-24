@@ -152,5 +152,13 @@ namespace Aplicacion
             Usuario usuario = SessionManager.GetInstance().Usuario;
             return usuario == null ? string.Empty : usuario.Username;
         }
+
+        public bool UsuarioLogueadoTienePermiso(string patenteKey)
+        {
+            Usuario usuario = SessionManager.GetInstance().Usuario;
+            if (usuario == null) return false;
+            var permisoServicio = new PermisoServicio();
+            return permisoServicio.UsuarioTienePermiso(usuario, patenteKey);
+        }
     }
 }

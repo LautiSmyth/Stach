@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BE
 {
@@ -13,5 +14,6 @@ namespace BE
         public int IntentosFallidos { get; set; }
         public int CantidadBloqueos { get; set; }
         public DateTime? FechaBloqueo { get; set; }
+        public List<ComponentePermiso> Permisos { get; set; } = new List<ComponentePermiso>();
     }
 }

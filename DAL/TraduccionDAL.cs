@@ -20,6 +20,7 @@ namespace DAL
             AgregarMock("MenuForm.btnUsuarios", "👤 Usuarios", "👤 Users");
             AgregarMock("MenuForm.btnBitacora", "📜 Bitácora", "📜 Audit Trail");
             AgregarMock("MenuForm.btnIdiomas", "🌐 Idiomas", "🌐 Languages");
+            AgregarMock("MenuForm.btnPermisos", "🔑 Permisos", "🔑 Permissions");
             AgregarMock("MenuForm.btnCerrarSesion", "❌ Cerrar sesión", "❌ Log Out");
             AgregarMock("MenuForm.lblSesionInfo", "👤 Sesión:", "👤 Session:");
             AgregarMock("MenuForm.lblServidorInfo", "🖳 Servidor / BD:", "🖳 Server / DB:");
@@ -66,6 +67,23 @@ namespace DAL
             AgregarMock("IdiomaForm.btnGuardarTraducciones", "Guardar traducciones", "Save translations");
             AgregarMock("IdiomaForm.colComponente", "Componente", "Component");
             AgregarMock("IdiomaForm.colTexto", "Texto / Traducción", "Translation text");
+
+            AgregarMock("PermisosForm.Text", "Gestión de Perfiles y Permisos", "Role & Permission Management");
+            AgregarMock("PermisosForm.lblCol1Titulo", "Estructura de Permisos", "Permission Structure");
+            AgregarMock("PermisosForm.lblNombrePermiso", "Nombre", "Name");
+            AgregarMock("PermisosForm.lblClavePermiso", "Clave", "Key");
+            AgregarMock("PermisosForm.btnCrearPatente", "Nueva Patente", "New Patent/Permission");
+            AgregarMock("PermisosForm.btnCrearFamilia", "Nueva Familia", "New Family/Role");
+            AgregarMock("PermisosForm.btnEliminarPermiso", "Eliminar Seleccionado", "Delete Selected");
+            AgregarMock("PermisosForm.lblCol2Titulo", "Configurador de Relaciones", "Relationship Configurator");
+            AgregarMock("PermisosForm.lblDisponibles", "Permisos Disponibles", "Available Permissions");
+            AgregarMock("PermisosForm.lblMiembros", "Miembros del Rol", "Role Members");
+            AgregarMock("PermisosForm.btnGuardarRelaciones", "Guardar Relaciones del Rol", "Save Role Relationships");
+            AgregarMock("PermisosForm.lblCol3Titulo", "Gestión de Usuarios", "User Management");
+            AgregarMock("PermisosForm.lblUserPerms", "Permisos del Usuario", "User Permissions");
+            AgregarMock("PermisosForm.lblPatentesPlanas", "Patentes Resultantes", "Resulting Patents/Permissions");
+            AgregarMock("PermisosForm.btnAsignarUsuario", "Asignar a Usuario >>", "Assign to User >>");
+            AgregarMock("PermisosForm.btnQuitarUsuario", "<< Quitar de Usuario", "<< Remove from User");
         }
 
         private static void AgregarMock(string nombreComponente, string textoEs, string textoEn)

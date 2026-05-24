@@ -9,24 +9,40 @@ namespace BLL
     public class UsuarioBLL
     {
         private readonly UsuarioDAL _dal = new UsuarioDAL();
+        private readonly PermisoBLL _permisoBll = new PermisoBLL();
 
         private static readonly int[] _minutosBloqueo = { 1, 5, 15, 60 };
 
         public List<Usuario> ObtenerTodos()
         {
-            return _dal.ObtenerTodos();
+            var usuarios = _dal.ObtenerTodos();
+            foreach (var u in usuarios)
+            {
+                u.Permisos = _permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
+            }
+            return usuarios;
         }
 
         public Usuario ObtenerPorId(int idUsuario)
         {
-            return _dal.ObtenerPorId(idUsuario);
+            var u = _dal.ObtenerPorId(idUsuario);
+            if (u != null)
+            {
+                u.Permisos = _permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
+            }
+            return u;
         }
 
         public Usuario ObtenerPorUsername(string username)
         {
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentException("El nombre de usuario no puede estar vacio.");
-            return _dal.ObtenerPorUsername(username);
+            var u = _dal.ObtenerPorUsername(username);
+            if (u != null)
+            {
+                u.Permisos = _permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
+            }
+            return u;
         }
 
         public void ValidarEstado(Usuario usuario)
