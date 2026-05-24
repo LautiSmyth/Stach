@@ -55,13 +55,16 @@ namespace DAL
         public void Actualizar(Usuario usuario)
         {
             const string consulta =
-                "UPDATE Usuario SET Estado = @Estado, IntentosFallidos = @IntentosFallidos, " +
-                "CantidadBloqueos = @CantidadBloqueos, FechaBloqueo = @FechaBloqueo, UltimoLogin = @UltimoLogin " +
+                "UPDATE Usuario SET Username = @Username, PasswordHash = @PasswordHash, Estado = @Estado, " +
+                "IntentosFallidos = @IntentosFallidos, CantidadBloqueos = @CantidadBloqueos, " +
+                "FechaBloqueo = @FechaBloqueo, UltimoLogin = @UltimoLogin " +
                 "WHERE IdUsuario = @IdUsuario";
 
             SqlParameter[] p = new SqlParameter[]
             {
                 new SqlParameter("@IdUsuario", usuario.IdUsuario),
+                new SqlParameter("@Username", usuario.Username),
+                new SqlParameter("@PasswordHash", usuario.PasswordHash),
                 new SqlParameter("@Estado", (int)usuario.Estado),
                 new SqlParameter("@IntentosFallidos", usuario.IntentosFallidos),
                 new SqlParameter("@CantidadBloqueos", usuario.CantidadBloqueos),

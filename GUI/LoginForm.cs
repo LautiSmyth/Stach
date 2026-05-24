@@ -14,54 +14,18 @@ namespace GUI
         public LoginForm()
         {
             InitializeComponent();
+            txtUsername.TextChanged += TxtInput_TextChanged;
+            txtPassword.TextChanged += TxtInput_TextChanged;
+        }
+
+        private void TxtInput_TextChanged(object sender, EventArgs e)
+        {
+            lblErrorValidacion.Text = "";
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            ConfigurarEstilos();
             ConfigurarEventosPaint();
-        }
-
-        private void ConfigurarEstilos()
-        {
-            this.BackColor = AppEstilo.ColorFondo;
-
-            pnlIzquierda.BackColor = AppEstilo.ColorPrimario;
-
-            pnlCard.BackColor = AppEstilo.ColorFondoCard;
-
-            lblBienvenida.Font = new Font("Segoe UI", 13f, FontStyle.Bold);
-            lblBienvenida.ForeColor = AppEstilo.ColorTextoClaro;
-            lblBienvenida.BackColor = Color.Transparent;
-
-            lblTagline.Font = new Font("Segoe UI", 9.5f);
-            lblTagline.ForeColor = Color.FromArgb(220, 200, 245);
-            lblTagline.BackColor = Color.Transparent;
-
-            lblTitulo.Font = AppEstilo.FuenteSubtitulo;
-            lblTitulo.ForeColor = AppEstilo.ColorPrimario;
-            lblTitulo.BackColor = Color.Transparent;
-
-            lblSubtitulo.Font = AppEstilo.FuenteNormal;
-            lblSubtitulo.ForeColor = AppEstilo.ColorTextoSecundario;
-            lblSubtitulo.BackColor = Color.Transparent;
-
-            lblUsername.Font = AppEstilo.FuenteSeccion;
-            lblUsername.ForeColor = AppEstilo.ColorTexto;
-            lblUsername.BackColor = Color.Transparent;
-
-            lblPassword.Font = AppEstilo.FuenteSeccion;
-            lblPassword.ForeColor = AppEstilo.ColorTexto;
-            lblPassword.BackColor = Color.Transparent;
-
-            chkHidePass.Font = AppEstilo.FuenteNormal;
-            chkHidePass.ForeColor = AppEstilo.ColorTextoSecundario;
-            chkHidePass.BackColor = Color.Transparent;
-
-            AppEstilo.AplicarTextBox(txtUsername);
-            AppEstilo.AplicarTextBox(txtPassword);
-            AppEstilo.AplicarBotonPrimario(btnIngresar);
-            AppEstilo.AplicarBotonSecundario(btnSalir);
         }
 
         private void ConfigurarEventosPaint()
@@ -72,7 +36,7 @@ namespace GUI
 
         private void PnlCard_Paint(object sender, PaintEventArgs e)
         {
-            using (Pen pen = new Pen(AppEstilo.ColorBordeSuave, 1))
+            using (Pen pen = new Pen(Color.FromArgb(225, 215, 240), 1))
                 e.Graphics.DrawRectangle(pen, 0, 0, pnlCard.Width - 1, pnlCard.Height - 1);
         }
 
@@ -96,9 +60,27 @@ namespace GUI
 
         private void BtnIngresar_Click(object sender, EventArgs e)
         {
+            lblErrorValidacion.Text = "";
+
+            if (string.IsNullOrWhiteSpace(txtUsername.Text) && string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                lblErrorValidacion.Text = "Por favor, ingrese usuario y contraseña.";
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                lblErrorValidacion.Text = "Por favor, ingrese el usuario.";
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                lblErrorValidacion.Text = "Por favor, ingrese la contraseña.";
+                return;
+            }
+
             if (!_conexionServicio.VerificarConexion())
             {
-                MessageBox.Show("No hay conexion a la base de datos.", "Error de conexion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblErrorValidacion.Text = "No hay conexion a la base de datos.";
                 return;
             }
 
@@ -113,7 +95,7 @@ namespace GUI
             }
             catch (UnauthorizedAccessException ex)
             {
-                MessageBox.Show(ex.Message, "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                lblErrorValidacion.Text = ex.Message;
 
                 if (_usuarioServicio.LimiteAlcanzadoEnSesion())
                 {
@@ -123,7 +105,7 @@ namespace GUI
             }
             catch (Exception)
             {
-                MessageBox.Show("Ocurrio un error inesperado. Intente nuevamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblErrorValidacion.Text = "Ocurrio un error inesperado. Intente nuevamente.";
             }
             finally
             {

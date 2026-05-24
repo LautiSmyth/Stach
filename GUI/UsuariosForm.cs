@@ -13,7 +13,8 @@ namespace GUI
         private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
         private List<Usuario> _usuarios;
         private Usuario _seleccionado;
-        private bool _columnasConfiguradas = false;
+        private bool _cargandoSeleccion = false;
+        private bool _deseleccionarEnClick = false;
 
         public UsuariosForm()
         {
@@ -22,76 +23,62 @@ namespace GUI
 
         private void UsuariosForm_Load(object sender, EventArgs e)
         {
-            this.BackColor = AppEstilo.ColorFondo;
-
-            pnlEncabezado.BackColor = AppEstilo.ColorPrimarioUltraClaro;
-
-            lblTituloGrilla.Font = AppEstilo.FuenteSubtitulo;
-            lblTituloGrilla.ForeColor = AppEstilo.ColorPrimario;
-            lblTituloGrilla.BackColor = Color.Transparent;
-
-            AppEstilo.AplicarGrilla(dgvUsuarios);
-            AppEstilo.AplicarGroupBox(grpAlta);
-            AppEstilo.AplicarGroupBox(grpEstado);
-            AppEstilo.AplicarTextBox(txtUsername);
-            AppEstilo.AplicarTextBox(txtPassword);
-            AppEstilo.AplicarComboBox(cboEstado);
-            AppEstilo.AplicarBotonPrimario(btnCrear);
-            AppEstilo.AplicarBotonPrimario(btnCambiarEstado);
-            AppEstilo.AplicarBotonSecundario(btnRefrescar);
-
-            AppEstilo.AplicarLabelNegrita(lblUsername);
-            AppEstilo.AplicarLabelNegrita(lblPassword);
-            AppEstilo.AplicarLabel(lblRequisitos, esSecundario: true);
-            lblRequisitos.Font = AppEstilo.FuentePequena;
-
-            AppEstilo.AplicarLabelNegrita(lblSeleccionado);
-            lblNombreSeleccionado.Font = AppEstilo.FuenteNegrita;
-            lblNombreSeleccionado.ForeColor = AppEstilo.ColorPrimario;
-            lblNombreSeleccionado.BackColor = Color.Transparent;
-
-            AppEstilo.AplicarLabelNegrita(lblEstado);
-
-            tblInferior.BackColor = AppEstilo.ColorFondo;
-            tblAlta.BackColor = Color.Transparent;
-            tblEstado.BackColor = Color.Transparent;
-
             cboEstado.DataSource = Enum.GetValues(typeof(EstadoUsuario));
             CargarDatos();
         }
 
         private void UsuariosForm_Shown(object sender, EventArgs e)
         {
-            splitPrincipal.SplitterDistance = (int)(this.ClientSize.Height * 0.60);
+            splitPrincipal.SplitterDistance = 600;
         }
 
         private void CargarDatos()
         {
             _usuarios = _usuarioServicio.ObtenerTodos();
-            dgvUsuarios.DataSource = null;
-            dgvUsuarios.DataSource = _usuarios;
+            FiltrarGrilla();
+        }
 
-            if (!_columnasConfiguradas && dgvUsuarios.Columns.Count > 0)
+        private void FiltrarGrilla()
+        {
+            if (_usuarios == null) return;
+            string fil = txtBuscarUsuario.Text.Trim().ToLower();
+            if (string.IsNullOrEmpty(fil))
             {
-                dgvUsuarios.Columns["PasswordHash"].Visible = false;
-                dgvUsuarios.Columns["IntentosFallidos"].Visible = false;
-                dgvUsuarios.Columns["CantidadBloqueos"].Visible = false;
-                dgvUsuarios.Columns["FechaBloqueo"].Visible = false;
+                dgvUsuarios.DataSource = null;
+                dgvUsuarios.DataSource = _usuarios;
+            }
+            else
+            {
+                var filtrados = _usuarios.FindAll(u => u.Username.ToLower().Contains(fil));
+                dgvUsuarios.DataSource = null;
+                dgvUsuarios.DataSource = filtrados;
+            }
+            AplicarFormatoGrilla();
+        }
+
+        private void AplicarFormatoGrilla()
+        {
+            if (dgvUsuarios.Columns.Count > 0)
+            {
+                if (dgvUsuarios.Columns["PasswordHash"] != null) dgvUsuarios.Columns["PasswordHash"].Visible = false;
+                if (dgvUsuarios.Columns["IntentosFallidos"] != null) dgvUsuarios.Columns["IntentosFallidos"].Visible = false;
+                if (dgvUsuarios.Columns["CantidadBloqueos"] != null) dgvUsuarios.Columns["CantidadBloqueos"].Visible = false;
+                if (dgvUsuarios.Columns["FechaBloqueo"] != null) dgvUsuarios.Columns["FechaBloqueo"].Visible = false;
 
                 if (dgvUsuarios.Columns["IdUsuario"] != null)
                     dgvUsuarios.Columns["IdUsuario"].HeaderText = "ID";
                 if (dgvUsuarios.Columns["Username"] != null)
+                {
                     dgvUsuarios.Columns["Username"].HeaderText = "Usuario";
+                    dgvUsuarios.Columns["Username"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
                 if (dgvUsuarios.Columns["Estado"] != null)
                     dgvUsuarios.Columns["Estado"].HeaderText = "Estado";
                 if (dgvUsuarios.Columns["FechaAlta"] != null)
                     dgvUsuarios.Columns["FechaAlta"].HeaderText = "Fecha alta";
                 if (dgvUsuarios.Columns["UltimoLogin"] != null)
                     dgvUsuarios.Columns["UltimoLogin"].HeaderText = "Último login";
-
-                _columnasConfiguradas = true;
             }
-
             AplicarColorEstados();
         }
 
@@ -104,50 +91,129 @@ namespace GUI
                     switch (u.Estado)
                     {
                         case EstadoUsuario.Bloqueado:
-                            fila.DefaultCellStyle.ForeColor = AppEstilo.ColorPeligro;
+                            fila.DefaultCellStyle.ForeColor = Color.FromArgb(229, 115, 115);
                             break;
                         case EstadoUsuario.Inactivo:
-                            fila.DefaultCellStyle.ForeColor = AppEstilo.ColorTextoSecundario;
+                            fila.DefaultCellStyle.ForeColor = Color.FromArgb(110, 85, 150);
                             break;
                         default:
-                            fila.DefaultCellStyle.ForeColor = AppEstilo.ColorTexto;
+                            fila.DefaultCellStyle.ForeColor = Color.FromArgb(38, 20, 70);
                             break;
                     }
                 }
             }
         }
 
-        private void DgvUsuarios_SelectionChanged(object sender, EventArgs e)
+        private void Deseleccionar()
         {
-            if (dgvUsuarios.SelectedRows.Count == 0)
+            if (_cargandoSeleccion) return;
+            _cargandoSeleccion = true;
+            try
             {
                 _seleccionado = null;
-                lblNombreSeleccionado.Text = "(ninguno)";
-                return;
+                dgvUsuarios.ClearSelection();
+                txtUsername.Clear();
+                txtPassword.Clear();
+                txtConfirmarPassword.Clear();
+                cboEstado.SelectedIndex = 0;
+                btnGuardar.Text = "Crear usuario";
             }
-            _seleccionado = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
-            if (_seleccionado != null)
+            finally
             {
-                cboEstado.SelectedItem = _seleccionado.Estado;
-                lblNombreSeleccionado.Text = _seleccionado.Username;
+                _cargandoSeleccion = false;
             }
         }
 
-        private void BtnCrear_Click(object sender, EventArgs e)
+        private void CargarCamposModificacion()
         {
-            if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
-            {
-                MessageBox.Show("Complete todos los campos.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (_cargandoSeleccion || _seleccionado == null) return;
+            _cargandoSeleccion = true;
             try
             {
-                _usuarioServicio.Alta(this.Text, txtUsername.Text.Trim(), txtPassword.Text);
-                MessageBox.Show($"Usuario '{txtUsername.Text.Trim()}' creado correctamente.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtUsername.Clear();
+                txtUsername.Text = _seleccionado.Username;
                 txtPassword.Clear();
-                txtUsername.Focus();
+                txtConfirmarPassword.Clear();
+                cboEstado.SelectedItem = _seleccionado.Estado;
+                btnGuardar.Text = "Guardar cambios";
+            }
+            finally
+            {
+                _cargandoSeleccion = false;
+            }
+        }
+
+        private void DgvUsuarios_SelectionChanged(object sender, EventArgs e)
+        {
+            if (_cargandoSeleccion) return;
+            if (dgvUsuarios.SelectedRows.Count == 0)
+            {
+                Deseleccionar();
+                return;
+            }
+            var u = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
+            if (u != null && u != _seleccionado)
+            {
+                _seleccionado = u;
+                CargarCamposModificacion();
+            }
+        }
+
+        private void DgvUsuarios_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.Button == MouseButtons.Left)
+            {
+                _deseleccionarEnClick = dgvUsuarios.Rows[e.RowIndex].Selected;
+            }
+        }
+
+        private void DgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && _deseleccionarEnClick)
+            {
+                _deseleccionarEnClick = false;
+                Deseleccionar();
+            }
+        }
+
+        private void BtnGuardar_Click(object sender, EventArgs e)
+        {
+            string username = txtUsername.Text.Trim();
+            string pass = txtPassword.Text;
+            string confirm = txtConfirmarPassword.Text;
+            EstadoUsuario estado = (EstadoUsuario)cboEstado.SelectedItem;
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                MessageBox.Show("El nombre de usuario es obligatorio.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (pass != confirm)
+            {
+                MessageBox.Show("Las contraseñas ingresadas no coinciden.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                if (_seleccionado == null)
+                {
+                    if (string.IsNullOrEmpty(pass))
+                    {
+                        MessageBox.Show("La contraseña es obligatoria para nuevos usuarios.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    _usuarioServicio.Alta(this.Text, username, pass);
+                    MessageBox.Show($"Usuario '{username}' creado correctamente.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    _usuarioServicio.Modificar(this.Text, _seleccionado.IdUsuario, username, pass, estado);
+                    MessageBox.Show($"Usuario '{username}' modificado correctamente.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 CargarDatos();
+                Deseleccionar();
             }
             catch (ArgumentException ex)
             {
@@ -159,34 +225,19 @@ namespace GUI
             }
         }
 
-        private void BtnCambiarEstado_Click(object sender, EventArgs e)
+        private void BtnLimpiar_Click(object sender, EventArgs e)
         {
-            if (_seleccionado == null)
-            {
-                MessageBox.Show("Seleccione un usuario de la lista.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            EstadoUsuario nuevoEstado = (EstadoUsuario)cboEstado.SelectedItem;
-            if (nuevoEstado == _seleccionado.Estado)
-            {
-                MessageBox.Show("El estado seleccionado ya es el actual.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            try
-            {
-                _usuarioServicio.CambiarEstado(this.Text, _seleccionado.IdUsuario, nuevoEstado);
-                MessageBox.Show("Estado actualizado correctamente.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                CargarDatos();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Deseleccionar();
         }
 
         private void BtnRefrescar_Click(object sender, EventArgs e)
         {
             CargarDatos();
+        }
+
+        private void TxtBuscarUsuario_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarGrilla();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Aplicacion
         {
             try
             {
+                _bll.ValidarPassword(password);
                 Usuario usuario = new Usuario
                 {
                     Username = username,
@@ -35,6 +36,42 @@ namespace Aplicacion
             catch (Exception ex)
             {
                 _bitacora.Registrar(modulo, "Alta", $"Error al dar de alta usuario '{username}'.", false, ex.Message);
+                throw;
+            }
+        }
+
+        public void Modificar(string modulo, int idUsuario, string nuevoUsername, string nuevoPassword, EstadoUsuario nuevoEstado)
+        {
+            try
+            {
+                Usuario usuario = _bll.ObtenerPorId(idUsuario);
+                if (usuario == null)
+                    throw new ArgumentException("El usuario no existe.");
+
+                string anteriorUsername = usuario.Username;
+                string nuevoPasswordHash = null;
+                if (!string.IsNullOrEmpty(nuevoPassword))
+                {
+                    _bll.ValidarPassword(nuevoPassword);
+                    nuevoPasswordHash = Encriptador.Hash(nuevoPassword);
+                }
+
+                _bll.Modificar(usuario, nuevoUsername, nuevoPasswordHash, nuevoEstado);
+
+                string detalle = $"Modificacion de usuario '{anteriorUsername}'. Nuevo username: '{nuevoUsername}', Estado: {nuevoEstado}.";
+                if (!string.IsNullOrEmpty(nuevoPassword))
+                {
+                    detalle += " Contraseña actualizada.";
+                }
+                _bitacora.Registrar(modulo, "Modificacion", detalle, true);
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _bitacora.Registrar(modulo, "Modificacion", $"Error al modificar usuario '{nuevoUsername}'.", false, ex.Message);
                 throw;
             }
         }

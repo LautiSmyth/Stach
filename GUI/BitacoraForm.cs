@@ -13,7 +13,6 @@ namespace GUI
         private readonly BitacoraServicio _bitacoraServicio = new BitacoraServicio();
         private readonly CriticidadServicio _criticidadServicio = new CriticidadServicio();
         private List<Bitacora> _listaCompleta = new List<Bitacora>();
-        private bool _columnasConfiguradas = false;
         private readonly Timer _timerBusqueda = new Timer();
 
         public BitacoraForm()
@@ -25,38 +24,17 @@ namespace GUI
 
         private void BitacoraForm_Load(object sender, EventArgs e)
         {
-            AplicarEstilo();
+            cboLimite.Items.Clear();
+            cboLimite.Items.Add("50");
+            cboLimite.Items.Add("100");
+            cboLimite.Items.Add("500");
+            cboLimite.Items.Add("Todos");
+            cboLimite.SelectedIndex = 1;
+
             DesuscribirFiltros();
             CargarComboCriticidad();
             LimpiarFiltros();
             SuscribirFiltros();
-        }
-
-        private void AplicarEstilo()
-        {
-            this.BackColor = AppEstilo.ColorFondo;
-            pnlFiltros.BackColor = AppEstilo.ColorPrimarioMuyClaro;
-            pnlEstado.BackColor = AppEstilo.ColorPrimarioMuyClaro;
-            AppEstilo.AplicarGrilla(dgvBitacora);
-            AppEstilo.AplicarTextBox(txtBuscar);
-            AppEstilo.AplicarComboBox(cboCriticidad);
-            AppEstilo.AplicarComboBox(cboActividad);
-            AppEstilo.AplicarBotonPrimario(btnBuscar);
-            AppEstilo.AplicarBotonSecundario(btnLimpiar);
-
-            foreach (Control c in flpFila1.Controls)
-            {
-                if (c is Label lbl) { lbl.ForeColor = AppEstilo.ColorTexto; lbl.Font = AppEstilo.FuenteNormal; }
-                if (c is CheckBox chk) { chk.ForeColor = AppEstilo.ColorTexto; chk.Font = AppEstilo.FuenteNormal; chk.BackColor = Color.Transparent; }
-            }
-            foreach (Control c in flpFila2.Controls)
-            {
-                if (c is Label lbl) { lbl.ForeColor = AppEstilo.ColorTexto; lbl.Font = AppEstilo.FuenteNormal; }
-                if (c is CheckBox chk) { chk.ForeColor = AppEstilo.ColorTexto; chk.Font = AppEstilo.FuenteNormal; chk.BackColor = Color.Transparent; }
-            }
-
-            lblContador.ForeColor = AppEstilo.ColorTexto;
-            lblContador.Font = AppEstilo.FuenteNormal;
         }
 
         private void BitacoraForm_Shown(object sender, EventArgs e)
@@ -83,6 +61,7 @@ namespace GUI
             chkExitoso.CheckStateChanged += Filtro_Changed;
             dtpDesde.ValueChanged += Filtro_Changed;
             dtpHasta.ValueChanged += Filtro_Changed;
+            cboLimite.SelectedIndexChanged += Filtro_Changed;
         }
 
         private void DesuscribirFiltros()
@@ -96,6 +75,7 @@ namespace GUI
             chkExitoso.CheckStateChanged -= Filtro_Changed;
             dtpDesde.ValueChanged -= Filtro_Changed;
             dtpHasta.ValueChanged -= Filtro_Changed;
+            cboLimite.SelectedIndexChanged -= Filtro_Changed;
         }
 
         private void TxtBuscar_TextChanged(object sender, EventArgs e)
@@ -187,6 +167,15 @@ namespace GUI
                 resultado.Add(b);
             }
 
+            if (cboLimite.SelectedItem != null && cboLimite.SelectedItem.ToString() != "Todos")
+            {
+                int limite = int.Parse(cboLimite.SelectedItem.ToString());
+                if (resultado.Count > limite)
+                {
+                    resultado = resultado.GetRange(0, limite);
+                }
+            }
+
             MostrarEnGrilla(resultado);
         }
 
@@ -194,15 +183,22 @@ namespace GUI
         {
             dgvBitacora.SuspendLayout();
             dgvBitacora.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvBitacora.DataSource = null;
             dgvBitacora.DataSource = lista;
 
-            if (!_columnasConfiguradas && dgvBitacora.Columns.Count > 0)
+            if (dgvBitacora.Columns.Count > 0)
             {
-                dgvBitacora.Columns["IdBitacora"].Visible = false;
-                dgvBitacora.Columns["IdUsuario"].Visible = false;
-                dgvBitacora.Columns["Detalle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvBitacora.Columns["Error"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                _columnasConfiguradas = true;
+                if (dgvBitacora.Columns["IdBitacora"] != null) dgvBitacora.Columns["IdBitacora"].Visible = false;
+                if (dgvBitacora.Columns["IdUsuario"] != null) dgvBitacora.Columns["IdUsuario"].Visible = false;
+                if (dgvBitacora.Columns["Detalle"] != null) dgvBitacora.Columns["Detalle"].Visible = false;
+                if (dgvBitacora.Columns["Error"] != null) dgvBitacora.Columns["Error"].Visible = false;
+
+                if (dgvBitacora.Columns["Username"] != null) dgvBitacora.Columns["Username"].HeaderText = "Usuario";
+                if (dgvBitacora.Columns["Modulo"] != null) dgvBitacora.Columns["Modulo"].HeaderText = "Módulo";
+                if (dgvBitacora.Columns["Actividad"] != null) dgvBitacora.Columns["Actividad"].HeaderText = "Actividad";
+                if (dgvBitacora.Columns["Criticidad"] != null) dgvBitacora.Columns["Criticidad"].HeaderText = "Criticidad";
+                if (dgvBitacora.Columns["Fecha"] != null) dgvBitacora.Columns["Fecha"].HeaderText = "Fecha y Hora";
+                if (dgvBitacora.Columns["Exitoso"] != null) dgvBitacora.Columns["Exitoso"].HeaderText = "Resultado";
             }
 
             foreach (DataGridViewRow fila in dgvBitacora.Rows)
@@ -219,12 +215,10 @@ namespace GUI
             }
 
             dgvBitacora.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            if (_columnasConfiguradas)
+            if (dgvBitacora.Columns["Modulo"] != null)
             {
-                dgvBitacora.Columns["Detalle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvBitacora.Columns["Error"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvBitacora.Columns["Modulo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
-
             dgvBitacora.ResumeLayout();
             lblContador.Text = $"  Mostrando {lista.Count} de {_listaCompleta.Count} registros";
         }
@@ -241,6 +235,7 @@ namespace GUI
             dtpHasta.MinDate = DateTime.Today.AddMonths(-1);
             dtpDesde.Value = DateTime.Today.AddMonths(-1);
             dtpHasta.Value = DateTime.Today;
+            if (cboLimite.Items.Count > 0) cboLimite.SelectedIndex = 1;
         }
 
         private void Filtro_Changed(object sender, EventArgs e)
@@ -266,6 +261,68 @@ namespace GUI
             LimpiarFiltros();
             SuscribirFiltros();
             AplicarFiltros();
+        }
+
+        private void DgvBitacora_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvBitacora.SelectedRows.Count > 0 && dgvBitacora.SelectedRows[0].DataBoundItem is Bitacora b)
+            {
+                txtDetFecha.Text = b.Fecha.ToString();
+                txtDetUsuario.Text = b.Username;
+                txtDetModulo.Text = b.Modulo;
+                txtDetActividad.Text = b.Actividad;
+                txtDetCriticidad.Text = b.Criticidad.ToString();
+                txtDetResultado.Text = b.Exitoso ? "Exitoso" : "Fallido";
+                txtDetDetalle.Text = b.Detalle;
+                txtDetError.Text = b.Error;
+            }
+            else
+            {
+                txtDetFecha.Clear();
+                txtDetUsuario.Clear();
+                txtDetModulo.Clear();
+                txtDetActividad.Clear();
+                txtDetCriticidad.Clear();
+                txtDetResultado.Clear();
+                txtDetDetalle.Clear();
+                txtDetError.Clear();
+            }
+        }
+
+        private void BtnExportar_Click(object sender, EventArgs e)
+        {
+            if (dgvBitacora.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay datos para exportar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Archivos CSV (*.csv)|*.csv";
+                sfd.FileName = "Bitacora_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".csv";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                     {
+                        List<string> lineas = new List<string>();
+                        lineas.Add("Fecha y Hora;Usuario;Módulo;Actividad;Criticidad;Resultado;Detalle;Detalle del Error");
+                        foreach (DataGridViewRow fila in dgvBitacora.Rows)
+                        {
+                            if (fila.DataBoundItem is Bitacora b)
+                            {
+                                string linea = $"\"{b.Fecha}\";\"{b.Username}\";\"{b.Modulo}\";\"{b.Actividad}\";\"{b.Criticidad}\";\"{(b.Exitoso ? "Exitoso" : "Fallido")}\";\"{b.Detalle.Replace("\"", "\"\"")}\";\"{b.Error.Replace("\"", "\"\"")}\"";
+                                lineas.Add(linea);
+                            }
+                        }
+                        System.IO.File.WriteAllLines(sfd.FileName, lineas, System.Text.Encoding.UTF8);
+                        MessageBox.Show("Datos exportados correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al exportar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
     }
 

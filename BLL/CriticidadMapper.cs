@@ -1,5 +1,6 @@
 using BE;
 using BE.Enums;
+using BE.Repositorios;
 using System;
 using System.Collections.Generic;
 
@@ -9,32 +10,26 @@ namespace BLL
     {
         private static readonly Dictionary<string, NivelCriticidad> _diccionario = new Dictionary<string, NivelCriticidad>
         {
-            { "Login", NivelCriticidad.Informativo },
-            { "Logout", NivelCriticidad.Informativo },
-            { "Consulta", NivelCriticidad.Informativo },
-            { "Alta", NivelCriticidad.Bajo },
-            { "Modificacion", NivelCriticidad.Medio },
-            { "Eliminacion", NivelCriticidad.Alto },
-            { "CambioPassword", NivelCriticidad.Critico },
-            { "IntentoFallido", NivelCriticidad.Alto },
+            { "Login",            NivelCriticidad.Informativo },
+            { "Logout",           NivelCriticidad.Informativo },
+            { "Consulta",         NivelCriticidad.Informativo },
+            { "Alta",             NivelCriticidad.Bajo },
+            { "Modificacion",     NivelCriticidad.Medio },
+            { "Eliminacion",      NivelCriticidad.Alto },
+            { "CambioPassword",   NivelCriticidad.Critico },
+            { "IntentoFallido",   NivelCriticidad.Alto },
             { "UsuarioBloqueado", NivelCriticidad.Critico },
-            { "CambioEstado", NivelCriticidad.Alto },
+            { "CambioEstado",     NivelCriticidad.Alto },
         };
 
         private static Dictionary<NivelCriticidad, CriticidadConfig> _configBD = new Dictionary<NivelCriticidad, CriticidadConfig>();
         private static List<CriticidadConfig> _listaOrdenada = new List<CriticidadConfig>();
 
-        static CriticidadMapper()
-        {
-            Recargar();
-        }
-
-        public static void Recargar()
+        public static void Recargar(ICriticidadRepositorio repositorio)
         {
             try
             {
-                DAL.CriticidadDAL dal = new DAL.CriticidadDAL();
-                List<CriticidadConfig> lista = dal.ObtenerTodos();
+                List<CriticidadConfig> lista = repositorio.ObtenerTodos();
                 Dictionary<NivelCriticidad, CriticidadConfig> nuevo = new Dictionary<NivelCriticidad, CriticidadConfig>();
 
                 foreach (CriticidadConfig config in lista)

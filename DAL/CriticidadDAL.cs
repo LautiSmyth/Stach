@@ -1,12 +1,13 @@
 using BE;
 using BE.Enums;
+using BE.Repositorios;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 namespace DAL
 {
-    public class CriticidadDAL
+    public class CriticidadDAL : ICriticidadRepositorio
     {
         private readonly Acceso _acceso = Acceso.GetInstance();
 

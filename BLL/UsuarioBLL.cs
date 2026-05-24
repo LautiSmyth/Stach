@@ -58,6 +58,23 @@ namespace BLL
                 throw new UnauthorizedAccessException("Usuario inactivo. Contacte al administrador.");
         }
 
+        public void ValidarPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("La contraseña no puede estar vacia.");
+            if (password.Length < 6)
+                throw new ArgumentException("La contraseña debe tener al menos 6 caracteres.");
+            bool tieneMayuscula = false;
+            bool tieneNumero = false;
+            foreach (char c in password)
+            {
+                if (char.IsUpper(c)) tieneMayuscula = true;
+                if (char.IsDigit(c)) tieneNumero = true;
+            }
+            if (!tieneMayuscula || !tieneNumero)
+                throw new ArgumentException("La contraseña debe contener al menos una letra mayúscula y un número.");
+        }
+
         public void Alta(Usuario usuario)
         {
             if (string.IsNullOrEmpty(usuario.Username))
@@ -68,6 +85,41 @@ namespace BLL
                 throw new ArgumentException("El nombre de usuario ya existe.");
 
             _dal.Insertar(usuario);
+        }
+
+        public void Modificar(Usuario usuario, string nuevoUsername, string nuevoPasswordHash, EstadoUsuario nuevoEstado)
+        {
+            if (string.IsNullOrEmpty(nuevoUsername))
+                throw new ArgumentException("El nombre de usuario no puede estar vacio.");
+
+            Usuario existente = _dal.ObtenerPorUsername(nuevoUsername);
+            if (existente != null && existente.IdUsuario != usuario.IdUsuario)
+                throw new ArgumentException("El nombre de usuario ya existe.");
+
+            usuario.Username = nuevoUsername;
+
+            if (!string.IsNullOrEmpty(nuevoPasswordHash))
+            {
+                usuario.PasswordHash = nuevoPasswordHash;
+            }
+
+            if (nuevoEstado != usuario.Estado)
+            {
+                usuario.Estado = nuevoEstado;
+                if (nuevoEstado == EstadoUsuario.Activo)
+                {
+                    usuario.IntentosFallidos = 0;
+                    usuario.CantidadBloqueos = 0;
+                    usuario.FechaBloqueo = null;
+                }
+                else if (nuevoEstado == EstadoUsuario.Bloqueado)
+                {
+                    usuario.FechaBloqueo = DateTime.Now;
+                    usuario.CantidadBloqueos++;
+                }
+            }
+
+            _dal.Actualizar(usuario);
         }
 
         public void CambiarEstado(Usuario usuario, EstadoUsuario nuevoEstado)
@@ -102,7 +154,6 @@ namespace BLL
         public void RegistrarLoginExitoso(Usuario usuario)
         {
             usuario.IntentosFallidos = 0;
-            usuario.CantidadBloqueos = 0;
             usuario.UltimoLogin = DateTime.Now;
             _dal.Actualizar(usuario);
         }
