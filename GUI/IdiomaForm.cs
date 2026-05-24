@@ -19,8 +19,9 @@ namespace GUI
 
         private void IdiomaForm_Load(object sender, EventArgs e)
         {
-            CargarIdiomas();
             ConfigurarGrilla();
+            CargarIdiomas();
+            CargarTraduccionesGrilla();
             ActualizarIdioma();
 
             lstIdiomas.SelectedIndexChanged += LstIdiomas_SelectedIndexChanged;

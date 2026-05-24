@@ -69,7 +69,7 @@ namespace GUI
 
         private TreeNode CrearNodoRecursivo(ComponentePermiso comp)
         {
-            var nodo = new TreeNode(comp.Nombre) { Tag = comp };
+            var nodo = new TreeNode(comp.NombreMostrar) { Tag = comp };
             if (comp is Familia fam)
             {
                 foreach (var hijo in fam.Hijos)
@@ -108,7 +108,7 @@ namespace GUI
                 
                 var miembros = fam.Hijos;
                 lstMiembros.DataSource = miembros;
-                lstMiembros.DisplayMember = "Nombre";
+                lstMiembros.DisplayMember = "NombreMostrar";
 
                 var disponibles = _todosPermisos.Where(p => 
                     p.IdPermiso != fam.IdPermiso && 
@@ -117,7 +117,7 @@ namespace GUI
                 ).ToList();
 
                 lstDisponibles.DataSource = disponibles;
-                lstDisponibles.DisplayMember = "Nombre";
+                lstDisponibles.DisplayMember = "NombreMostrar";
             }
             else
             {

@@ -115,6 +115,7 @@ namespace GUI
             this.sepIdiomas.Name = "sepIdiomas";
             this.sepIdiomas.Size = new System.Drawing.Size(6, 32);
 
+            this.cboIdioma.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboIdioma.Name = "cboIdioma";
             this.cboIdioma.Size = new System.Drawing.Size(120, 32);

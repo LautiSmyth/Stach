@@ -25,8 +25,8 @@ BEGIN
     );
 
     SET IDENTITY_INSERT Idioma ON;
-    INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (1, 'Español', 'es', 1);
-    INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (2, 'English', 'en', 0);
+    INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (1, N'Español', 'es', 1);
+    INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (2, N'English', 'en', 0);
     SET IDENTITY_INSERT Idioma OFF;
 END
 
@@ -52,16 +52,16 @@ BEGIN
     );
 
     SET IDENTITY_INSERT Permiso ON;
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (1, 'Gestión de Usuarios', 'Usuarios', 0);
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (2, 'Ver Bitácora', 'Bitacora', 0);
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (3, 'Gestión de Idiomas', 'Idiomas', 0);
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (4, 'Gestión de Permisos', 'Permisos', 0);
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (5, 'Control de Cambios', 'ControlCambios', 0);
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (6, 'Restauración DV', 'RestauracionDV', 0);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (1, N'Gestión de Usuarios', 'Usuarios', 0);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (2, N'Ver Bitácora', 'Bitacora', 0);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (3, N'Gestión de Idiomas', 'Idiomas', 0);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (4, N'Gestión de Permisos', 'Permisos', 0);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (5, N'Control de Cambios', 'ControlCambios', 0);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (6, N'Restauración DV', 'RestauracionDV', 0);
 
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (100, 'Administrador', 'FamiliaAdmin', 1);
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (101, 'Supervisor', 'FamiliaSupervisor', 1);
-    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (102, 'Operador', 'FamiliaOperador', 1);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (100, N'Administrador', 'FamiliaAdmin', 1);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (101, N'Supervisor', 'FamiliaSupervisor', 1);
+    INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (102, N'Operador', 'FamiliaOperador', 1);
     SET IDENTITY_INSERT Permiso OFF;
 
     INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 1);

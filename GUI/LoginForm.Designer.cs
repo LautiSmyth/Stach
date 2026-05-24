@@ -109,6 +109,7 @@ namespace GUI
             this.pnlDerecha.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pnlDerecha.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.pnlDerecha.Controls.Add(this.pnlCard, 1, 1);
+            this.pnlDerecha.Controls.Add(this.cboIdioma, 1, 0);
             this.pnlDerecha.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDerecha.Location = new System.Drawing.Point(311, 3);
             this.pnlDerecha.Name = "pnlDerecha";
@@ -132,7 +133,6 @@ namespace GUI
             this.pnlCard.Controls.Add(this.lblUsername);
             this.pnlCard.Controls.Add(this.lblSubtitulo);
             this.pnlCard.Controls.Add(this.lblTitulo);
-            this.pnlCard.Controls.Add(this.cboIdioma);
             this.pnlCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCard.Location = new System.Drawing.Point(63, 63);
             this.pnlCard.Name = "pnlCard";
@@ -171,14 +171,15 @@ namespace GUI
             // 
             // cboIdioma
             // 
-            this.cboIdioma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboIdioma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboIdioma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cboIdioma.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.cboIdioma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.cboIdioma.Location = new System.Drawing.Point(31, 308);
+            this.cboIdioma.Location = new System.Drawing.Point(242, 27);
+            this.cboIdioma.Margin = new System.Windows.Forms.Padding(0, 0, 0, 8);
             this.cboIdioma.Name = "cboIdioma";
-            this.cboIdioma.Size = new System.Drawing.Size(266, 25);
+            this.cboIdioma.Size = new System.Drawing.Size(95, 25);
             this.cboIdioma.TabIndex = 5;
             this.cboIdioma.SelectedIndexChanged += new System.EventHandler(this.CboIdioma_SelectedIndexChanged);
             // 

@@ -11,9 +11,14 @@ namespace BE
         public abstract void Agregar(ComponentePermiso c);
         public abstract void Quitar(ComponentePermiso c);
 
+        public string NombreMostrar
+        {
+            get { return (this is Familia ? "📁 " : "🔑 ") + Nombre; }
+        }
+
         public override string ToString()
         {
-            return Nombre;
+            return NombreMostrar;
         }
     }
 }

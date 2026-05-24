@@ -86,8 +86,7 @@ namespace GUI
 
         private void BtnIdiomas_Click(object sender, EventArgs e)
         {
-            var form = new IdiomaForm();
-            form.ShowDialog();
+            AbrirOActivar<IdiomaForm>();
         }
 
         private void Timer_Tick(object sender, EventArgs e)

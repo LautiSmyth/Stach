@@ -66,6 +66,7 @@ namespace GUI
                 if (dgvUsuarios.Columns["IntentosFallidos"] != null) dgvUsuarios.Columns["IntentosFallidos"].Visible = false;
                 if (dgvUsuarios.Columns["CantidadBloqueos"] != null) dgvUsuarios.Columns["CantidadBloqueos"].Visible = false;
                 if (dgvUsuarios.Columns["FechaBloqueo"] != null) dgvUsuarios.Columns["FechaBloqueo"].Visible = false;
+                if (dgvUsuarios.Columns["DVH"] != null) dgvUsuarios.Columns["DVH"].Visible = false;
 
                 if (dgvUsuarios.Columns["IdUsuario"] != null)
                     dgvUsuarios.Columns["IdUsuario"].HeaderText = "ID";
