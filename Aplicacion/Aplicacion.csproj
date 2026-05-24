@@ -50,6 +50,7 @@
     <Compile Include="UsuarioServicio.cs" />
     <Compile Include="VersionUsuarioServicio.cs" />
     <Compile Include="DigitoVerificadorServicio.cs" />
+    <Compile Include="BackupServicio.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE.csproj">

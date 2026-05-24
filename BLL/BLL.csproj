@@ -51,6 +51,7 @@
     <Compile Include="UsuarioBLL.cs" />
     <Compile Include="VersionUsuarioBLL.cs" />
     <Compile Include="DigitoVerificadorBLL.cs" />
+    <Compile Include="BackupBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE.csproj">

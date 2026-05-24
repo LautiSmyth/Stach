@@ -19,6 +19,12 @@ namespace DAL
                 _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 7);", null);
                 _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (101, 7);", null);
             }
+            var dtCount8 = _acceso.Leer("SELECT COUNT(*) FROM Permiso WHERE IdPermiso = 8", null);
+            if (Convert.ToInt32(dtCount8.Rows[0][0]) == 0)
+            {
+                _acceso.Escribir("SET IDENTITY_INSERT Permiso ON; INSERT INTO Permiso (IdPermiso, Nombre, PermisoKey, EsFamilia) VALUES (8, N'Gestión de Backups', 'Backups', 0); SET IDENTITY_INSERT Permiso OFF;", null);
+                _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 8);", null);
+            }
             var dt = _acceso.Leer("SELECT IdPermiso, Nombre, PermisoKey, EsFamilia FROM Permiso", null);
             var nodes = new Dictionary<int, ComponentePermiso>();
 

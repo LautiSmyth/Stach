@@ -30,16 +30,22 @@ namespace GUI
 
         private void BtnRecalcular_Click(object sender, EventArgs e)
         {
-            try
+            using (ConfirmarAdminForm loginForm = new ConfirmarAdminForm())
             {
-                _dvServicio.InicializarDVs();
-                MessageBox.Show("Dígitos verificadores recalculados y restaurados con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RestauradoExitosamente = true;
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al restaurar integridad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (loginForm.ShowDialog() == DialogResult.OK && loginForm.Autorizado)
+                {
+                    try
+                    {
+                        _dvServicio.InicializarDVs();
+                        MessageBox.Show("Dígitos verificadores recalculados y restaurados con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        RestauradoExitosamente = true;
+                        this.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al restaurar integridad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
