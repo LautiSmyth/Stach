@@ -41,8 +41,8 @@ namespace GUI
         {
             var usuarios = _usuarioServicio.ObtenerTodos();
             cboUsuarios.DataSource = null;
-            cboUsuarios.DataSource = usuarios;
             cboUsuarios.DisplayMember = "Username";
+            cboUsuarios.DataSource = usuarios;
         }
 
         private void ConfigurarGrilla()
@@ -114,9 +114,9 @@ namespace GUI
 
         private void DgvVersiones_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvVersiones.SelectedRows.Count > 0)
+            if (dgvVersiones.CurrentRow != null)
             {
-                _seleccionado = dgvVersiones.SelectedRows[0].DataBoundItem as VersionUsuario;
+                _seleccionado = dgvVersiones.CurrentRow.DataBoundItem as VersionUsuario;
                 if (_seleccionado != null)
                 {
                     txtDetUsername.Text = _seleccionado.Username;

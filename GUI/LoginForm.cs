@@ -180,8 +180,8 @@ namespace GUI
                 var actual = ManejadorIdioma.Instancia.IdiomaActual;
 
                 cboIdioma.DataSource = null;
-                cboIdioma.DataSource = idiomas;
                 cboIdioma.DisplayMember = "Nombre";
+                cboIdioma.DataSource = idiomas;
 
                 if (actual != null)
                 {

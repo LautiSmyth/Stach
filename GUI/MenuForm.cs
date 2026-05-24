@@ -63,8 +63,8 @@ namespace GUI
                 var actual = ManejadorIdioma.Instancia.IdiomaActual;
 
                 cboIdioma.ComboBox.DataSource = null;
-                cboIdioma.ComboBox.DataSource = idiomas;
                 cboIdioma.ComboBox.DisplayMember = "Nombre";
+                cboIdioma.ComboBox.DataSource = idiomas;
 
                 if (actual != null)
                 {

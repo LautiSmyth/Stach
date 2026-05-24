@@ -47,14 +47,19 @@ namespace GUI
         private void CargarIdiomas()
         {
             var idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
+            if (idiomas == null || idiomas.Count == 0)
+            {
+                MessageBox.Show("La lista de idiomas en la base de datos está vacía. Verifique la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             lstIdiomas.DataSource = null;
-            lstIdiomas.DataSource = idiomas;
             lstIdiomas.DisplayMember = "Nombre";
+            lstIdiomas.DataSource = idiomas;
 
             cboIdiomaDestino.DataSource = null;
-            cboIdiomaDestino.DataSource = new List<Idioma>(idiomas);
             cboIdiomaDestino.DisplayMember = "Nombre";
+            cboIdiomaDestino.DataSource = new List<Idioma>(idiomas);
 
             if (idiomas.Count > 0)
             {

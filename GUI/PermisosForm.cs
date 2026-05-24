@@ -84,8 +84,8 @@ namespace GUI
         {
             var usuarios = _usuarioServicio.ObtenerTodos();
             cboUsuarios.DataSource = null;
-            cboUsuarios.DataSource = usuarios;
             cboUsuarios.DisplayMember = "Username";
+            cboUsuarios.DataSource = usuarios;
         }
 
         private void TvEstructura_AfterSelect(object sender, TreeViewEventArgs e)
@@ -107,8 +107,8 @@ namespace GUI
                 lblCol2Titulo.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}";
                 
                 var miembros = fam.Hijos;
-                lstMiembros.DataSource = miembros;
                 lstMiembros.DisplayMember = "NombreMostrar";
+                lstMiembros.DataSource = miembros;
 
                 var disponibles = _todosPermisos.Where(p => 
                     p.IdPermiso != fam.IdPermiso && 
@@ -116,8 +116,8 @@ namespace GUI
                     !EsAncestroRecursivo(p, fam.IdPermiso)
                 ).ToList();
 
-                lstDisponibles.DataSource = disponibles;
                 lstDisponibles.DisplayMember = "NombreMostrar";
+                lstDisponibles.DataSource = disponibles;
             }
             else
             {
