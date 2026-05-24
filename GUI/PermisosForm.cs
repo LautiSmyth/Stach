@@ -117,13 +117,13 @@ namespace GUI
             if (_seleccionado is Familia fam)
             {
                 lblCol2Titulo.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}";
-                
+
                 var miembros = fam.Hijos;
                 lstMiembros.DisplayMember = "NombreMostrar";
                 lstMiembros.DataSource = miembros;
 
-                var disponibles = _todosPermisos.Where(p => 
-                    p.IdPermiso != fam.IdPermiso && 
+                var disponibles = _todosPermisos.Where(p =>
+                    p.IdPermiso != fam.IdPermiso &&
                     !miembros.Any(m => m.IdPermiso == p.IdPermiso) &&
                     !EsAncestroRecursivo(p, fam.IdPermiso)
                 ).ToList();
@@ -343,7 +343,7 @@ namespace GUI
             btnCrearFamilia.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnCrearFamilia");
             btnEliminarPermiso.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnEliminarPermiso");
 
-            lblCol2Titulo.Text = _seleccionado is Familia fam 
+            lblCol2Titulo.Text = _seleccionado is Familia fam
                 ? $"{ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}"
                 : ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo");
 

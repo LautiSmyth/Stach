@@ -363,7 +363,7 @@ namespace GUI
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     try
-                     {
+                    {
                         List<string> lineas = new List<string>();
                         lineas.Add("Fecha y Hora;Usuario;Módulo;Actividad;Criticidad;Resultado;Detalle;Detalle del Error");
                         foreach (DataGridViewRow fila in dgvBitacora.Rows)
