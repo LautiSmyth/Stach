@@ -427,7 +427,11 @@ namespace GUI
     {
         public NivelCriticidad? Nivel { get; }
         public string Nombre { get; }
-        public CriticidadItem(NivelCriticidad? nivel, string nombre) { Nivel = nivel; Nombre = nombre; }
-        public override string ToString() { return Nombre; }
+
+        public CriticidadItem(NivelCriticidad? nivel, string nombre)
+        { Nivel = nivel; Nombre = nombre; }
+
+        public override string ToString()
+        { return Nombre; }
     }
 }

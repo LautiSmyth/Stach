@@ -1,7 +1,6 @@
 using Aplicacion;
 using BE;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace GUI

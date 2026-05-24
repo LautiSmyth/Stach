@@ -106,9 +106,11 @@ namespace GUI
                         case EstadoUsuario.Bloqueado:
                             fila.DefaultCellStyle.ForeColor = Color.FromArgb(229, 115, 115);
                             break;
+
                         case EstadoUsuario.Inactivo:
                             fila.DefaultCellStyle.ForeColor = Color.FromArgb(110, 85, 150);
                             break;
+
                         default:
                             fila.DefaultCellStyle.ForeColor = Color.FromArgb(38, 20, 70);
                             break;
