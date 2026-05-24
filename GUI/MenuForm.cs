@@ -43,6 +43,7 @@ namespace GUI
             btnPermisos.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Permisos");
             btnCambios.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("ControlCambios");
             btnIdiomas.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Idiomas");
+            btnBackup.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Backups");
         }
 
         private void CboIdioma_SelectedIndexChanged(object sender, EventArgs e)
@@ -119,6 +120,11 @@ namespace GUI
             AbrirOActivar<ControlCambiosForm>();
         }
 
+        private void BtnBackup_Click(object sender, EventArgs e)
+        {
+            AbrirOActivar<BackupForm>();
+        }
+
         private void AbrirOActivar<T>() where T : Form, new()
         {
             foreach (Form form in this.MdiChildren)
@@ -178,6 +184,7 @@ namespace GUI
             btnBitacora.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnBitacora");
             btnPermisos.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnPermisos") ?? "🔑 Permisos";
             btnCambios.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnCambios") ?? "📜 Cambios";
+            btnBackup.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnBackup") ?? "💾 Backup";
             btnIdiomas.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnIdiomas") ?? "🌐 Idiomas";
             btnCerrarSesion.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnCerrarSesion");
             lblUsuario.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblSesionInfo")} {_usuarioServicio.ObtenerUsernameEnSesion()}";

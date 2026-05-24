@@ -20,6 +20,7 @@ namespace GUI
             this.lblTitulo = new System.Windows.Forms.Label();
             this.lstErrores = new System.Windows.Forms.ListBox();
             this.tblBotones = new System.Windows.Forms.TableLayoutPanel();
+            this.btnRestaurarBackup = new System.Windows.Forms.Button();
             this.btnRecalcular = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
             this.tblRaiz.SuspendLayout();
@@ -83,12 +84,14 @@ namespace GUI
             // 
             // tblBotones
             // 
-            this.tblBotones.ColumnCount = 3;
+            this.tblBotones.ColumnCount = 4;
             this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 220F));
+            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tblBotones.Controls.Add(this.btnRecalcular, 1, 0);
-            this.tblBotones.Controls.Add(this.btnSalir, 2, 0);
+            this.tblBotones.Controls.Add(this.btnRestaurarBackup, 1, 0);
+            this.tblBotones.Controls.Add(this.btnRecalcular, 2, 0);
+            this.tblBotones.Controls.Add(this.btnSalir, 3, 0);
             this.tblBotones.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblBotones.Location = new System.Drawing.Point(0, 340);
             this.tblBotones.Margin = new System.Windows.Forms.Padding(0);
@@ -97,9 +100,20 @@ namespace GUI
             this.tblBotones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblBotones.Size = new System.Drawing.Size(600, 60);
             this.tblBotones.TabIndex = 2;
-            // 
-            // btnRecalcular
-            // 
+            this.btnRestaurarBackup.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnRestaurarBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
+            this.btnRestaurarBackup.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRestaurarBackup.FlatAppearance.BorderSize = 0;
+            this.btnRestaurarBackup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRestaurarBackup.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnRestaurarBackup.ForeColor = System.Drawing.Color.White;
+            this.btnRestaurarBackup.Location = new System.Drawing.Point(90, 12);
+            this.btnRestaurarBackup.Name = "btnRestaurarBackup";
+            this.btnRestaurarBackup.Size = new System.Drawing.Size(170, 35);
+            this.btnRestaurarBackup.TabIndex = 2;
+            this.btnRestaurarBackup.Text = "Restaurar Backup";
+            this.btnRestaurarBackup.UseVisualStyleBackColor = false;
+            this.btnRestaurarBackup.Click += new System.EventHandler(this.BtnRestaurarBackup_Click);
             this.btnRecalcular.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnRecalcular.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnRecalcular.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -107,16 +121,13 @@ namespace GUI
             this.btnRecalcular.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRecalcular.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnRecalcular.ForeColor = System.Drawing.Color.White;
-            this.btnRecalcular.Location = new System.Drawing.Point(240, 12);
+            this.btnRecalcular.Location = new System.Drawing.Point(280, 12);
             this.btnRecalcular.Name = "btnRecalcular";
-            this.btnRecalcular.Size = new System.Drawing.Size(210, 35);
+            this.btnRecalcular.Size = new System.Drawing.Size(170, 35);
             this.btnRecalcular.TabIndex = 0;
             this.btnRecalcular.Text = "Recalcular Digitos";
             this.btnRecalcular.UseVisualStyleBackColor = false;
             this.btnRecalcular.Click += new System.EventHandler(this.BtnRecalcular_Click);
-            // 
-            // btnSalir
-            // 
             this.btnSalir.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnSalir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnSalir.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -159,5 +170,6 @@ namespace GUI
         private System.Windows.Forms.TableLayoutPanel tblBotones;
         private System.Windows.Forms.Button btnRecalcular;
         private System.Windows.Forms.Button btnSalir;
+        private System.Windows.Forms.Button btnRestaurarBackup;
     }
 }

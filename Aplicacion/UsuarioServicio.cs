@@ -172,5 +172,19 @@ namespace Aplicacion
             var permisoServicio = new PermisoServicio();
             return permisoServicio.UsuarioTienePermiso(usuario, patenteKey);
         }
+
+        public bool ValidarCredencialesAdmin(string username, string password, List<string> permisosRequeridos)
+        {
+            Usuario usuario = _bll.ObtenerPorUsername(username);
+            if (usuario == null) return false;
+            if (!Encriptador.Verificar(password, usuario.PasswordHash)) return false;
+            if (username.Equals("admin", StringComparison.OrdinalIgnoreCase)) return true;
+            var permisoServicio = new PermisoServicio();
+            foreach (var permiso in permisosRequeridos)
+            {
+                if (permisoServicio.UsuarioTienePermiso(usuario, permiso)) return true;
+            }
+            return false;
+        }
     }
 }

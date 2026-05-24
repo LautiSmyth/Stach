@@ -1,7 +1,5 @@
 using Aplicacion;
 using BE;
-using BLL;
-using Seguridad;
 using System;
 using System.Windows.Forms;
 
@@ -9,8 +7,7 @@ namespace GUI
 {
     public partial class ConfirmarAdminForm : Form
     {
-        private readonly UsuarioBLL _usuarioBll = new UsuarioBLL();
-        private readonly PermisoServicio _permisoServicio = new PermisoServicio();
+        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
 
         public bool Autorizado { get; private set; }
 
@@ -49,20 +46,12 @@ namespace GUI
 
             try
             {
-                Usuario u = _usuarioBll.ObtenerPorUsername(username);
-                if (u == null || !Encriptador.Verificar(password, u.PasswordHash))
-                {
-                    MessageBox.Show("Usuario o contraseña incorrectos.", "Error de Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                bool tienePermiso = _permisoServicio.UsuarioTienePermiso(u, "RestauracionDV") || 
-                                   _permisoServicio.UsuarioTienePermiso(u, "Backups") || 
-                                   username.Equals("admin", StringComparison.OrdinalIgnoreCase);
+                var perms = new System.Collections.Generic.List<string> { "RestauracionDV", "Backups" };
+                bool tienePermiso = _usuarioServicio.ValidarCredencialesAdmin(username, password, perms);
 
                 if (!tienePermiso)
                 {
-                    MessageBox.Show("El usuario no cuenta con los permisos necesarios para realizar esta acción.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("El usuario no cuenta con los permisos necesarios para realizar esta acción o sus credenciales son incorrectas.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
 

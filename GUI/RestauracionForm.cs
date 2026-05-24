@@ -8,6 +8,7 @@ namespace GUI
     public partial class RestauracionForm : Form
     {
         private readonly DigitoVerificadorServicio _dvServicio = new DigitoVerificadorServicio();
+        private readonly BackupServicio _backupServicio = new BackupServicio();
         private readonly List<string> _errores;
 
         public bool RestauradoExitosamente { get; private set; }
@@ -44,6 +45,39 @@ namespace GUI
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Error al restaurar integridad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void BtnRestaurarBackup_Click(object sender, EventArgs e)
+        {
+            using (ConfirmarAdminForm loginForm = new ConfirmarAdminForm())
+            {
+                if (loginForm.ShowDialog() == DialogResult.OK && loginForm.Autorizado)
+                {
+                    using (OpenFileDialog ofd = new OpenFileDialog())
+                    {
+                        ofd.Filter = "Copia de Seguridad SQL (*.bak)|*.bak";
+                        ofd.Title = "Seleccionar Copia de Seguridad para Restaurar";
+                        if (ofd.ShowDialog() == DialogResult.OK)
+                        {
+                            string confirmMsg = "¿Está seguro de restaurar la base de datos? Esta operación cerrará las sesiones activas, sobrescribirá todos los datos actuales y reiniciará la aplicación.";
+                            if (MessageBox.Show(confirmMsg, "Confirmar Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                            {
+                                try
+                                {
+                                    _backupServicio.RestaurarBackup("Restauracion", ofd.FileName);
+                                    MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    RestauradoExitosamente = true;
+                                    Application.Restart();
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Error al restaurar la base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+                        }
                     }
                 }
             }

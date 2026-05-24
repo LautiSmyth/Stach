@@ -187,6 +187,12 @@ namespace DAL
             seed("ControlCambiosForm.colDetalle", "Detalle del Cambio", "Change Details", "Detalhes da Alteração");
             seed("BitacoraForm.lblFiltrarUsuario", "Usuario:", "User:", "Usuário:");
             seed("BitacoraForm.Todos", "Todos", "All", "Todos");
+            seed("MenuForm.btnBackup", "💾 Backup", "💾 Backup", "💾 Backup");
+            seed("BackupForm.Text", "Copia de Seguridad y Restauración", "Backup & Restore", "Cópia de Segurança y Restauração");
+            seed("BackupForm.lblTitulo", "Gestión de Backups", "Backup Management", "Gestão de Backups");
+            seed("BackupForm.btnCrear", "Generar Copia de Seguridad (.bak)", "Generate Backup (.bak)", "Gerar Cópia de Segurança (.bak)");
+            seed("BackupForm.btnRestaurar", "Restaurar Copia de Seguridad (.bak)", "Restore Backup (.bak)", "Restaurar Cópia de Segurança (.bak)");
+            seed("BackupForm.lblInfo", "Nota: La restauración cerrará las conexiones activas temporalmente para poder sobrescribir la base de datos.", "Note: Restoration will temporarily close active connections to overwrite the database.", "Nota: A restauração fechará as conexões ativas temporariamente para poder sobrescrever a base de datos.");
         }
 
         private void AgregarSeed(string nombreComponente, string textoEs, string textoEn, string textoPt)

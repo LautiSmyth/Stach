@@ -22,6 +22,7 @@ namespace GUI
             this.btnUsuarios = new System.Windows.Forms.ToolStripButton();
             this.btnPermisos = new System.Windows.Forms.ToolStripButton();
             this.btnCambios = new System.Windows.Forms.ToolStripButton();
+            this.btnBackup = new System.Windows.Forms.ToolStripButton();
             this.sepIdiomas = new System.Windows.Forms.ToolStripSeparator();
             this.cboIdioma = new System.Windows.Forms.ToolStripComboBox();
             this.btnIdiomas = new System.Windows.Forms.ToolStripButton();
@@ -48,6 +49,7 @@ namespace GUI
             this.btnUsuarios,
             this.btnPermisos,
             this.btnCambios,
+            this.btnBackup,
             this.sepIdiomas,
             this.cboIdioma,
             this.btnIdiomas,
@@ -111,6 +113,14 @@ namespace GUI
             this.btnCambios.Size = new System.Drawing.Size(105, 29);
             this.btnCambios.Text = "📜 Cambios";
             this.btnCambios.Click += new System.EventHandler(this.BtnCambios_Click);
+            this.btnBackup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnBackup.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.btnBackup.ForeColor = System.Drawing.Color.White;
+            this.btnBackup.Name = "btnBackup";
+            this.btnBackup.Padding = new System.Windows.Forms.Padding(10, 4, 10, 4);
+            this.btnBackup.Size = new System.Drawing.Size(105, 29);
+            this.btnBackup.Text = "💾 Backup";
+            this.btnBackup.Click += new System.EventHandler(this.BtnBackup_Click);
 
             this.sepIdiomas.Name = "sepIdiomas";
             this.sepIdiomas.Size = new System.Drawing.Size(6, 32);
@@ -210,6 +220,7 @@ namespace GUI
         private System.Windows.Forms.ToolStripButton btnUsuarios;
         private System.Windows.Forms.ToolStripButton btnPermisos;
         private System.Windows.Forms.ToolStripButton btnCambios;
+        private System.Windows.Forms.ToolStripButton btnBackup;
         private System.Windows.Forms.ToolStripSeparator sepIdiomas;
         private System.Windows.Forms.ToolStripComboBox cboIdioma;
         private System.Windows.Forms.ToolStripButton btnIdiomas;
