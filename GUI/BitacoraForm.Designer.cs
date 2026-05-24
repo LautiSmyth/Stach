@@ -505,7 +505,7 @@ namespace GUI
             this.splitCuerpo.Panel2.Controls.Add(this.grpDetalle);
             this.splitCuerpo.Panel2.Padding = new System.Windows.Forms.Padding(7);
             this.splitCuerpo.Size = new System.Drawing.Size(1068, 570);
-            this.splitCuerpo.SplitterDistance = 722;
+            this.splitCuerpo.SplitterDistance = 723;
             this.splitCuerpo.SplitterWidth = 3;
             this.splitCuerpo.TabIndex = 0;
             // 
@@ -550,7 +550,7 @@ namespace GUI
             this.dgvBitacora.RowHeadersVisible = false;
             this.dgvBitacora.RowTemplate.Height = 34;
             this.dgvBitacora.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvBitacora.Size = new System.Drawing.Size(722, 570);
+            this.dgvBitacora.Size = new System.Drawing.Size(723, 570);
             this.dgvBitacora.TabIndex = 0;
             this.dgvBitacora.SelectionChanged += new System.EventHandler(this.DgvBitacora_SelectionChanged);
             // 
@@ -563,7 +563,7 @@ namespace GUI
             this.grpDetalle.Location = new System.Drawing.Point(7, 7);
             this.grpDetalle.Name = "grpDetalle";
             this.grpDetalle.Padding = new System.Windows.Forms.Padding(7, 10, 7, 7);
-            this.grpDetalle.Size = new System.Drawing.Size(329, 556);
+            this.grpDetalle.Size = new System.Drawing.Size(328, 556);
             this.grpDetalle.TabIndex = 0;
             this.grpDetalle.TabStop = false;
             this.grpDetalle.Text = "Detalle del Registro";
@@ -603,7 +603,7 @@ namespace GUI
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
-            this.tblDetalle.Size = new System.Drawing.Size(315, 522);
+            this.tblDetalle.Size = new System.Drawing.Size(314, 522);
             this.tblDetalle.TabIndex = 0;
             // 
             // lblDetFecha
@@ -626,7 +626,7 @@ namespace GUI
             this.lblDetUsuario.Location = new System.Drawing.Point(162, 2);
             this.lblDetUsuario.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetUsuario.Name = "lblDetUsuario";
-            this.lblDetUsuario.Size = new System.Drawing.Size(153, 14);
+            this.lblDetUsuario.Size = new System.Drawing.Size(152, 14);
             this.lblDetUsuario.TabIndex = 1;
             this.lblDetUsuario.Text = "Usuario";
             // 
@@ -655,7 +655,7 @@ namespace GUI
             this.txtDetUsuario.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetUsuario.Name = "txtDetUsuario";
             this.txtDetUsuario.ReadOnly = true;
-            this.txtDetUsuario.Size = new System.Drawing.Size(153, 23);
+            this.txtDetUsuario.Size = new System.Drawing.Size(152, 23);
             this.txtDetUsuario.TabIndex = 3;
             // 
             // lblDetModulo
@@ -678,7 +678,7 @@ namespace GUI
             this.lblDetActividad.Location = new System.Drawing.Point(162, 43);
             this.lblDetActividad.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetActividad.Name = "lblDetActividad";
-            this.lblDetActividad.Size = new System.Drawing.Size(153, 14);
+            this.lblDetActividad.Size = new System.Drawing.Size(152, 14);
             this.lblDetActividad.TabIndex = 5;
             this.lblDetActividad.Text = "Actividad";
             // 
@@ -707,7 +707,7 @@ namespace GUI
             this.txtDetActividad.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetActividad.Name = "txtDetActividad";
             this.txtDetActividad.ReadOnly = true;
-            this.txtDetActividad.Size = new System.Drawing.Size(153, 23);
+            this.txtDetActividad.Size = new System.Drawing.Size(152, 23);
             this.txtDetActividad.TabIndex = 7;
             // 
             // lblDetCriticidad
@@ -730,7 +730,7 @@ namespace GUI
             this.lblDetResultado.Location = new System.Drawing.Point(162, 84);
             this.lblDetResultado.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetResultado.Name = "lblDetResultado";
-            this.lblDetResultado.Size = new System.Drawing.Size(153, 14);
+            this.lblDetResultado.Size = new System.Drawing.Size(152, 14);
             this.lblDetResultado.TabIndex = 9;
             this.lblDetResultado.Text = "Resultado";
             // 
@@ -759,7 +759,7 @@ namespace GUI
             this.txtDetResultado.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetResultado.Name = "txtDetResultado";
             this.txtDetResultado.ReadOnly = true;
-            this.txtDetResultado.Size = new System.Drawing.Size(153, 23);
+            this.txtDetResultado.Size = new System.Drawing.Size(152, 23);
             this.txtDetResultado.TabIndex = 11;
             // 
             // lblDetDetalle
@@ -771,7 +771,7 @@ namespace GUI
             this.lblDetDetalle.Location = new System.Drawing.Point(0, 126);
             this.lblDetDetalle.Margin = new System.Windows.Forms.Padding(0, 3, 0, 1);
             this.lblDetDetalle.Name = "lblDetDetalle";
-            this.lblDetDetalle.Size = new System.Drawing.Size(315, 13);
+            this.lblDetDetalle.Size = new System.Drawing.Size(314, 13);
             this.lblDetDetalle.TabIndex = 12;
             this.lblDetDetalle.Text = "Detalle";
             // 
@@ -788,7 +788,7 @@ namespace GUI
             this.txtDetDetalle.Name = "txtDetDetalle";
             this.txtDetDetalle.ReadOnly = true;
             this.txtDetDetalle.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDetDetalle.Size = new System.Drawing.Size(309, 158);
+            this.txtDetDetalle.Size = new System.Drawing.Size(308, 158);
             this.txtDetDetalle.TabIndex = 13;
             // 
             // lblDetError
@@ -800,7 +800,7 @@ namespace GUI
             this.lblDetError.Location = new System.Drawing.Point(0, 307);
             this.lblDetError.Margin = new System.Windows.Forms.Padding(0, 3, 0, 1);
             this.lblDetError.Name = "lblDetError";
-            this.lblDetError.Size = new System.Drawing.Size(315, 13);
+            this.lblDetError.Size = new System.Drawing.Size(314, 13);
             this.lblDetError.TabIndex = 14;
             this.lblDetError.Text = "Detalle del Error";
             // 
@@ -817,7 +817,7 @@ namespace GUI
             this.txtDetError.Name = "txtDetError";
             this.txtDetError.ReadOnly = true;
             this.txtDetError.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDetError.Size = new System.Drawing.Size(309, 195);
+            this.txtDetError.Size = new System.Drawing.Size(308, 195);
             this.txtDetError.TabIndex = 15;
             // 
             // pnlEstado

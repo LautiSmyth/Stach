@@ -156,6 +156,7 @@ namespace GUI
             this.btnSalir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSalir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnSalir.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSalir.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnSalir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(182)))), ((int)(((byte)(228)))));
             this.btnSalir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(208)))), ((int)(((byte)(240)))));
             this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -168,20 +169,6 @@ namespace GUI
             this.btnSalir.Text = "Cancelar";
             this.btnSalir.UseVisualStyleBackColor = false;
             this.btnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
-            // 
-            // cboIdioma
-            // 
-            this.cboIdioma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboIdioma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboIdioma.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.cboIdioma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.cboIdioma.Location = new System.Drawing.Point(242, 27);
-            this.cboIdioma.Margin = new System.Windows.Forms.Padding(0, 0, 0, 8);
-            this.cboIdioma.Name = "cboIdioma";
-            this.cboIdioma.Size = new System.Drawing.Size(95, 25);
-            this.cboIdioma.TabIndex = 5;
-            this.cboIdioma.SelectedIndexChanged += new System.EventHandler(this.CboIdioma_SelectedIndexChanged);
             // 
             // btnIngresar
             // 
@@ -296,11 +283,27 @@ namespace GUI
             this.lblTitulo.Text = "Iniciar sesión";
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // cboIdioma
+            // 
+            this.cboIdioma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboIdioma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboIdioma.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.cboIdioma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
+            this.cboIdioma.Location = new System.Drawing.Point(302, 27);
+            this.cboIdioma.Margin = new System.Windows.Forms.Padding(0, 0, 0, 8);
+            this.cboIdioma.Name = "cboIdioma";
+            this.cboIdioma.Size = new System.Drawing.Size(95, 25);
+            this.cboIdioma.TabIndex = 5;
+            this.cboIdioma.SelectedIndexChanged += new System.EventHandler(this.CboIdioma_SelectedIndexChanged);
+            // 
             // LoginForm
             // 
+            this.AcceptButton = this.btnIngresar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
+            this.CancelButton = this.btnSalir;
             this.ClientSize = new System.Drawing.Size(771, 485);
             this.Controls.Add(this.tblRaiz);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

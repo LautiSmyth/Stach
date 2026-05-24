@@ -113,7 +113,7 @@ namespace GUI
             this.dgvUsuarios.RowTemplate.Height = 34;
             this.dgvUsuarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvUsuarios.Size = new System.Drawing.Size(475, 396);
-            this.dgvUsuarios.TabIndex = 2;
+            this.dgvUsuarios.TabIndex = 1;
             this.dgvUsuarios.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvUsuarios_CellClick);
             this.dgvUsuarios.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvUsuarios_CellMouseDown);
             this.dgvUsuarios.SelectionChanged += new System.EventHandler(this.DgvUsuarios_SelectionChanged);
@@ -126,7 +126,7 @@ namespace GUI
             this.pnlEncabezado.Location = new System.Drawing.Point(0, 0);
             this.pnlEncabezado.Name = "pnlEncabezado";
             this.pnlEncabezado.Size = new System.Drawing.Size(475, 37);
-            this.pnlEncabezado.TabIndex = 3;
+            this.pnlEncabezado.TabIndex = 0;
             // 
             // tblEncabezado
             // 

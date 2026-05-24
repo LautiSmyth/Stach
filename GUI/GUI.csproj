@@ -119,6 +119,9 @@
     <EmbeddedResource Include="BitacoraForm.resx">
       <DependentUpon>BitacoraForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfirmarAdminForm.resx">
+      <DependentUpon>ConfirmarAdminForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="IdiomaForm.resx">
       <DependentUpon>IdiomaForm.cs</DependentUpon>
     </EmbeddedResource>
