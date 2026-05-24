@@ -28,6 +28,7 @@ namespace GUI
             cboUsuarios.SelectedIndexChanged += CboUsuarios_SelectedIndexChanged;
             dgvVersiones.SelectionChanged += DgvVersiones_SelectionChanged;
             btnRollback.Click += BtnRollback_Click;
+            CargarVersiones();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
