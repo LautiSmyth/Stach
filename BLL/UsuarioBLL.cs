@@ -138,6 +138,16 @@ namespace BLL
             _dal.Actualizar(usuario);
         }
 
+        public void RestaurarVersion(Usuario usuario, string username, string passwordHash, EstadoUsuario estado)
+        {
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentException("El nombre de usuario no puede estar vacio.");
+            usuario.Username = username;
+            usuario.PasswordHash = passwordHash;
+            usuario.Estado = estado;
+            _dal.Actualizar(usuario);
+        }
+
         public void CambiarEstado(Usuario usuario, EstadoUsuario nuevoEstado)
         {
             usuario.Estado = nuevoEstado;

@@ -64,6 +64,12 @@
     <Compile Include="PermisosForm.Designer.cs">
       <DependentUpon>PermisosForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ControlCambiosForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControlCambiosForm.Designer.cs">
+      <DependentUpon>ControlCambiosForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

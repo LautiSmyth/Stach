@@ -21,6 +21,7 @@ namespace DAL
             AgregarMock("MenuForm.btnBitacora", "📜 Bitácora", "📜 Audit Trail");
             AgregarMock("MenuForm.btnIdiomas", "🌐 Idiomas", "🌐 Languages");
             AgregarMock("MenuForm.btnPermisos", "🔑 Permisos", "🔑 Permissions");
+            AgregarMock("MenuForm.btnCambios", "📜 Cambios", "📜 Changes");
             AgregarMock("MenuForm.btnCerrarSesion", "❌ Cerrar sesión", "❌ Log Out");
             AgregarMock("MenuForm.lblSesionInfo", "👤 Sesión:", "👤 Session:");
             AgregarMock("MenuForm.lblServidorInfo", "🖳 Servidor / BD:", "🖳 Server / DB:");
@@ -84,6 +85,17 @@ namespace DAL
             AgregarMock("PermisosForm.lblPatentesPlanas", "Patentes Resultantes", "Resulting Patents/Permissions");
             AgregarMock("PermisosForm.btnAsignarUsuario", "Asignar a Usuario >>", "Assign to User >>");
             AgregarMock("PermisosForm.btnQuitarUsuario", "<< Quitar de Usuario", "<< Remove from User");
+
+            AgregarMock("ControlCambiosForm.Text", "Historial de Cambios y Rollback", "Change History & Rollback");
+            AgregarMock("ControlCambiosForm.lblSeleccionarUsuario", "Usuario a auditar:", "User to audit:");
+            AgregarMock("ControlCambiosForm.lblDetalleTitulo", "Detalle de la Versión", "Version Details");
+            AgregarMock("ControlCambiosForm.lblDetUsername", "Nombre de Usuario", "Username");
+            AgregarMock("ControlCambiosForm.lblDetEstado", "Estado", "Status");
+            AgregarMock("ControlCambiosForm.btnRollback", "Revertir a esta versión", "Restore to this version");
+            AgregarMock("ControlCambiosForm.colId", "ID", "ID");
+            AgregarMock("ControlCambiosForm.colFecha", "Fecha y Hora", "Date & Time");
+            AgregarMock("ControlCambiosForm.colActor", "Modificado Por", "Modified By");
+            AgregarMock("ControlCambiosForm.colDetalle", "Detalle del Cambio", "Change Details");
         }
 
         private static void AgregarMock(string nombreComponente, string textoEs, string textoEn)

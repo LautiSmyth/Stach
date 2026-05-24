@@ -48,6 +48,11 @@ namespace Aplicacion
                 if (usuario == null)
                     throw new ArgumentException("El usuario no existe.");
 
+                var versionServ = new VersionUsuarioServicio();
+                string actor = ObtenerUsernameEnSesion();
+                if (string.IsNullOrEmpty(actor)) actor = "Sistema";
+                versionServ.GrabarVersion(idUsuario, actor, $"Antes de modificación. Nuevo username: '{nuevoUsername}', Estado: {nuevoEstado}.");
+
                 string anteriorUsername = usuario.Username;
                 string nuevoPasswordHash = null;
                 if (!string.IsNullOrEmpty(nuevoPassword))
@@ -132,6 +137,13 @@ namespace Aplicacion
         public void CambiarEstado(string modulo, int idUsuario, EstadoUsuario nuevoEstado)
         {
             Usuario usuario = _bll.ObtenerPorId(idUsuario);
+            if (usuario == null) return;
+
+            var versionServ = new VersionUsuarioServicio();
+            string actor = ObtenerUsernameEnSesion();
+            if (string.IsNullOrEmpty(actor)) actor = "Sistema";
+            versionServ.GrabarVersion(idUsuario, actor, $"Antes de cambio de estado a {nuevoEstado}.");
+
             _bll.CambiarEstado(usuario, nuevoEstado);
             _bitacora.Registrar(modulo, "CambioEstado", $"Estado cambiado a {nuevoEstado} para '{usuario.Username}'.", true);
         }
