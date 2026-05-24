@@ -311,8 +311,6 @@ namespace GUI
             // 
             this.cboFiltrarUsuario.BackColor = System.Drawing.Color.White;
             this.cboFiltrarUsuario.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.cboFiltrarUsuario.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboFiltrarUsuario.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboFiltrarUsuario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cboFiltrarUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.cboFiltrarUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));

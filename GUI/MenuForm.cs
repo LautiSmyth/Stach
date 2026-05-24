@@ -145,10 +145,21 @@ namespace GUI
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                e.Cancel = true;
-                SalirAplicacion();
+                if (MessageBox.Show("¿Esta seguro que desea salir de la aplicacion?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                _usuarioServicio.Logout(this.Text);
+                _timer.Stop();
             }
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
             ManejadorIdioma.Instancia.Detach(this);
+            base.OnFormClosed(e);
+            Application.Exit();
         }
 
         private void CerrarSesion()
@@ -158,16 +169,6 @@ namespace GUI
                 _usuarioServicio.Logout(this.Text);
                 _timer.Stop();
                 Application.Restart();
-            }
-        }
-
-        private void SalirAplicacion()
-        {
-            if (MessageBox.Show("¿Esta seguro que desea salir de la aplicacion?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                _usuarioServicio.Logout(this.Text);
-                _timer.Stop();
-                Environment.Exit(0);
             }
         }
 

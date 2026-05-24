@@ -56,16 +56,22 @@ namespace DAL
             if (traducciones == null) throw new ArgumentNullException(nameof(traducciones));
             foreach (var t in traducciones)
             {
-                var p = new SqlParameter[]
+                var pUpdate = new SqlParameter[]
                 {
                     new SqlParameter("@IdIdioma", t.IdIdioma),
                     new SqlParameter("@IdComponente", t.IdComponente),
                     new SqlParameter("@Texto", t.Texto)
                 };
-                var rows = _acceso.Escribir("UPDATE Traduccion SET Texto = @Texto WHERE IdIdioma = @IdIdioma AND IdComponente = @IdComponente", p);
+                var rows = _acceso.Escribir("UPDATE Traduccion SET Texto = @Texto WHERE IdIdioma = @IdIdioma AND IdComponente = @IdComponente", pUpdate);
                 if (rows == 0)
                 {
-                    _acceso.Escribir("INSERT INTO Traduccion (IdIdioma, IdComponente, Texto) VALUES (@IdIdioma, @IdComponente, @Texto)", p);
+                    var pInsert = new SqlParameter[]
+                    {
+                        new SqlParameter("@IdIdioma", t.IdIdioma),
+                        new SqlParameter("@IdComponente", t.IdComponente),
+                        new SqlParameter("@Texto", t.Texto)
+                    };
+                    _acceso.Escribir("INSERT INTO Traduccion (IdIdioma, IdComponente, Texto) VALUES (@IdIdioma, @IdComponente, @Texto)", pInsert);
                 }
             }
         }
@@ -97,6 +103,8 @@ namespace DAL
             };
             seed("LoginForm.lblTitulo", "Iniciar sesión", "Log In", "Iniciar sessão");
             seed("LoginForm.lblSubtitulo", "Ingrese sus credenciales para acceder", "Enter your credentials to access", "Insira as suas credenciais para aceder");
+            seed("LoginForm.lblBienvenida", "Sistema de\nGestión", "Management\nSystem", "Sistema de\nGestão");
+            seed("LoginForm.lblTagline", "Acceso seguro y centralizado\na todos los módulos", "Secure and centralized access\nto all modules", "Acesso seguro e centralizado\na todos os módulos");
             seed("LoginForm.lblUsername", "Usuario:", "Username:", "Usuário:");
             seed("LoginForm.lblPassword", "Contraseña:", "Password:", "Senha:");
             seed("LoginForm.btnIngresar", "Ingresar", "Login", "Entrar");

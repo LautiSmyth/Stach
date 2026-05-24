@@ -64,6 +64,8 @@ namespace GUI
                     cboFiltrarUsuario.Items.Add(u.Username);
                 }
                 cboFiltrarUsuario.SelectedIndex = 0;
+                cboFiltrarUsuario.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cboFiltrarUsuario.AutoCompleteSource = AutoCompleteSource.ListItems;
             }
             else
             {

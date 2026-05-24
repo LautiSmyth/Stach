@@ -131,7 +131,12 @@ namespace GUI
                 e.Cancel = true;
                 Salir();
             }
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
             ManejadorIdioma.Instancia.Detach(this);
+            base.OnFormClosed(e);
         }
 
         private void Salir()
@@ -205,6 +210,8 @@ namespace GUI
             btnIngresar.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.btnIngresar");
             btnSalir.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.btnSalir") ?? "Cancelar";
             chkHidePass.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.chkHidePass") ?? "Ocultar contraseña";
+            lblBienvenida.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblBienvenida") ?? "Sistema de\nGestión";
+            lblTagline.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblTagline") ?? "Acceso seguro y centralizado\na todos los módulos";
         }
     }
 }

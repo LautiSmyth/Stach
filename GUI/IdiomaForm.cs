@@ -19,16 +19,23 @@ namespace GUI
 
         private void IdiomaForm_Load(object sender, EventArgs e)
         {
-            ConfigurarGrilla();
-            CargarIdiomas();
-            CargarTraduccionesGrilla();
-            ActualizarIdioma();
+            try
+            {
+                ConfigurarGrilla();
+                CargarIdiomas();
+                CargarTraduccionesGrilla();
+                ActualizarIdioma();
 
-            lstIdiomas.SelectedIndexChanged += LstIdiomas_SelectedIndexChanged;
-            cboIdiomaDestino.SelectedIndexChanged += CboIdiomaDestino_SelectedIndexChanged;
-            btnAgregarIdioma.Click += BtnAgregarIdioma_Click;
-            btnEliminarIdioma.Click += BtnEliminarIdioma_Click;
-            btnGuardarTraducciones.Click += BtnGuardarTraducciones_Click;
+                lstIdiomas.SelectedIndexChanged += LstIdiomas_SelectedIndexChanged;
+                cboIdiomaDestino.SelectedIndexChanged += CboIdiomaDestino_SelectedIndexChanged;
+                btnAgregarIdioma.Click += BtnAgregarIdioma_Click;
+                btnEliminarIdioma.Click += BtnEliminarIdioma_Click;
+                btnGuardarTraducciones.Click += BtnGuardarTraducciones_Click;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
