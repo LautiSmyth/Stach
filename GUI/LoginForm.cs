@@ -11,6 +11,7 @@ namespace GUI
     {
         private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
         private readonly ConexionServicio _conexionServicio = new ConexionServicio();
+        private bool _cargandoIdioma = false;
 
         public LoginForm()
         {
@@ -29,6 +30,7 @@ namespace GUI
         private void LoginForm_Load(object sender, EventArgs e)
         {
             ConfigurarEventosPaint();
+            CargarComboIdioma();
         }
 
         private void ConfigurarEventosPaint()
@@ -155,11 +157,54 @@ namespace GUI
                 BtnIngresar_Click(sender, e);
         }
 
+        private void CboIdioma_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_cargandoIdioma) return;
+            if (cboIdioma.SelectedItem is Idioma idioma)
+            {
+                ManejadorIdioma.Instancia.CambiarIdioma(idioma);
+            }
+        }
+
+        private void CargarComboIdioma()
+        {
+            _cargandoIdioma = true;
+            try
+            {
+                var idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
+                var actual = ManejadorIdioma.Instancia.IdiomaActual;
+
+                cboIdioma.DataSource = null;
+                cboIdioma.DataSource = idiomas;
+                cboIdioma.DisplayMember = "Nombre";
+
+                if (actual != null)
+                {
+                    for (int i = 0; i < cboIdioma.Items.Count; i++)
+                    {
+                        if (cboIdioma.Items[i] is Idioma id && id.IdIdioma == actual.IdIdioma)
+                        {
+                            cboIdioma.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                _cargandoIdioma = false;
+            }
+        }
+
         public void ActualizarIdioma()
         {
+            lblTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblTitulo") ?? "Iniciar sesion";
+            lblSubtitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblSubtitulo") ?? "Ingrese sus credenciales para acceder";
             lblUsername.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblUsername");
             lblPassword.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblPassword");
             btnIngresar.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.btnIngresar");
+            btnSalir.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.btnSalir") ?? "Cancelar";
+            chkHidePass.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.chkHidePass") ?? "Ocultar contraseña";
         }
     }
 }

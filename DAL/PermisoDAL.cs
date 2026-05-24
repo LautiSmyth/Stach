@@ -62,9 +62,7 @@ namespace DAL
                 new SqlParameter("@PermisoKey", (object)permiso.PermisoKey ?? DBNull.Value),
                 new SqlParameter("@EsFamilia", esFamilia)
             };
-            _acceso.Escribir("INSERT INTO Permiso (Nombre, PermisoKey, EsFamilia) VALUES (@Nombre, @PermisoKey, @EsFamilia)", p);
-
-            var dt = _acceso.Leer("SELECT @@IDENTITY", null);
+            var dt = _acceso.Leer("INSERT INTO Permiso (Nombre, PermisoKey, EsFamilia) OUTPUT INSERTED.IdPermiso VALUES (@Nombre, @PermisoKey, @EsFamilia)", p);
             permiso.IdPermiso = Convert.ToInt32(dt.Rows[0][0]);
         }
 

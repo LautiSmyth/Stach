@@ -13,9 +13,9 @@ namespace GUI
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlFiltros = new System.Windows.Forms.Panel();
             this.tlpFiltros = new System.Windows.Forms.TableLayoutPanel();
             this.lblBuscar = new System.Windows.Forms.Label();
@@ -474,7 +474,7 @@ namespace GUI
             this.splitCuerpo.Panel2.Controls.Add(this.grpDetalle);
             this.splitCuerpo.Panel2.Padding = new System.Windows.Forms.Padding(7);
             this.splitCuerpo.Size = new System.Drawing.Size(1068, 570);
-            this.splitCuerpo.SplitterDistance = 720;
+            this.splitCuerpo.SplitterDistance = 721;
             this.splitCuerpo.SplitterWidth = 3;
             this.splitCuerpo.TabIndex = 0;
             // 
@@ -482,33 +482,33 @@ namespace GUI
             // 
             this.dgvBitacora.AllowUserToAddRows = false;
             this.dgvBitacora.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(196)))), ((int)(((byte)(233)))));
-            this.dgvBitacora.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(196)))), ((int)(((byte)(233)))));
+            this.dgvBitacora.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvBitacora.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvBitacora.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.dgvBitacora.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvBitacora.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvBitacora.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvBitacora.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvBitacora.ColumnHeadersHeight = 38;
             this.dgvBitacora.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(10, 4, 10, 4);
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(196)))), ((int)(((byte)(233)))));
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvBitacora.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(10, 4, 10, 4);
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(196)))), ((int)(((byte)(233)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvBitacora.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvBitacora.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvBitacora.EnableHeadersVisualStyles = false;
             this.dgvBitacora.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(215)))), ((int)(((byte)(240)))));
@@ -519,7 +519,7 @@ namespace GUI
             this.dgvBitacora.RowHeadersVisible = false;
             this.dgvBitacora.RowTemplate.Height = 34;
             this.dgvBitacora.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvBitacora.Size = new System.Drawing.Size(720, 570);
+            this.dgvBitacora.Size = new System.Drawing.Size(721, 570);
             this.dgvBitacora.TabIndex = 0;
             this.dgvBitacora.SelectionChanged += new System.EventHandler(this.DgvBitacora_SelectionChanged);
             // 
@@ -532,7 +532,7 @@ namespace GUI
             this.grpDetalle.Location = new System.Drawing.Point(7, 7);
             this.grpDetalle.Name = "grpDetalle";
             this.grpDetalle.Padding = new System.Windows.Forms.Padding(7, 10, 7, 7);
-            this.grpDetalle.Size = new System.Drawing.Size(331, 556);
+            this.grpDetalle.Size = new System.Drawing.Size(330, 556);
             this.grpDetalle.TabIndex = 0;
             this.grpDetalle.TabStop = false;
             this.grpDetalle.Text = "Detalle del Registro";
@@ -572,7 +572,7 @@ namespace GUI
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
-            this.tblDetalle.Size = new System.Drawing.Size(317, 522);
+            this.tblDetalle.Size = new System.Drawing.Size(316, 522);
             this.tblDetalle.TabIndex = 0;
             // 
             // lblDetFecha
@@ -595,7 +595,7 @@ namespace GUI
             this.lblDetUsuario.Location = new System.Drawing.Point(163, 2);
             this.lblDetUsuario.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetUsuario.Name = "lblDetUsuario";
-            this.lblDetUsuario.Size = new System.Drawing.Size(154, 14);
+            this.lblDetUsuario.Size = new System.Drawing.Size(153, 14);
             this.lblDetUsuario.TabIndex = 1;
             this.lblDetUsuario.Text = "Usuario";
             // 
@@ -624,7 +624,7 @@ namespace GUI
             this.txtDetUsuario.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetUsuario.Name = "txtDetUsuario";
             this.txtDetUsuario.ReadOnly = true;
-            this.txtDetUsuario.Size = new System.Drawing.Size(154, 23);
+            this.txtDetUsuario.Size = new System.Drawing.Size(153, 23);
             this.txtDetUsuario.TabIndex = 3;
             // 
             // lblDetModulo
@@ -647,7 +647,7 @@ namespace GUI
             this.lblDetActividad.Location = new System.Drawing.Point(163, 43);
             this.lblDetActividad.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetActividad.Name = "lblDetActividad";
-            this.lblDetActividad.Size = new System.Drawing.Size(154, 14);
+            this.lblDetActividad.Size = new System.Drawing.Size(153, 14);
             this.lblDetActividad.TabIndex = 5;
             this.lblDetActividad.Text = "Actividad";
             // 
@@ -676,7 +676,7 @@ namespace GUI
             this.txtDetActividad.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetActividad.Name = "txtDetActividad";
             this.txtDetActividad.ReadOnly = true;
-            this.txtDetActividad.Size = new System.Drawing.Size(154, 23);
+            this.txtDetActividad.Size = new System.Drawing.Size(153, 23);
             this.txtDetActividad.TabIndex = 7;
             // 
             // lblDetCriticidad
@@ -699,7 +699,7 @@ namespace GUI
             this.lblDetResultado.Location = new System.Drawing.Point(163, 84);
             this.lblDetResultado.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetResultado.Name = "lblDetResultado";
-            this.lblDetResultado.Size = new System.Drawing.Size(154, 14);
+            this.lblDetResultado.Size = new System.Drawing.Size(153, 14);
             this.lblDetResultado.TabIndex = 9;
             this.lblDetResultado.Text = "Resultado";
             // 
@@ -728,7 +728,7 @@ namespace GUI
             this.txtDetResultado.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetResultado.Name = "txtDetResultado";
             this.txtDetResultado.ReadOnly = true;
-            this.txtDetResultado.Size = new System.Drawing.Size(154, 23);
+            this.txtDetResultado.Size = new System.Drawing.Size(153, 23);
             this.txtDetResultado.TabIndex = 11;
             // 
             // lblDetDetalle
@@ -740,7 +740,7 @@ namespace GUI
             this.lblDetDetalle.Location = new System.Drawing.Point(0, 126);
             this.lblDetDetalle.Margin = new System.Windows.Forms.Padding(0, 3, 0, 1);
             this.lblDetDetalle.Name = "lblDetDetalle";
-            this.lblDetDetalle.Size = new System.Drawing.Size(317, 13);
+            this.lblDetDetalle.Size = new System.Drawing.Size(316, 13);
             this.lblDetDetalle.TabIndex = 12;
             this.lblDetDetalle.Text = "Detalle";
             // 
@@ -757,7 +757,7 @@ namespace GUI
             this.txtDetDetalle.Name = "txtDetDetalle";
             this.txtDetDetalle.ReadOnly = true;
             this.txtDetDetalle.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDetDetalle.Size = new System.Drawing.Size(311, 158);
+            this.txtDetDetalle.Size = new System.Drawing.Size(310, 158);
             this.txtDetDetalle.TabIndex = 13;
             // 
             // lblDetError
@@ -769,7 +769,7 @@ namespace GUI
             this.lblDetError.Location = new System.Drawing.Point(0, 307);
             this.lblDetError.Margin = new System.Windows.Forms.Padding(0, 3, 0, 1);
             this.lblDetError.Name = "lblDetError";
-            this.lblDetError.Size = new System.Drawing.Size(317, 13);
+            this.lblDetError.Size = new System.Drawing.Size(316, 13);
             this.lblDetError.TabIndex = 14;
             this.lblDetError.Text = "Detalle del Error";
             // 
@@ -786,7 +786,7 @@ namespace GUI
             this.txtDetError.Name = "txtDetError";
             this.txtDetError.ReadOnly = true;
             this.txtDetError.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDetError.Size = new System.Drawing.Size(311, 195);
+            this.txtDetError.Size = new System.Drawing.Size(310, 195);
             this.txtDetError.TabIndex = 15;
             // 
             // pnlEstado

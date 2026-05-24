@@ -30,6 +30,7 @@ namespace GUI
             this.lblUsername = new System.Windows.Forms.Label();
             this.lblSubtitulo = new System.Windows.Forms.Label();
             this.lblTitulo = new System.Windows.Forms.Label();
+            this.cboIdioma = new System.Windows.Forms.ComboBox();
             this.tblRaiz.SuspendLayout();
             this.pnlIzquierda.SuspendLayout();
             this.pnlDerecha.SuspendLayout();
@@ -131,6 +132,7 @@ namespace GUI
             this.pnlCard.Controls.Add(this.lblUsername);
             this.pnlCard.Controls.Add(this.lblSubtitulo);
             this.pnlCard.Controls.Add(this.lblTitulo);
+            this.pnlCard.Controls.Add(this.cboIdioma);
             this.pnlCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCard.Location = new System.Drawing.Point(63, 63);
             this.pnlCard.Name = "pnlCard";
@@ -166,6 +168,19 @@ namespace GUI
             this.btnSalir.Text = "Cancelar";
             this.btnSalir.UseVisualStyleBackColor = false;
             this.btnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
+            // 
+            // cboIdioma
+            // 
+            this.cboIdioma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboIdioma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboIdioma.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.cboIdioma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
+            this.cboIdioma.Location = new System.Drawing.Point(31, 308);
+            this.cboIdioma.Name = "cboIdioma";
+            this.cboIdioma.Size = new System.Drawing.Size(266, 25);
+            this.cboIdioma.TabIndex = 5;
+            this.cboIdioma.SelectedIndexChanged += new System.EventHandler(this.CboIdioma_SelectedIndexChanged);
             // 
             // btnIngresar
             // 
@@ -322,5 +337,6 @@ namespace GUI
         private System.Windows.Forms.CheckBox chkHidePass;
         private System.Windows.Forms.Button btnIngresar;
         private System.Windows.Forms.Button btnSalir;
+        private System.Windows.Forms.ComboBox cboIdioma;
     }
 }
