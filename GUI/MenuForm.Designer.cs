@@ -28,82 +28,64 @@ namespace GUI
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
-            //
-            // toolStrip
-            //
+
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.lblUsuario, this.sepNavegacion,
                 this.btnBitacora, this.btnUsuarios, this.btnCerrarSesion});
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(1008, 36);
-            //
-            // lblUsuario
-            //
+            this.toolStrip.Size = new System.Drawing.Size(1100, 42);
+            this.toolStrip.Height = 42;
+
             this.lblUsuario.Name = "lblUsuario";
+            this.lblUsuario.Padding = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblUsuario.Text = "  Usuario";
-            //
-            // sepNavegacion
-            //
+            this.lblUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5f, System.Drawing.FontStyle.Bold);
+
             this.sepNavegacion.Name = "sepNavegacion";
-            //
-            // btnBitacora
-            //
+
             this.btnBitacora.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnBitacora.Name = "btnBitacora";
-            this.btnBitacora.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.btnBitacora.Text = "Bitacora";
+            this.btnBitacora.Padding = new System.Windows.Forms.Padding(14, 0, 14, 0);
+            this.btnBitacora.Text = "Bitácora";
             this.btnBitacora.Click += new System.EventHandler(this.BtnBitacora_Click);
-            //
-            // btnUsuarios
-            //
+
             this.btnUsuarios.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnUsuarios.Name = "btnUsuarios";
-            this.btnUsuarios.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.btnUsuarios.Padding = new System.Windows.Forms.Padding(14, 0, 14, 0);
             this.btnUsuarios.Text = "Usuarios";
             this.btnUsuarios.Click += new System.EventHandler(this.BtnUsuarios_Click);
-            //
-            // btnCerrarSesion
-            //
+
             this.btnCerrarSesion.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.btnCerrarSesion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnCerrarSesion.Name = "btnCerrarSesion";
-            this.btnCerrarSesion.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.btnCerrarSesion.Text = "Cerrar Sesion";
+            this.btnCerrarSesion.Padding = new System.Windows.Forms.Padding(14, 0, 14, 0);
+            this.btnCerrarSesion.Text = "Cerrar sesión";
             this.btnCerrarSesion.Click += new System.EventHandler(this.BtnCerrarSesion_Click);
-            //
-            // statusStrip
-            //
+
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.lblBaseDatos, this.lblSeparador, this.lblHora});
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1008, 22);
-            //
-            // lblBaseDatos
-            //
+            this.statusStrip.Size = new System.Drawing.Size(1100, 24);
+
             this.lblBaseDatos.Name = "lblBaseDatos";
-            this.lblBaseDatos.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblBaseDatos.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lblBaseDatos.Text = "Base de datos:";
-            //
-            // lblSeparador
-            //
+
             this.lblSeparador.Name = "lblSeparador";
             this.lblSeparador.Spring = true;
-            //
-            // lblHora
-            //
+
             this.lblHora.Name = "lblHora";
-            this.lblHora.Text = "00:00:00  ";
-            //
-            // MenuForm
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.lblHora.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
+            this.lblHora.Text = "00:00:00";
+
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 661);
+            this.ClientSize = new System.Drawing.Size(1100, 700);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
             this.IsMdiContainer = true;
-            this.MinimumSize = new System.Drawing.Size(800, 600);
+            this.MinimumSize = new System.Drawing.Size(900, 600);
             this.Name = "MenuForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sistema de Gestión";

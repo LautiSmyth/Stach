@@ -1,6 +1,7 @@
 using Aplicacion;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace GUI
@@ -17,63 +18,92 @@ namespace GUI
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
+            ConfigurarEstilos();
+            ConfigurarEventosPaint();
+        }
+
+        private void ConfigurarEstilos()
+        {
             this.BackColor = AppEstilo.ColorFondo;
-            tblCentro.BackColor = AppEstilo.ColorFondo;
 
-            pnlCard.BackColor = Color.White;
-            pnlCard.Paint += (s, pe) =>
-            {
-                using (Pen pen = new Pen(AppEstilo.ColorBorde, 1))
-                    pe.Graphics.DrawRectangle(pen, 0, 0, pnlCard.Width - 1, pnlCard.Height - 1);
-            };
+            pnlIzquierda.BackColor = AppEstilo.ColorPrimario;
 
-            lblTitulo.Font = AppEstilo.FuenteTitulo;
+            pnlCard.BackColor = AppEstilo.ColorFondoCard;
+
+            lblBienvenida.Font = new Font("Segoe UI", 13f, FontStyle.Bold);
+            lblBienvenida.ForeColor = AppEstilo.ColorTextoClaro;
+            lblBienvenida.BackColor = Color.Transparent;
+
+            lblTagline.Font = new Font("Segoe UI", 9.5f);
+            lblTagline.ForeColor = Color.FromArgb(220, 200, 245);
+            lblTagline.BackColor = Color.Transparent;
+
+            lblTitulo.Font = AppEstilo.FuenteSubtitulo;
             lblTitulo.ForeColor = AppEstilo.ColorPrimario;
+            lblTitulo.BackColor = Color.Transparent;
 
             lblSubtitulo.Font = AppEstilo.FuenteNormal;
-            lblSubtitulo.ForeColor = AppEstilo.ColorAccent;
+            lblSubtitulo.ForeColor = AppEstilo.ColorTextoSecundario;
+            lblSubtitulo.BackColor = Color.Transparent;
 
-            lblUsername.Font = AppEstilo.FuenteNegrita;
+            lblUsername.Font = AppEstilo.FuenteSeccion;
             lblUsername.ForeColor = AppEstilo.ColorTexto;
+            lblUsername.BackColor = Color.Transparent;
 
-            lblPassword.Font = AppEstilo.FuenteNegrita;
+            lblPassword.Font = AppEstilo.FuenteSeccion;
             lblPassword.ForeColor = AppEstilo.ColorTexto;
+            lblPassword.BackColor = Color.Transparent;
 
             chkHidePass.Font = AppEstilo.FuenteNormal;
-            chkHidePass.ForeColor = AppEstilo.ColorTexto;
+            chkHidePass.ForeColor = AppEstilo.ColorTextoSecundario;
             chkHidePass.BackColor = Color.Transparent;
 
             AppEstilo.AplicarTextBox(txtUsername);
             AppEstilo.AplicarTextBox(txtPassword);
             AppEstilo.AplicarBotonPrimario(btnIngresar);
             AppEstilo.AplicarBotonSecundario(btnSalir);
-
-            AjustarSizes();
         }
 
-        private void AjustarSizes()
+        private void ConfigurarEventosPaint()
         {
-            int margen = 32;
-            int ancho = pnlCard.Width - margen * 2;
+            pnlCard.Paint += PnlCard_Paint;
+            pnlIzquierda.Paint += PnlIzquierda_Paint;
+        }
 
-            lblTitulo.SetBounds(margen, 24, ancho, 38);
-            lblSubtitulo.SetBounds(margen, 62, ancho, 22);
-            lblUsername.SetBounds(margen, 100, ancho, 20);
-            txtUsername.SetBounds(margen, 122, ancho, 28);
-            lblPassword.SetBounds(margen, 162, ancho, 20);
-            txtPassword.SetBounds(margen, 184, ancho, 28);
-            chkHidePass.SetBounds(margen, 222, ancho, 22);
-            btnIngresar.SetBounds(margen, 258, ancho, 40);
-            btnSalir.SetBounds(margen, 308, ancho, 40);
+        private void PnlCard_Paint(object sender, PaintEventArgs e)
+        {
+            using (Pen pen = new Pen(AppEstilo.ColorBordeSuave, 1))
+                e.Graphics.DrawRectangle(pen, 0, 0, pnlCard.Width - 1, pnlCard.Height - 1);
+        }
+
+        private void PnlIzquierda_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            using (SolidBrush brush = new SolidBrush(Color.FromArgb(30, 255, 255, 255)))
+            {
+                int r = 80;
+                e.Graphics.FillEllipse(brush, pnlIzquierda.Width - r, -r / 2, r * 2, r * 2);
+                e.Graphics.FillEllipse(brush, -r / 2, pnlIzquierda.Height - r, r * 2, r * 2);
+            }
+
+            using (SolidBrush brush = new SolidBrush(Color.FromArgb(15, 255, 255, 255)))
+            {
+                int r = 120;
+                e.Graphics.FillEllipse(brush, pnlIzquierda.Width - r, pnlIzquierda.Height / 2 - r / 2, r * 2, r * 2);
+            }
         }
 
         private void BtnIngresar_Click(object sender, EventArgs e)
         {
             if (!_conexionServicio.VerificarConexion())
             {
-                MessageBox.Show("No hay conexion a la base de datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No hay conexion a la base de datos.", "Error de conexion", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            btnIngresar.Enabled = false;
+            btnIngresar.Text = "Ingresando...";
 
             try
             {
@@ -94,6 +124,11 @@ namespace GUI
             catch (Exception)
             {
                 MessageBox.Show("Ocurrio un error inesperado. Intente nuevamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnIngresar.Enabled = true;
+                btnIngresar.Text = "Ingresar";
             }
         }
 
@@ -120,6 +155,18 @@ namespace GUI
         private void ChkHidePass_CheckedChanged(object sender, EventArgs e)
         {
             txtPassword.UseSystemPasswordChar = chkHidePass.Checked;
+        }
+
+        private void TxtUsername_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                txtPassword.Focus();
+        }
+
+        private void TxtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                BtnIngresar_Click(sender, e);
         }
     }
 }
