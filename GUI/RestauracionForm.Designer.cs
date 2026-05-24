@@ -85,14 +85,16 @@ namespace GUI
             // 
             // tblBotones
             // 
-            this.tblBotones.ColumnCount = 4;
+            this.tblBotones.ColumnCount = 5;
             this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tblBotones.Controls.Add(this.btnRestaurarBackup, 1, 0);
-            this.tblBotones.Controls.Add(this.btnRecalcular, 2, 0);
-            this.tblBotones.Controls.Add(this.btnSalir, 3, 0);
+            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.tblBotones.Controls.Add(this.btnVerDetalles, 1, 0);
+            this.tblBotones.Controls.Add(this.btnRestaurarBackup, 2, 0);
+            this.tblBotones.Controls.Add(this.btnRecalcular, 3, 0);
+            this.tblBotones.Controls.Add(this.btnSalir, 4, 0);
             this.tblBotones.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblBotones.Location = new System.Drawing.Point(0, 340);
             this.tblBotones.Margin = new System.Windows.Forms.Padding(0);
@@ -101,6 +103,26 @@ namespace GUI
             this.tblBotones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblBotones.Size = new System.Drawing.Size(600, 60);
             this.tblBotones.TabIndex = 2;
+            // 
+            // btnVerDetalles
+            // 
+            this.btnVerDetalles.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnVerDetalles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
+            this.btnVerDetalles.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnVerDetalles.FlatAppearance.BorderSize = 0;
+            this.btnVerDetalles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVerDetalles.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerDetalles.ForeColor = System.Drawing.Color.White;
+            this.btnVerDetalles.Location = new System.Drawing.Point(5, 12);
+            this.btnVerDetalles.Name = "btnVerDetalles";
+            this.btnVerDetalles.Size = new System.Drawing.Size(110, 35);
+            this.btnVerDetalles.TabIndex = 3;
+            this.btnVerDetalles.Text = "Ver Detalles";
+            this.btnVerDetalles.UseVisualStyleBackColor = false;
+            this.btnVerDetalles.Click += new System.EventHandler(this.BtnVerDetalles_Click);
+            // 
+            // btnRestaurarBackup
+            // 
             this.btnRestaurarBackup.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnRestaurarBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnRestaurarBackup.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -108,13 +130,16 @@ namespace GUI
             this.btnRestaurarBackup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRestaurarBackup.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnRestaurarBackup.ForeColor = System.Drawing.Color.White;
-            this.btnRestaurarBackup.Location = new System.Drawing.Point(90, 12);
+            this.btnRestaurarBackup.Location = new System.Drawing.Point(125, 12);
             this.btnRestaurarBackup.Name = "btnRestaurarBackup";
-            this.btnRestaurarBackup.Size = new System.Drawing.Size(170, 35);
+            this.btnRestaurarBackup.Size = new System.Drawing.Size(150, 35);
             this.btnRestaurarBackup.TabIndex = 2;
             this.btnRestaurarBackup.Text = "Restaurar Backup";
             this.btnRestaurarBackup.UseVisualStyleBackColor = false;
             this.btnRestaurarBackup.Click += new System.EventHandler(this.BtnRestaurarBackup_Click);
+            // 
+            // btnRecalcular
+            // 
             this.btnRecalcular.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnRecalcular.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnRecalcular.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -122,13 +147,16 @@ namespace GUI
             this.btnRecalcular.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRecalcular.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnRecalcular.ForeColor = System.Drawing.Color.White;
-            this.btnRecalcular.Location = new System.Drawing.Point(280, 12);
+            this.btnRecalcular.Location = new System.Drawing.Point(285, 12);
             this.btnRecalcular.Name = "btnRecalcular";
-            this.btnRecalcular.Size = new System.Drawing.Size(170, 35);
+            this.btnRecalcular.Size = new System.Drawing.Size(150, 35);
             this.btnRecalcular.TabIndex = 0;
             this.btnRecalcular.Text = "Recalcular Digitos";
             this.btnRecalcular.UseVisualStyleBackColor = false;
             this.btnRecalcular.Click += new System.EventHandler(this.BtnRecalcular_Click);
+            // 
+            // btnSalir
+            // 
             this.btnSalir.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnSalir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnSalir.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -136,9 +164,9 @@ namespace GUI
             this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSalir.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.btnSalir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
-            this.btnSalir.Location = new System.Drawing.Point(460, 12);
+            this.btnSalir.Location = new System.Drawing.Point(465, 12);
             this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(130, 35);
+            this.btnSalir.Size = new System.Drawing.Size(120, 35);
             this.btnSalir.TabIndex = 1;
             this.btnSalir.Text = "Cerrar Aplicacion";
             this.btnSalir.UseVisualStyleBackColor = false;
