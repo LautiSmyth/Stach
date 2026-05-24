@@ -2,6 +2,8 @@ using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace DAL
 {
@@ -22,31 +24,37 @@ namespace DAL
 
         private string ObtenerDirectorioBackupDefault()
         {
-            string dir = null;
+            string dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TempBackups");
             try
             {
-                using (SqlConnection conn = new SqlConnection(_cadenaConexionMaster))
+                if (!Directory.Exists(dir))
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(
-                        @"DECLARE @BackupDir NVARCHAR(512); " +
-                        @"EXEC master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'BackupDirectory', @BackupDir OUTPUT; " +
-                        @"SELECT @BackupDir;", conn))
-                    {
-                        var result = cmd.ExecuteScalar();
-                        if (result != null && result != DBNull.Value)
-                        {
-                            dir = result.ToString();
-                        }
-                    }
+                    Directory.CreateDirectory(dir);
                 }
+                DirectoryInfo dInfo = new DirectoryInfo(dir);
+                DirectorySecurity dSecurity = dInfo.GetAccessControl();
+                SecurityIdentifier everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                dSecurity.AddAccessRule(new FileSystemAccessRule(
+                    everyone,
+                    FileSystemRights.FullControl,
+                    InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                    PropagationFlags.None,
+                    AccessControlType.Allow));
+                dInfo.SetAccessControl(dSecurity);
             }
             catch
             {
-            }
-            if (string.IsNullOrEmpty(dir))
-            {
-                dir = @"C:\Users\Public";
+                dir = Path.Combine(Path.GetTempPath(), "TempBackups");
+                try
+                {
+                    if (!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+                }
+                catch
+                {
+                }
             }
             return dir;
         }
