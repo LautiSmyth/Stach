@@ -10,6 +10,7 @@ namespace GUI
     public partial class IdiomaForm : Form, IObserver
     {
         private List<FilaTraduccion> _traduccionesBindeables;
+        List<Idioma> idiomas = new List<Idioma>();
 
         public IdiomaForm()
         {
@@ -30,11 +31,6 @@ namespace GUI
                 txtCodigo.MaxLength = 10;
                 txtCodigo.KeyPress += TxtCodigo_KeyPress;
 
-                lstIdiomas.SelectedIndexChanged += LstIdiomas_SelectedIndexChanged;
-                cboIdiomaDestino.SelectedIndexChanged += CboIdiomaDestino_SelectedIndexChanged;
-                btnAgregarIdioma.Click += BtnAgregarIdioma_Click;
-                btnEliminarIdioma.Click += BtnEliminarIdioma_Click;
-                btnGuardarTraducciones.Click += BtnGuardarTraducciones_Click;
             }
             catch (Exception ex)
             {
@@ -58,12 +54,13 @@ namespace GUI
 
         private void CargarIdiomas()
         {
-            var idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
+            idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
             if (idiomas == null || idiomas.Count == 0)
             {
                 MessageBox.Show("La lista de idiomas en la base de datos está vacía. Verifique la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (idiomas.Any(idioma => idioma.Default = true)) chkDefault.Enabled = false;
 
             lstIdiomas.DataSource = null;
             lstIdiomas.DisplayMember = "Nombre";
@@ -158,6 +155,10 @@ namespace GUI
             {
                 MessageBox.Show("Por favor, ingrese el nombre y código del idioma.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+            if (idiomas.Any(idioma => idioma.Codigo == codigo || idioma.Nombre == nombre))
+            {
+                MessageBox.Show("El nombre y/o codigo de idioma ya existe"); return;
             }
 
             try
