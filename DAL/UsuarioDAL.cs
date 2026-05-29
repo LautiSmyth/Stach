@@ -1,5 +1,6 @@
 using BE;
 using BE.Enums;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace DAL
 {
-    public class UsuarioDAL
+    public class UsuarioDAL : IUsuarioDAL
     {
         private readonly Acceso _acceso = Acceso.GetInstance();
 

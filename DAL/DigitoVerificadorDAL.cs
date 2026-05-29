@@ -1,10 +1,11 @@
+using Abstracciones;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace DAL
 {
-    public class DigitoVerificadorDAL
+    public class DigitoVerificadorDAL : IDigitoVerificadorDAL
     {
         private readonly Acceso _acceso = Acceso.GetInstance();
 

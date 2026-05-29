@@ -1,3 +1,4 @@
+using Abstracciones;
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -7,7 +8,7 @@ using System.Security.Principal;
 
 namespace DAL
 {
-    public class BackupDAL
+    public class BackupDAL : IBackupDAL
     {
         private readonly string _cadenaConexionMaster;
 

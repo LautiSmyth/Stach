@@ -60,6 +60,10 @@
       <Project>{25636c61-d0a6-4416-9d59-cb17d5ebb8a1}</Project>
       <Name>BE</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Abstracciones\Abstracciones.csproj">
+      <Project>{52905808-a51a-4701-ba9a-36d5126b6a8f}</Project>
+      <Name>Abstracciones</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

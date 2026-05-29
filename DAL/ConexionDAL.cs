@@ -1,6 +1,8 @@
+using Abstracciones;
+
 namespace DAL
 {
-    public class ConexionDAL
+    public class ConexionDAL : IConexionDAL
     {
         private readonly Acceso _acceso = Acceso.GetInstance();
 

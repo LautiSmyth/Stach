@@ -1,6 +1,6 @@
 using BE;
 using BE.Enums;
-using BE.Repositorios;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.Data;

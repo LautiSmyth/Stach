@@ -1,4 +1,5 @@
 using BE;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace DAL
 {
-    public class PermisoDAL
+    public class PermisoDAL : IPermisoDAL
     {
         private readonly Acceso _acceso = Acceso.GetInstance();
 
