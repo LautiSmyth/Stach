@@ -295,13 +295,29 @@ namespace GUI
 
         private void BtnQuitarUsuario_Click(object sender, EventArgs e)
         {
-            if (_usuarioSeleccionado == null || _seleccionado == null)
+            if (_usuarioSeleccionado == null)
             {
-                MessageBox.Show("Seleccione un usuario y un permiso a quitar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Seleccione un usuario.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var p = _usuarioSeleccionado.Permisos.FirstOrDefault(x => x.IdPermiso == _seleccionado.IdPermiso);
+            ComponentePermiso target = null;
+            if (tvUsuarioPermisos.SelectedNode != null)
+            {
+                target = tvUsuarioPermisos.SelectedNode.Tag as ComponentePermiso;
+            }
+            else if (_seleccionado != null)
+            {
+                target = _seleccionado;
+            }
+
+            if (target == null)
+            {
+                MessageBox.Show("Seleccione el permiso o rol a quitar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var p = _usuarioSeleccionado.Permisos.FirstOrDefault(x => x.IdPermiso == target.IdPermiso);
             if (p == null)
             {
                 MessageBox.Show("El usuario no tiene asignado directamente este permiso/rol.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
