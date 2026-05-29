@@ -1,5 +1,7 @@
-using Aplicacion;
 using BE;
+using BLL;
+using Abstracciones;
+using Servicios;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,8 +10,8 @@ namespace GUI
 {
     public partial class MenuForm : Form, IObserver
     {
-        private readonly ConexionServicio _conexionServicio = new ConexionServicio();
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
+        private readonly IConexionService _conexionService = IoCContainer.Resolver<IConexionService>();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private bool _cargandoIdioma = false;
 
         public MenuForm()
@@ -38,12 +40,12 @@ namespace GUI
 
         private void ValidarPermisosMenu()
         {
-            btnUsuarios.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Usuarios");
-            btnBitacora.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Bitacora");
-            btnPermisos.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Permisos");
-            btnCambios.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("ControlCambios");
-            btnIdiomas.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Idiomas");
-            btnBackup.Enabled = _usuarioServicio.UsuarioLogueadoTienePermiso("Backups");
+            btnUsuarios.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Usuarios");
+            btnBitacora.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Bitacora");
+            btnPermisos.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Permisos");
+            btnCambios.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("ControlCambios");
+            btnIdiomas.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Idiomas");
+            btnBackup.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Backups");
         }
 
         private void CboIdioma_SelectedIndexChanged(object sender, EventArgs e)
@@ -157,12 +159,12 @@ namespace GUI
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (MessageBox.Show("¿Esta seguro que desea salir de la aplicacion?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                if (MessageBox.Show("¿Esta seguro que desea salir?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 {
                     e.Cancel = true;
                     return;
                 }
-                _usuarioServicio.Logout(this.Text);
+                _usuarioBll.Logout(this.Text);
                 _timer.Stop();
             }
         }
@@ -231,7 +233,7 @@ namespace GUI
         {
             if (MessageBox.Show("¿Esta seguro que desea cerrar la sesion?", "Cerrar sesion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                _usuarioServicio.Logout(this.Text);
+                _usuarioBll.Logout(this.Text);
                 _timer.Stop();
                 Application.Restart();
             }
@@ -246,8 +248,8 @@ namespace GUI
             btnBackup.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnBackup") ?? "💾 Backup";
             btnIdiomas.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnIdiomas") ?? "🌐 Idiomas";
             btnCerrarSesion.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnCerrarSesion");
-            lblUsuario.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblSesionInfo")} {_usuarioServicio.ObtenerUsernameEnSesion()}";
-            lblBaseDatos.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblServidorInfo")} {_conexionServicio.ObtenerNombreBaseDatos()}";
+            lblUsuario.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblSesionInfo")} {_usuarioBll.ObtenerUsernameEnSesion()}";
+            lblBaseDatos.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblServidorInfo")} {_conexionService.ObtenerNombreBaseDatos()}";
             CargarComboIdioma();
         }
 

@@ -1,4 +1,5 @@
-using Aplicacion;
+using BLL;
+using Servicios;
 using System;
 using System.Windows.Forms;
 
@@ -6,7 +7,7 @@ namespace GUI
 {
     public partial class ConfirmarAdminForm : Form
     {
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
 
         public bool Autorizado { get; private set; }
 
@@ -46,7 +47,7 @@ namespace GUI
             try
             {
                 var perms = new System.Collections.Generic.List<string> { "RestauracionDV", "Backups" };
-                bool tienePermiso = _usuarioServicio.ValidarCredencialesAdmin(username, password, perms);
+                bool tienePermiso = _usuarioBll.ValidarCredencialesAdmin(username, password, perms);
 
                 if (!tienePermiso)
                 {

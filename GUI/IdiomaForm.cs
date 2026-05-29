@@ -1,5 +1,5 @@
-using Aplicacion;
 using BE;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +30,6 @@ namespace GUI
                 txtNombre.MaxLength = 100;
                 txtCodigo.MaxLength = 10;
                 txtCodigo.KeyPress += TxtCodigo_KeyPress;
-
             }
             catch (Exception ex)
             {
@@ -174,7 +173,8 @@ namespace GUI
             }
             if (idiomas.Any(idioma => idioma.Codigo == codigo || idioma.Nombre == nombre))
             {
-                MessageBox.Show("El nombre y/o codigo de idioma ya existe"); return;
+                MessageBox.Show("El nombre y/o codigo de idioma ya existe");
+                return;
             }
 
             try

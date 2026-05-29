@@ -1,5 +1,6 @@
-using Aplicacion;
 using BE;
+using BLL;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -8,8 +9,8 @@ namespace GUI
 {
     public partial class ControlCambiosForm : Form, IObserver
     {
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
-        private readonly VersionUsuarioServicio _versionServicio = new VersionUsuarioServicio();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
+        private readonly VersionUsuarioBLL _versionBll = IoCContainer.Resolver<VersionUsuarioBLL>();
         private List<VersionUsuario> _versiones;
         private VersionUsuario _seleccionado;
 
@@ -40,7 +41,7 @@ namespace GUI
 
         private void CargarUsuarios()
         {
-            var usuarios = _usuarioServicio.ObtenerTodos();
+            var usuarios = _usuarioBll.ObtenerTodos();
             cboUsuarios.DataSource = null;
             cboUsuarios.DisplayMember = "Username";
             cboUsuarios.DataSource = usuarios;
@@ -103,7 +104,7 @@ namespace GUI
             LimpiarCampos();
             if (cboUsuarios.SelectedItem is Usuario u)
             {
-                _versiones = _versionServicio.ObtenerPorUsuario(u.IdUsuario);
+                _versiones = _versionBll.ObtenerPorUsuario(u.IdUsuario);
                 dgvVersiones.DataSource = null;
                 dgvVersiones.DataSource = _versiones;
             }
@@ -149,10 +150,10 @@ namespace GUI
             {
                 try
                 {
-                    string actor = _usuarioServicio.ObtenerUsernameEnSesion();
+                    string actor = _usuarioBll.ObtenerUsernameEnSesion();
                     if (string.IsNullOrEmpty(actor)) actor = "Sistema";
 
-                    _versionServicio.RestaurarVersion(this.Text, _seleccionado.IdVersion, actor);
+                    _versionBll.RestaurarVersion(this.Text, _seleccionado.IdVersion, actor);
                     MessageBox.Show("Rollback completado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarVersiones();
                 }

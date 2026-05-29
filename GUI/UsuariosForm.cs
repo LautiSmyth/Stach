@@ -1,6 +1,7 @@
-using Aplicacion;
 using BE;
 using BE.Enums;
+using BLL;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +11,7 @@ namespace GUI
 {
     public partial class UsuariosForm : Form, IObserver
     {
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private List<Usuario> _usuarios;
         private Usuario _seleccionado;
         private bool _cargandoSeleccion = false;
@@ -46,7 +47,7 @@ namespace GUI
 
         private void CargarDatos()
         {
-            _usuarios = _usuarioServicio.ObtenerTodos();
+            _usuarios = _usuarioBll.ObtenerTodos();
             FiltrarGrilla();
         }
 
@@ -218,12 +219,12 @@ namespace GUI
                         MessageBox.Show("La contraseña es obligatoria para nuevos usuarios.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
-                    _usuarioServicio.Alta(this.Text, username, pass);
+                    _usuarioBll.Alta(this.Text, username, pass);
                     MessageBox.Show($"Usuario '{username}' creado correctamente.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    _usuarioServicio.Modificar(this.Text, _seleccionado.IdUsuario, username, pass, estado);
+                    _usuarioBll.Modificar(this.Text, _seleccionado.IdUsuario, username, pass, estado);
                     MessageBox.Show($"Usuario '{username}' modificado correctamente.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 

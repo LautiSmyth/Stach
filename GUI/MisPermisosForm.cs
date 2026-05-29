@@ -1,5 +1,6 @@
-using Aplicacion;
 using BE;
+using BLL;
+using Servicios;
 using System;
 using System.Windows.Forms;
 
@@ -7,8 +8,8 @@ namespace GUI
 {
     public partial class MisPermisosForm : Form, IObserver
     {
-        private readonly PermisoServicio _permisoServicio = new PermisoServicio();
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
+        private readonly PermisoBLL _permisoBll = IoCContainer.Resolver<PermisoBLL>();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
 
         public MisPermisosForm()
         {
@@ -30,7 +31,7 @@ namespace GUI
 
         private void CargarPermisos()
         {
-            Usuario usuario = _usuarioServicio.ObtenerUsuarioLogueado();
+            Usuario usuario = _usuarioBll.ObtenerUsuarioLogueado();
             if (usuario == null) return;
 
             tvDirectos.Nodes.Clear();
@@ -42,7 +43,7 @@ namespace GUI
             tvDirectos.ExpandAll();
 
             lstResueltos.Items.Clear();
-            var patentes = _permisoServicio.ResolverPatentes(usuario.Permisos);
+            var patentes = _permisoBll.ResolverPatentes(usuario.Permisos);
             foreach (var pat in patentes)
             {
                 lstResueltos.Items.Add($"{pat.Nombre} ({pat.PermisoKey})");

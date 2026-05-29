@@ -1,5 +1,7 @@
-using Aplicacion;
 using BE;
+using BLL;
+using Abstracciones;
+using Servicios;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -9,8 +11,8 @@ namespace GUI
 {
     public partial class LoginForm : Form, IObserver
     {
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
-        private readonly ConexionServicio _conexionServicio = new ConexionServicio();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
+        private readonly IConexionService _conexionService = IoCContainer.Resolver<IConexionService>();
         private bool _cargandoIdioma = false;
 
         public LoginForm()
@@ -84,7 +86,7 @@ namespace GUI
                 return;
             }
 
-            if (!_conexionServicio.VerificarConexion())
+            if (!_conexionService.VerificarConexion())
             {
                 lblErrorValidacion.Text = "No hay conexion a la base de datos.";
                 return;
@@ -95,7 +97,7 @@ namespace GUI
 
             try
             {
-                _usuarioServicio.Login(this.Text, txtUsername.Text.Trim(), txtPassword.Text);
+                _usuarioBll.Login(this.Text, txtUsername.Text.Trim(), txtPassword.Text);
                 new MenuForm().Show();
                 this.Hide();
             }
@@ -103,7 +105,7 @@ namespace GUI
             {
                 lblErrorValidacion.Text = ex.Message;
 
-                if (_usuarioServicio.LimiteAlcanzadoEnSesion())
+                if (_usuarioBll.LimiteAlcanzadoEnSesion())
                 {
                     MessageBox.Show("Limite de intentos alcanzado. La aplicacion se cerrara.", "Bloqueado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     Application.Exit();

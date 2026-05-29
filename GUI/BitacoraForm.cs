@@ -1,6 +1,8 @@
-using Aplicacion;
 using BE;
 using BE.Enums;
+using BLL;
+using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,9 +12,9 @@ namespace GUI
 {
     public partial class BitacoraForm : Form, IObserver
     {
-        private readonly BitacoraServicio _bitacoraServicio = new BitacoraServicio();
-        private readonly CriticidadServicio _criticidadServicio = new CriticidadServicio();
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
+        private readonly IBitacoraService _bitacoraServicio = IoCContainer.Resolver<IBitacoraService>();
+        private readonly ICriticidadService _criticidadServicio = IoCContainer.Resolver<ICriticidadService>();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private List<Bitacora> _listaCompleta = new List<Bitacora>();
         private readonly Timer _timerBusqueda = new Timer();
 
@@ -51,7 +53,7 @@ namespace GUI
 
         private void CargarComboUsuarios()
         {
-            bool tienePermisoTodos = _usuarioServicio.UsuarioLogueadoTienePermiso("BitacoraTodos");
+            bool tienePermisoTodos = _usuarioBll.UsuarioLogueadoTienePermiso("BitacoraTodos");
             if (tienePermisoTodos)
             {
                 lblFiltrarUsuario.Visible = true;
@@ -59,7 +61,7 @@ namespace GUI
                 cboFiltrarUsuario.Items.Clear();
                 string todosText = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
                 cboFiltrarUsuario.Items.Add(todosText);
-                var usuarios = _usuarioServicio.ObtenerTodos();
+                var usuarios = _usuarioBll.ObtenerTodos();
                 foreach (var u in usuarios)
                 {
                     cboFiltrarUsuario.Items.Add(u.Username);
@@ -189,7 +191,7 @@ namespace GUI
 
             List<Bitacora> resultado = new List<Bitacora>();
 
-            bool tienePermisoTodos = _usuarioServicio.UsuarioLogueadoTienePermiso("BitacoraTodos");
+            bool tienePermisoTodos = _usuarioBll.UsuarioLogueadoTienePermiso("BitacoraTodos");
             string filtroUsuario = "";
             if (tienePermisoTodos)
             {
@@ -197,7 +199,7 @@ namespace GUI
             }
             else
             {
-                filtroUsuario = _usuarioServicio.ObtenerUsernameEnSesion();
+                filtroUsuario = _usuarioBll.ObtenerUsernameEnSesion();
             }
             string todosText = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
 

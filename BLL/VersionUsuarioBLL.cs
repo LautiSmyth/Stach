@@ -8,12 +8,16 @@ namespace BLL
     public class VersionUsuarioBLL
     {
         private readonly IVersionUsuarioDAL _dal;
-        private readonly UsuarioBLL _usuarioBll;
+        private readonly IUsuarioDAL _usuarioDal;
+        private readonly IDigitoVerificadorService _dvService;
+        private readonly IBitacoraService _bitacora;
 
-        public VersionUsuarioBLL(IVersionUsuarioDAL dal, UsuarioBLL usuarioBll)
+        public VersionUsuarioBLL(IVersionUsuarioDAL dal, IUsuarioDAL usuarioDal, IDigitoVerificadorService dvService, IBitacoraService bitacora)
         {
             _dal = dal;
-            _usuarioBll = usuarioBll;
+            _usuarioDal = usuarioDal;
+            _dvService = dvService;
+            _bitacora = bitacora;
         }
 
         public void Insertar(VersionUsuario version)
@@ -26,21 +30,35 @@ namespace BLL
             return _dal.ObtenerPorUsuario(idUsuario);
         }
 
-        public void RestaurarVersion(int idVersion, string actor)
+        public void RestaurarVersion(string modulo, int idVersion, string actor)
         {
-            var version = _dal.ObtenerPorId(idVersion);
-            if (version == null)
+            try
             {
-                throw new ArgumentException("La versión no existe.");
-            }
+                var version = _dal.ObtenerPorId(idVersion);
+                if (version == null)
+                {
+                    throw new ArgumentException("La versión no existe.");
+                }
 
-            var usuario = _usuarioBll.ObtenerPorId(version.IdUsuario);
-            if (usuario == null)
+                var usuario = _usuarioDal.ObtenerPorId(version.IdUsuario);
+                if (usuario == null)
+                {
+                    throw new ArgumentException("El usuario de esta versión ya no existe.");
+                }
+
+                usuario.Username = version.Username;
+                usuario.PasswordHash = version.PasswordHash;
+                usuario.Estado = version.Estado;
+
+                _usuarioDal.Actualizar(usuario);
+                _dvService.InicializarDVs();
+                _bitacora.Registrar(modulo, "Rollback", $"Rollback a versión {idVersion} ejecutado por '{actor}'.", true);
+            }
+            catch (Exception ex)
             {
-                throw new ArgumentException("El usuario de esta versión ya no existe.");
+                _bitacora.Registrar(modulo, "Rollback", $"Error al ejecutar rollback a versión {idVersion}.", false, ex.Message);
+                throw;
             }
-
-            _usuarioBll.RestaurarVersion(usuario, version.Username, version.PasswordHash, version.Estado);
         }
     }
 }

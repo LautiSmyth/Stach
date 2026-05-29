@@ -1,4 +1,5 @@
-using Aplicacion;
+using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -7,8 +8,8 @@ namespace GUI
 {
     public partial class RestauracionForm : Form
     {
-        private readonly DigitoVerificadorServicio _dvServicio = new DigitoVerificadorServicio();
-        private readonly BackupServicio _backupServicio = new BackupServicio();
+        private readonly IDigitoVerificadorService _dvService = IoCContainer.Resolver<IDigitoVerificadorService>();
+        private readonly IBackupService _backupService = IoCContainer.Resolver<IBackupService>();
         private readonly List<string> _errores;
 
         public bool RestauradoExitosamente { get; private set; }
@@ -54,7 +55,7 @@ namespace GUI
                 {
                     try
                     {
-                        _dvServicio.InicializarDVs();
+                        _dvService.InicializarDVs();
                         MessageBox.Show("Dígitos verificadores recalculados y restaurados con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         RestauradoExitosamente = true;
                         this.Close();
@@ -84,7 +85,7 @@ namespace GUI
                             {
                                 try
                                 {
-                                    _backupServicio.RestaurarBackup("Restauracion", ofd.FileName);
+                                    _backupService.RestaurarBackup("Restauracion", ofd.FileName);
                                     MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     RestauradoExitosamente = true;
                                     Application.Restart();

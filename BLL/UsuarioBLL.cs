@@ -11,14 +11,26 @@ namespace BLL
         private readonly IUsuarioDAL _dal;
         private readonly IPermisoDAL _permisoDal;
         private readonly IDigitoVerificadorService _dvService;
+        private readonly IVersionUsuarioDAL _versionDal;
+        private readonly ISessionManager _sessionManager;
+        private readonly IBitacoraService _bitacora;
+        private readonly IEncriptador _encriptador;
+        private readonly IContadorSesion _contadorSesion;
 
         private static readonly int[] _minutosBloqueo = { 1, 5, 15, 60 };
 
-        public UsuarioBLL(IUsuarioDAL dal, IPermisoDAL permisoDal, IDigitoVerificadorService dvService)
+        public UsuarioBLL(IUsuarioDAL dal, IPermisoDAL permisoDal, IDigitoVerificadorService dvService,
+            IVersionUsuarioDAL versionDal, ISessionManager sessionManager, IBitacoraService bitacora,
+            IEncriptador encriptador, IContadorSesion contadorSesion)
         {
             _dal = dal;
             _permisoDal = permisoDal;
             _dvService = dvService;
+            _versionDal = versionDal;
+            _sessionManager = sessionManager;
+            _bitacora = bitacora;
+            _encriptador = encriptador;
+            _contadorSesion = contadorSesion;
         }
 
         public List<Usuario> ObtenerTodos()
@@ -73,7 +85,7 @@ namespace BLL
                     usuario.IntentosFallidos = 0;
                     usuario.FechaBloqueo = null;
                     _dal.Actualizar(usuario);
-                    ActualizarIntegridad();
+                    _dvService.InicializarDVs();
                 }
                 else
                 {
@@ -103,68 +115,141 @@ namespace BLL
                 throw new ArgumentException("La contraseña debe contener al menos una letra mayúscula y un número.");
         }
 
-        public void Alta(Usuario usuario)
+        public void Alta(string modulo, string username, string password)
         {
-            if (string.IsNullOrEmpty(usuario.Username))
-                throw new ArgumentException("El nombre de usuario no puede estar vacio.");
-            if (string.IsNullOrEmpty(usuario.PasswordHash))
-                throw new ArgumentException("La contraseña no puede estar vacia.");
-            if (_dal.ObtenerPorUsername(usuario.Username) != null)
-                throw new ArgumentException("El nombre de usuario ya existe.");
-
-            _dal.Insertar(usuario);
-            ActualizarIntegridad();
-        }
-
-        public void Modificar(Usuario usuario, string nuevoUsername, string nuevoPasswordHash, EstadoUsuario nuevoEstado)
-        {
-            if (string.IsNullOrEmpty(nuevoUsername))
-                throw new ArgumentException("El nombre de usuario no puede estar vacio.");
-
-            Usuario existente = _dal.ObtenerPorUsername(nuevoUsername);
-            if (existente != null && existente.IdUsuario != usuario.IdUsuario)
-                throw new ArgumentException("El nombre de usuario ya existe.");
-
-            usuario.Username = nuevoUsername;
-
-            if (!string.IsNullOrEmpty(nuevoPasswordHash))
+            try
             {
-                usuario.PasswordHash = nuevoPasswordHash;
-            }
+                ValidarPassword(password);
+                if (_dal.ObtenerPorUsername(username) != null)
+                    throw new ArgumentException("El nombre de usuario ya existe.");
 
-            if (nuevoEstado != usuario.Estado)
+                Usuario usuario = new Usuario
+                {
+                    Username = username,
+                    PasswordHash = _encriptador.Hash(password),
+                    Estado = EstadoUsuario.Activo,
+                    FechaAlta = DateTime.Now,
+                    IntentosFallidos = 0,
+                    CantidadBloqueos = 0
+                };
+                _dal.Insertar(usuario);
+                _dvService.InicializarDVs();
+                _bitacora.Registrar(modulo, "Alta", $"Alta de usuario '{username}'.", true);
+            }
+            catch (ArgumentException)
             {
-                usuario.Estado = nuevoEstado;
-                if (nuevoEstado == EstadoUsuario.Activo)
-                {
-                    usuario.IntentosFallidos = 0;
-                    usuario.CantidadBloqueos = 0;
-                    usuario.FechaBloqueo = null;
-                }
-                else if (nuevoEstado == EstadoUsuario.Bloqueado)
-                {
-                    usuario.FechaBloqueo = DateTime.Now;
-                    usuario.CantidadBloqueos++;
-                }
+                throw;
             }
-
-            _dal.Actualizar(usuario);
-            ActualizarIntegridad();
+            catch (Exception ex)
+            {
+                _bitacora.Registrar(modulo, "Alta", $"Error al dar de alta usuario '{username}'.", false, ex.Message);
+                throw;
+            }
         }
 
-        public void RestaurarVersion(Usuario usuario, string username, string passwordHash, EstadoUsuario estado)
+        public void Modificar(string modulo, int idUsuario, string nuevoUsername, string nuevoPassword, EstadoUsuario nuevoEstado)
         {
-            if (string.IsNullOrEmpty(username))
-                throw new ArgumentException("El nombre de usuario no puede estar vacio.");
-            usuario.Username = username;
-            usuario.PasswordHash = passwordHash;
-            usuario.Estado = estado;
-            _dal.Actualizar(usuario);
-            ActualizarIntegridad();
+            try
+            {
+                Usuario usuario = _dal.ObtenerPorId(idUsuario);
+                if (usuario == null)
+                    throw new ArgumentException("El usuario no existe.");
+
+                Usuario logueado = ObtenerUsuarioLogueado();
+                if (logueado != null && logueado.IdUsuario == idUsuario)
+                {
+                    if (nuevoEstado != EstadoUsuario.Activo)
+                    {
+                        throw new ArgumentException("No puedes desactivar o bloquear tu propia cuenta.");
+                    }
+                }
+
+                string actor = ObtenerUsernameEnSesion();
+                if (string.IsNullOrEmpty(actor)) actor = "Sistema";
+
+                var v = new VersionUsuario
+                {
+                    IdUsuario = usuario.IdUsuario,
+                    Username = usuario.Username,
+                    PasswordHash = usuario.PasswordHash,
+                    Estado = usuario.Estado,
+                    ModificadoPor = actor,
+                    FechaModificacion = DateTime.Now,
+                    DetalleCambios = $"Antes de modificación. Nuevo username: '{nuevoUsername}', Estado: {nuevoEstado}."
+                };
+                _versionDal.Insertar(v);
+
+                string anteriorUsername = usuario.Username;
+                string nuevoPasswordHash = null;
+                if (!string.IsNullOrEmpty(nuevoPassword))
+                {
+                    ValidarPassword(nuevoPassword);
+                    nuevoPasswordHash = _encriptador.Hash(nuevoPassword);
+                }
+
+                usuario.Username = nuevoUsername;
+                if (!string.IsNullOrEmpty(nuevoPasswordHash))
+                {
+                    usuario.PasswordHash = nuevoPasswordHash;
+                }
+
+                if (nuevoEstado != usuario.Estado)
+                {
+                    usuario.Estado = nuevoEstado;
+                    if (nuevoEstado == EstadoUsuario.Activo)
+                    {
+                        usuario.IntentosFallidos = 0;
+                        usuario.CantidadBloqueos = 0;
+                        usuario.FechaBloqueo = null;
+                    }
+                    else if (nuevoEstado == EstadoUsuario.Bloqueado)
+                    {
+                        usuario.FechaBloqueo = DateTime.Now;
+                        usuario.CantidadBloqueos++;
+                    }
+                }
+
+                _dal.Actualizar(usuario);
+                _dvService.InicializarDVs();
+
+                string detalle = $"Modificacion de usuario '{anteriorUsername}'. Nuevo username: '{nuevoUsername}', Estado: {nuevoEstado}.";
+                if (!string.IsNullOrEmpty(nuevoPassword))
+                {
+                    detalle += " Contraseña actualizada.";
+                }
+                _bitacora.Registrar(modulo, "Modificacion", detalle, true);
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _bitacora.Registrar(modulo, "Modificacion", $"Error al modificar usuario '{nuevoUsername}'.", false, ex.Message);
+                throw;
+            }
         }
 
-        public void CambiarEstado(Usuario usuario, EstadoUsuario nuevoEstado)
+        public void CambiarEstado(string modulo, int idUsuario, EstadoUsuario nuevoEstado)
         {
+            Usuario usuario = _dal.ObtenerPorId(idUsuario);
+            if (usuario == null) return;
+
+            string actor = ObtenerUsernameEnSesion();
+            if (string.IsNullOrEmpty(actor)) actor = "Sistema";
+
+            var v = new VersionUsuario
+            {
+                IdUsuario = usuario.IdUsuario,
+                Username = usuario.Username,
+                PasswordHash = usuario.PasswordHash,
+                Estado = usuario.Estado,
+                ModificadoPor = actor,
+                FechaModificacion = DateTime.Now,
+                DetalleCambios = $"Antes de cambio de estado a {nuevoEstado}."
+            };
+            _versionDal.Insertar(v);
+
             usuario.Estado = nuevoEstado;
             if (nuevoEstado == EstadoUsuario.Activo)
             {
@@ -178,7 +263,111 @@ namespace BLL
                 usuario.CantidadBloqueos++;
             }
             _dal.Actualizar(usuario);
-            ActualizarIntegridad();
+            _dvService.InicializarDVs();
+            _bitacora.Registrar(modulo, "CambioEstado", $"Estado cambiado a {nuevoEstado} para '{usuario.Username}'.", true);
+        }
+
+        public void Login(string modulo, string username, string passwordIngresada)
+        {
+            try
+            {
+                Usuario usuario = _dal.ObtenerPorUsername(username);
+
+                if (usuario == null)
+                {
+                    _contadorSesion.RegistrarIntento();
+                    _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Credenciales invalidas.", false, "Credenciales invalidas.");
+                    throw new UnauthorizedAccessException("Usuario o contraseña incorrectos.");
+                }
+
+                if (!_encriptador.Verificar(passwordIngresada, usuario.PasswordHash))
+                {
+                    RegistrarIntentoFallido(usuario);
+                    _contadorSesion.RegistrarIntento();
+                    _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Credenciales invalidas.", false, "Credenciales invalidas.");
+                    throw new UnauthorizedAccessException("Usuario o contraseña incorrectos.");
+                }
+
+                try
+                {
+                    ValidarEstado(usuario);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    _contadorSesion.RegistrarIntento();
+                    _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Cuenta bloqueada.", false, "Cuenta bloqueada.");
+                    throw new UnauthorizedAccessException("Usuario o contraseña incorrectos.");
+                }
+
+                RegistrarLoginExitoso(usuario);
+                _contadorSesion.Resetear();
+                _sessionManager.Login(usuario);
+                _bitacora.Registrar(modulo, "Login", "Login exitoso.", true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Error inesperado.", false, ex.Message);
+                throw;
+            }
+        }
+
+        public bool LimiteAlcanzadoEnSesion()
+        {
+            return _contadorSesion.LimiteAlcanzado;
+        }
+
+        public void Logout(string modulo)
+        {
+            _bitacora.Registrar(modulo, "Logout", "Cierre de sesion.", true);
+            _sessionManager.Logout();
+        }
+
+        public string ObtenerUsernameEnSesion()
+        {
+            Usuario usuario = _sessionManager.Usuario;
+            return usuario == null ? string.Empty : usuario.Username;
+        }
+
+        public bool UsuarioLogueadoTienePermiso(string patenteKey)
+        {
+            Usuario usuario = _sessionManager.Usuario;
+            if (usuario == null) return false;
+            var permisoBll = new PermisoBLL(_permisoDal);
+            return permisoBll.UsuarioTienePermiso(usuario, patenteKey);
+        }
+
+        public bool ValidarCredencialesAdmin(string username, string password, List<string> permisosRequeridos)
+        {
+            Usuario usuario = _dal.ObtenerPorUsername(username);
+            if (usuario == null) return false;
+            if (!_encriptador.Verificar(password, usuario.PasswordHash)) return false;
+            if (username.Equals("admin", StringComparison.OrdinalIgnoreCase)) return true;
+            var permisoBll = new PermisoBLL(_permisoDal);
+            foreach (var permiso in permisosRequeridos)
+            {
+                if (permisoBll.UsuarioTienePermiso(usuario, permiso)) return true;
+            }
+            return false;
+        }
+
+        public Usuario ObtenerUsuarioLogueado()
+        {
+            return _sessionManager.Usuario;
+        }
+
+        public void RestaurarVersion(Usuario usuario, string username, string passwordHash, EstadoUsuario estado)
+        {
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentException("El nombre de usuario no puede estar vacio.");
+            usuario.Username = username;
+            usuario.PasswordHash = passwordHash;
+            usuario.Estado = estado;
+            _dal.Actualizar(usuario);
+            _dvService.InicializarDVs();
         }
 
         public void RegistrarIntentoFallido(Usuario usuario)
@@ -191,7 +380,7 @@ namespace BLL
                 usuario.CantidadBloqueos++;
             }
             _dal.Actualizar(usuario);
-            ActualizarIntegridad();
+            _dvService.InicializarDVs();
         }
 
         public void RegistrarLoginExitoso(Usuario usuario)
@@ -199,11 +388,6 @@ namespace BLL
             usuario.IntentosFallidos = 0;
             usuario.UltimoLogin = DateTime.Now;
             _dal.Actualizar(usuario);
-            ActualizarIntegridad();
-        }
-
-        private void ActualizarIntegridad()
-        {
             _dvService.InicializarDVs();
         }
     }

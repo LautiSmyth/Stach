@@ -160,13 +160,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aplicacion\Aplicacion.csproj">
-      <Project>{0311ac0d-5a5d-4633-ac83-01844e57cb1c}</Project>
-      <Name>Aplicacion</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BE\BE.csproj">
       <Project>{25636c61-d0a6-4416-9d59-cb17d5ebb8a1}</Project>
       <Name>BE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Abstracciones\Abstracciones.csproj">
+      <Project>{52905808-a51a-4701-ba9a-36d5126b6a8f}</Project>
+      <Name>Abstracciones</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{78C6548D-E141-4F91-B3B9-BCDEFF6396EA}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Servicios\Servicios.csproj">
+      <Project>{808AFC0A-0CF1-4EFC-BF7A-B24A6A74E1D2}</Project>
+      <Name>Servicios</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{730B3FC4-FFD4-4865-A871-73F82208E93B}</Project>
+      <Name>DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

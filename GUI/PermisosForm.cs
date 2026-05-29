@@ -1,5 +1,6 @@
-using Aplicacion;
 using BE;
+using BLL;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace GUI
 {
     public partial class PermisosForm : Form, IObserver
     {
-        private readonly PermisoServicio _permisoServicio = new PermisoServicio();
-        private readonly UsuarioServicio _usuarioServicio = new UsuarioServicio();
+        private readonly PermisoBLL _permisoBll = IoCContainer.Resolver<PermisoBLL>();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private List<ComponentePermiso> _todosPermisos;
         private ComponentePermiso _seleccionado;
         private Usuario _usuarioSeleccionado;
@@ -60,7 +61,7 @@ namespace GUI
 
         private void CargarDatos()
         {
-            _todosPermisos = _permisoServicio.ObtenerTodos();
+            _todosPermisos = _permisoBll.ObtenerTodos();
             CargarArbolEstructura();
             CargarUsuarios();
             CargarListasRelacion();
@@ -94,7 +95,7 @@ namespace GUI
 
         private void CargarUsuarios()
         {
-            var usuarios = _usuarioServicio.ObtenerTodos();
+            var usuarios = _usuarioBll.ObtenerTodos();
             cboUsuarios.DataSource = null;
             cboUsuarios.DisplayMember = "Username";
             cboUsuarios.DataSource = usuarios;
@@ -160,7 +161,7 @@ namespace GUI
 
             try
             {
-                _permisoServicio.CrearPatente(this.Text, nombre, clave);
+                _permisoBll.CrearPatente(this.Text, nombre, clave);
                 txtNombrePermiso.Clear();
                 txtClavePermiso.Clear();
                 CargarDatos();
@@ -184,7 +185,7 @@ namespace GUI
 
             try
             {
-                _permisoServicio.CrearFamilia(this.Text, nombre, clave);
+                _permisoBll.CrearFamilia(this.Text, nombre, clave);
                 txtNombrePermiso.Clear();
                 txtClavePermiso.Clear();
                 CargarDatos();
@@ -207,7 +208,7 @@ namespace GUI
             {
                 try
                 {
-                    _permisoServicio.EliminarPermiso(this.Text, _seleccionado.IdPermiso, _seleccionado.Nombre);
+                    _permisoBll.EliminarPermiso(this.Text, _seleccionado.IdPermiso, _seleccionado.Nombre);
                     _seleccionado = null;
                     CargarDatos();
                 }
@@ -242,7 +243,7 @@ namespace GUI
             {
                 try
                 {
-                    _permisoServicio.GuardarRelaciones(this.Text, fam);
+                    _permisoBll.GuardarRelaciones(this.Text, fam);
                     CargarDatos();
                     MessageBox.Show("Relaciones guardadas con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -272,7 +273,7 @@ namespace GUI
                 }
                 tvUsuarioPermisos.ExpandAll();
 
-                var planas = _permisoServicio.ResolverPatentes(_usuarioSeleccionado.Permisos);
+                var planas = _permisoBll.ResolverPatentes(_usuarioSeleccionado.Permisos);
                 foreach (var pl in planas)
                 {
                     lstPatentesPlanas.Items.Add(pl.Nombre);
@@ -297,7 +298,7 @@ namespace GUI
             _usuarioSeleccionado.Permisos.Add(_seleccionado);
             try
             {
-                _permisoServicio.GuardarPermisosUsuario(this.Text, _usuarioSeleccionado.IdUsuario, _usuarioSeleccionado.Username, _usuarioSeleccionado.Permisos);
+                _permisoBll.GuardarPermisosUsuario(this.Text, _usuarioSeleccionado.IdUsuario, _usuarioSeleccionado.Username, _usuarioSeleccionado.Permisos);
                 CargarPermisosUsuario();
             }
             catch (Exception ex)
@@ -324,7 +325,7 @@ namespace GUI
             _usuarioSeleccionado.Permisos.Remove(p);
             try
             {
-                _permisoServicio.GuardarPermisosUsuario(this.Text, _usuarioSeleccionado.IdUsuario, _usuarioSeleccionado.Username, _usuarioSeleccionado.Permisos);
+                _permisoBll.GuardarPermisosUsuario(this.Text, _usuarioSeleccionado.IdUsuario, _usuarioSeleccionado.Username, _usuarioSeleccionado.Permisos);
                 CargarPermisosUsuario();
             }
             catch (Exception ex)
@@ -344,8 +345,8 @@ namespace GUI
             btnEliminarPermiso.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnEliminarPermiso");
 
             lblCol2Titulo.Text = _seleccionado is Familia fam
-                ? $"{ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}"
-                : ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo");
+                 ? $"{ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}"
+                 : ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo");
 
             lblDisponibles.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblDisponibles");
             lblMiembros.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblMiembros");

@@ -1,5 +1,6 @@
-using Aplicacion;
 using BE;
+using Abstracciones;
+using Servicios;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -8,7 +9,7 @@ namespace GUI
 {
     public partial class BackupForm : Form, IObserver
     {
-        private readonly BackupServicio _backupServicio = new BackupServicio();
+        private readonly IBackupService _backupService = IoCContainer.Resolver<IBackupService>();
 
         public BackupForm()
         {
@@ -38,7 +39,7 @@ namespace GUI
                 }
                 string filename = string.Format("Stach_Backup_{0:yyyyMMdd_HHmmss}.bak", DateTime.Now);
                 string fullPath = Path.Combine(dirBackups, filename);
-                _backupServicio.RealizarBackup(this.Text, fullPath);
+                _backupService.RealizarBackup(this.Text, fullPath);
                 MessageBox.Show(string.Format("Copia de seguridad generada con éxito en:\n{0}", fullPath), "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -67,7 +68,7 @@ namespace GUI
                     {
                         try
                         {
-                            _backupServicio.RestaurarBackup(this.Text, ofd.FileName);
+                            _backupService.RestaurarBackup(this.Text, ofd.FileName);
                             MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             Application.Restart();
                         }
