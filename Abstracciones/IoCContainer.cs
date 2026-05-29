@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Servicios
+namespace Abstracciones
 {
     public static class IoCContainer
     {
@@ -25,7 +25,7 @@ namespace Servicios
 
         public static TInterface Resolver<TInterface>()
         {
-            if (_registros.TryGetValue(typeof(TInterface), out var func))
+            if (_registros.TryGetValue(typeof(TInterface), out Func<object> func))
             {
                 return (TInterface)func();
             }

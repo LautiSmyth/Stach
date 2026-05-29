@@ -1,5 +1,4 @@
 using Abstracciones;
-using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -38,7 +37,7 @@ namespace GUI
                 if (loginForm.ShowDialog() == DialogResult.OK && loginForm.Autorizado)
                 {
                     lstErrores.Items.Clear();
-                    foreach (var err in _errores)
+                    foreach (string err in _errores)
                     {
                         lstErrores.Items.Add(err);
                     }
@@ -83,7 +82,7 @@ namespace GUI
                             string confirmMsg = "¿Está seguro de restaurar la base de datos? Esta operación cerrará las sesiones activas, sobrescribirá todos los datos actuales y reiniciará la aplicación.";
                             if (MessageBox.Show(confirmMsg, "Confirmar Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                             {
-                                using (var pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese la contraseña para descifrar el archivo de respaldo:", true))
+                                using (InputDialog pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese la contraseña para descifrar el archivo de respaldo:", true))
                                 {
                                     if (pwdDlg.ShowDialog() != DialogResult.OK)
                                     {

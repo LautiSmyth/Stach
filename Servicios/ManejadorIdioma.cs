@@ -18,8 +18,8 @@ namespace Servicios
         {
             _idiomaDal = idiomaDal;
             _traduccionDal = traduccionDal;
-            var idiomas = _idiomaDal.ObtenerTodos();
-            var def = idiomas.FirstOrDefault(i => i.Default) ?? idiomas.FirstOrDefault();
+            List<Idioma> idiomas = _idiomaDal.ObtenerTodos();
+            Idioma def = idiomas.FirstOrDefault(i => i.Default) ?? idiomas.FirstOrDefault();
             if (def != null)
             {
                 CambiarIdioma(def);
@@ -32,8 +32,8 @@ namespace Servicios
             {
                 if (_instancia == null)
                 {
-                    var idiomaDal = IoCContainer.Resolver<IIdiomaDAL>();
-                    var traduccionDal = IoCContainer.Resolver<ITraduccionDAL>();
+                    IIdiomaDAL idiomaDal = IoCContainer.Resolver<IIdiomaDAL>();
+                    ITraduccionDAL traduccionDal = IoCContainer.Resolver<ITraduccionDAL>();
                     _instancia = new ManejadorIdioma(idiomaDal, traduccionDal);
                 }
                 return _instancia;
@@ -63,7 +63,7 @@ namespace Servicios
 
         public void Notify()
         {
-            foreach (var observer in _observers)
+            foreach (IObserver observer in _observers)
             {
                 observer.ActualizarIdioma();
             }
@@ -130,12 +130,12 @@ namespace Servicios
             _traduccionesActuales.Clear();
             if (_idiomaActual == null) return;
 
-            var traducciones = _traduccionDal.ObtenerTraduccionesPorIdioma(_idiomaActual.IdIdioma);
-            var componentes = _traduccionDal.ObtenerComponentes();
+            List<Traduccion> traducciones = _traduccionDal.ObtenerTraduccionesPorIdioma(_idiomaActual.IdIdioma);
+            List<Componente> componentes = _traduccionDal.ObtenerComponentes();
 
-            foreach (var t in traducciones)
+            foreach (Traduccion t in traducciones)
             {
-                var comp = componentes.FirstOrDefault(c => c.IdComponente == t.IdComponente);
+                Componente comp = componentes.FirstOrDefault(c => c.IdComponente == t.IdComponente);
                 if (comp != null)
                 {
                     _traduccionesActuales[comp.Nombre] = t.Texto;

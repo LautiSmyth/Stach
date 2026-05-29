@@ -1,5 +1,5 @@
 using BLL;
-using Servicios;
+using Abstracciones;
 using System;
 using System.Windows.Forms;
 
@@ -45,7 +45,8 @@ namespace GUI
             try
             {
                 string hashRecuperacion = System.Configuration.ConfigurationManager.AppSettings["MasterRecoveryKeyHash"];
-                if (!string.IsNullOrEmpty(hashRecuperacion) && Encriptador.Verificar(password, hashRecuperacion))
+                IEncriptador encriptador = IoCContainer.Resolver<IEncriptador>();
+                if (!string.IsNullOrEmpty(hashRecuperacion) && encriptador.Verificar(password, hashRecuperacion))
                 {
                     Autorizado = true;
                     this.DialogResult = DialogResult.OK;
@@ -53,7 +54,7 @@ namespace GUI
                     return;
                 }
 
-                var perms = new System.Collections.Generic.List<string> { "RestauracionDV", "Backups" };
+                System.Collections.Generic.List<string> perms = new System.Collections.Generic.List<string> { "RestauracionDV", "Backups" };
                 bool tienePermiso = _usuarioBll.ValidarCredencialesAdmin(username, password, perms);
 
                 if (!tienePermiso)

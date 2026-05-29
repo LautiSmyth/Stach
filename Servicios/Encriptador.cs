@@ -13,10 +13,10 @@ namespace Servicios
         public static string Hash(string contraseña)
         {
             byte[] salt = new byte[SaltSize];
-            using (var rng = RandomNumberGenerator.Create())
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
                 rng.GetBytes(salt);
 
-            using (var pbkdf2 = new Rfc2898DeriveBytes(contraseña, salt, Iterations, HashAlgorithmName.SHA256))
+            using (Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(contraseña, salt, Iterations, HashAlgorithmName.SHA256))
             {
                 byte[] hash = pbkdf2.GetBytes(HashSize);
                 byte[] hashBytes = new byte[SaltSize + HashSize];
@@ -32,7 +32,7 @@ namespace Servicios
             byte[] salt = new byte[SaltSize];
             Array.Copy(hashBytes, 0, salt, 0, SaltSize);
 
-            using (var pbkdf2 = new Rfc2898DeriveBytes(contraseñaIngresada, salt, Iterations, HashAlgorithmName.SHA256))
+            using (Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(contraseñaIngresada, salt, Iterations, HashAlgorithmName.SHA256))
             {
                 byte[] hashCalculado = pbkdf2.GetBytes(HashSize);
                 for (int i = 0; i < HashSize; i++)
@@ -46,7 +46,7 @@ namespace Servicios
 
         public static string HashSHA256(string input)
         {
-            using (var sha256 = SHA256.Create())
+            using (SHA256 sha256 = SHA256.Create())
             {
                 byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
                 byte[] hash = sha256.ComputeHash(bytes);

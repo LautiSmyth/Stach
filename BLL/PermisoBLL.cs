@@ -32,7 +32,7 @@ namespace BLL
         public void Insertar(ComponentePermiso permiso)
         {
             if (permiso == null) throw new ArgumentNullException(nameof(permiso));
-            var todos = _dal.ObtenerTodos();
+            List<ComponentePermiso> todos = _dal.ObtenerTodos();
             if (todos.Any(p => p.Nombre.Equals(permiso.Nombre, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new ArgumentException("Ya existe un permiso o rol con el mismo nombre.");
@@ -48,7 +48,7 @@ namespace BLL
         {
             try
             {
-                var p = new Patente { Nombre = nombre, PermisoKey = key };
+                Patente p = new Patente { Nombre = nombre, PermisoKey = key };
                 Insertar(p);
                 _bitacora.Registrar(modulo, "AltaPermiso", $"Creación de patente '{nombre}' con clave '{key}'.", true);
             }
@@ -63,7 +63,7 @@ namespace BLL
         {
             try
             {
-                var f = new Familia { Nombre = nombre, PermisoKey = key };
+                Familia f = new Familia { Nombre = nombre, PermisoKey = key };
                 Insertar(f);
                 _bitacora.Registrar(modulo, "AltaPermiso", $"Creación de familia '{nombre}' con clave '{key}'.", true);
             }
@@ -115,10 +115,10 @@ namespace BLL
         {
             try
             {
-                var logueado = _sessionManager.Usuario;
+                Usuario logueado = _sessionManager.Usuario;
                 if (logueado != null && logueado.IdUsuario == idUsuario)
                 {
-                    var resolved = ResolverPatentes(permisos);
+                    List<Patente> resolved = ResolverPatentes(permisos);
                     if (!resolved.Any(p => p.PermisoKey != null && p.PermisoKey.Equals("Permisos", StringComparison.OrdinalIgnoreCase)))
                     {
                         throw new ArgumentException("No puedes remover el permiso de Gestión de Permisos de tu propia cuenta.");
@@ -137,9 +137,9 @@ namespace BLL
 
         public List<Patente> ResolverPatentes(List<ComponentePermiso> componentes)
         {
-            var patentes = new List<Patente>();
-            var visitados = new HashSet<int>();
-            foreach (var comp in componentes)
+            List<Patente> patentes = new List<Patente>();
+            HashSet<int> visitados = new HashSet<int>();
+            foreach (ComponentePermiso comp in componentes)
             {
                 ResolverPatentesRecursivo(comp, patentes, visitados);
             }
@@ -160,7 +160,7 @@ namespace BLL
             }
             else if (componente is Familia familia)
             {
-                foreach (var hijo in familia.Hijos)
+                foreach (ComponentePermiso hijo in familia.Hijos)
                 {
                     ResolverPatentesRecursivo(hijo, acumulador, visitados);
                 }
@@ -170,7 +170,7 @@ namespace BLL
         public bool UsuarioTienePermiso(Usuario usuario, string patenteKey)
         {
             if (usuario == null) return false;
-            var patentes = ResolverPatentes(usuario.Permisos);
+            List<Patente> patentes = ResolverPatentes(usuario.Permisos);
             return patentes.Any(p => p.PermisoKey.Equals(patenteKey, StringComparison.OrdinalIgnoreCase));
         }
     }

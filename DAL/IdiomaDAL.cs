@@ -14,8 +14,8 @@ namespace DAL
         public List<Idioma> ObtenerTodos()
         {
             new TraduccionDAL().InicializarBaseDatosSiVacio();
-            var dt = _acceso.Leer("SELECT IdIdioma, Nombre, Codigo, [Default] FROM Idioma", null);
-            var lista = new List<Idioma>();
+            DataTable dt = _acceso.Leer("SELECT IdIdioma, Nombre, Codigo, [Default] FROM Idioma", null);
+            List<Idioma> lista = new List<Idioma>();
             foreach (DataRow r in dt.Rows)
             {
                 lista.Add(new Idioma
@@ -38,7 +38,7 @@ namespace DAL
                 _acceso.Escribir("UPDATE Idioma SET [Default] = 0", null);
             }
 
-            var p = new SqlParameter[]
+            SqlParameter[] p = new SqlParameter[]
             {
                 new SqlParameter("@Nombre", idioma.Nombre),
                 new SqlParameter("@Codigo", idioma.Codigo),
@@ -49,7 +49,7 @@ namespace DAL
 
         public void Eliminar(int idIdioma)
         {
-            var p = new SqlParameter[] { new SqlParameter("@IdIdioma", idIdioma) };
+            SqlParameter[] p = new SqlParameter[] { new SqlParameter("@IdIdioma", idIdioma) };
             _acceso.Escribir("DELETE FROM Idioma WHERE IdIdioma = @IdIdioma", p);
         }
     }

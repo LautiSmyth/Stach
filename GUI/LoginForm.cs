@@ -1,8 +1,8 @@
 using BE;
 using BLL;
 using Abstracciones;
-using Servicios;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -13,12 +13,13 @@ namespace GUI
     {
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private readonly IConexionService _conexionService = IoCContainer.Resolver<IConexionService>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private bool _cargandoIdioma = false;
 
         public LoginForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
             ActualizarIdioma();
         }
 
@@ -129,7 +130,7 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
@@ -161,7 +162,7 @@ namespace GUI
             if (_cargandoIdioma) return;
             if (cboIdioma.SelectedItem is Idioma idioma)
             {
-                ManejadorIdioma.Instancia.CambiarIdioma(idioma);
+                _manejadorIdioma.CambiarIdioma(idioma);
             }
         }
 
@@ -170,8 +171,8 @@ namespace GUI
             _cargandoIdioma = true;
             try
             {
-                var idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
-                var actual = ManejadorIdioma.Instancia.IdiomaActual;
+                List<Idioma> idiomas = _manejadorIdioma.ObtenerIdiomas();
+                Idioma actual = _manejadorIdioma.IdiomaActual;
 
                 cboIdioma.DataSource = null;
                 cboIdioma.DisplayMember = "Nombre";
@@ -197,15 +198,15 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            lblTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblTitulo") ?? "Iniciar sesion";
-            lblSubtitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblSubtitulo") ?? "Ingrese sus credenciales para acceder";
-            lblUsername.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblUsername");
-            lblPassword.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblPassword");
-            btnIngresar.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.btnIngresar");
-            btnSalir.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.btnSalir") ?? "Cancelar";
-            chkHidePass.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.chkHidePass") ?? "Ocultar contraseña";
-            lblBienvenida.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblBienvenida") ?? "Sistema de\nGestión";
-            lblTagline.Text = ManejadorIdioma.Instancia.ObtenerTexto("LoginForm.lblTagline") ?? "Acceso seguro y centralizado\na todos los módulos";
+            lblTitulo.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblTitulo") ?? "Iniciar sesion";
+            lblSubtitulo.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblSubtitulo") ?? "Ingrese sus credenciales para acceder";
+            lblUsername.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblUsername");
+            lblPassword.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblPassword");
+            btnIngresar.Text = _manejadorIdioma.ObtenerTexto("LoginForm.btnIngresar");
+            btnSalir.Text = _manejadorIdioma.ObtenerTexto("LoginForm.btnSalir") ?? "Cancelar";
+            chkHidePass.Text = _manejadorIdioma.ObtenerTexto("LoginForm.chkHidePass") ?? "Ocultar contraseña";
+            lblBienvenida.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblBienvenida") ?? "Sistema de\nGestión";
+            lblTagline.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblTagline") ?? "Acceso seguro y centralizado\na todos los módulos";
         }
     }
 }

@@ -1,6 +1,5 @@
 using BE;
 using Abstracciones;
-using Servicios;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -10,11 +9,12 @@ namespace GUI
     public partial class BackupForm : Form, IObserver
     {
         private readonly IBackupService _backupService = IoCContainer.Resolver<IBackupService>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
 
         public BackupForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void BackupForm_Load(object sender, EventArgs e)
@@ -24,7 +24,7 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
@@ -37,7 +37,7 @@ namespace GUI
                 {
                     Directory.CreateDirectory(dirBackups);
                 }
-                using (var pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese una contraseña para cifrar el archivo de respaldo:", true))
+                using (InputDialog pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese una contraseña para cifrar el archivo de respaldo:", true))
                 {
                     if (pwdDlg.ShowDialog() != DialogResult.OK)
                     {
@@ -79,7 +79,7 @@ namespace GUI
                                        "y reiniciará la aplicación.";
                     if (MessageBox.Show(confirmMsg, "Confirmar Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
-                        using (var pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese la contraseña para descifrar el archivo de respaldo:", true))
+                        using (InputDialog pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese la contraseña para descifrar el archivo de respaldo:", true))
                         {
                             if (pwdDlg.ShowDialog() != DialogResult.OK)
                             {
@@ -104,11 +104,11 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            this.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.Text") ?? "Copia de Seguridad y Restauración";
-            lblTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.lblTitulo") ?? "Gestión de Backups";
-            btnCrear.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.btnCrear") ?? "Generar Copia de Seguridad (.stachbak)";
-            btnRestaurar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.btnRestaurar") ?? "Restaurar Copia de Seguridad (.stachbak)";
-            lblInfo.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.lblInfo") ?? "Nota: La restauración cerrará las conexiones activas temporalmente para poder sobrescribir la base de datos.";
+            this.Text = _manejadorIdioma.ObtenerTexto("BackupForm.Text") ?? "Copia de Seguridad y Restauración";
+            lblTitulo.Text = _manejadorIdioma.ObtenerTexto("BackupForm.lblTitulo") ?? "Gestión de Backups";
+            btnCrear.Text = _manejadorIdioma.ObtenerTexto("BackupForm.btnCrear") ?? "Generar Copia de Seguridad (.stachbak)";
+            btnRestaurar.Text = _manejadorIdioma.ObtenerTexto("BackupForm.btnRestaurar") ?? "Restaurar Copia de Seguridad (.stachbak)";
+            lblInfo.Text = _manejadorIdioma.ObtenerTexto("BackupForm.lblInfo") ?? "Nota: La restauración cerrará las conexiones activas temporalmente para poder sobrescribir la base de datos.";
         }
     }
 }

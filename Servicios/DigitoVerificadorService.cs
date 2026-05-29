@@ -43,7 +43,7 @@ namespace Servicios
             List<Usuario> ordenados = new List<Usuario>(usuarios);
             ordenados.Sort((a, b) => a.IdUsuario.CompareTo(b.IdUsuario));
             string concat = string.Empty;
-            foreach (var u in ordenados)
+            foreach (Usuario u in ordenados)
             {
                 concat += CalcularDVH(u);
             }
@@ -54,7 +54,7 @@ namespace Servicios
         {
             List<Usuario> usuarios = _usuarioDal.ObtenerTodos();
             Dictionary<int, string> dvhs = new Dictionary<int, string>();
-            foreach (var u in usuarios)
+            foreach (Usuario u in usuarios)
             {
                 dvhs[u.IdUsuario] = CalcularDVH(u);
             }
@@ -76,7 +76,7 @@ namespace Servicios
             }
 
             bool todoOk = true;
-            foreach (var u in usuarios)
+            foreach (Usuario u in usuarios)
             {
                 string dvhCalculado = CalcularDVH(u);
                 if (storedDvhs.TryGetValue(u.IdUsuario, out string dvhGuardado))

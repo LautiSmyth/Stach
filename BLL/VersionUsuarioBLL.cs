@@ -34,13 +34,13 @@ namespace BLL
         {
             try
             {
-                var version = _dal.ObtenerPorId(idVersion);
+                VersionUsuario version = _dal.ObtenerPorId(idVersion);
                 if (version == null)
                 {
                     throw new ArgumentException("La versión no existe.");
                 }
 
-                var usuario = _usuarioDal.ObtenerPorId(version.IdUsuario);
+                Usuario usuario = _usuarioDal.ObtenerPorId(version.IdUsuario);
                 if (usuario == null)
                 {
                     throw new ArgumentException("El usuario de esta versión ya no existe.");

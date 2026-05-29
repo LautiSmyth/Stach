@@ -2,7 +2,6 @@ using BE;
 using BE.Enums;
 using BLL;
 using Abstracciones;
-using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,6 +14,7 @@ namespace GUI
         private readonly IBitacoraService _bitacoraServicio = IoCContainer.Resolver<IBitacoraService>();
         private readonly ICriticidadService _criticidadServicio = IoCContainer.Resolver<ICriticidadService>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private List<Bitacora> _listaCompleta = new List<Bitacora>();
         private readonly Timer _timerBusqueda = new Timer();
 
@@ -23,7 +23,7 @@ namespace GUI
             InitializeComponent();
             _timerBusqueda.Interval = 300;
             _timerBusqueda.Tick += TimerBusqueda_Tick;
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void BitacoraForm_Load(object sender, EventArgs e)
@@ -59,10 +59,10 @@ namespace GUI
                 lblFiltrarUsuario.Visible = true;
                 cboFiltrarUsuario.Visible = true;
                 cboFiltrarUsuario.Items.Clear();
-                string todosText = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
+                string todosText = _manejadorIdioma.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
                 cboFiltrarUsuario.Items.Add(todosText);
-                var usuarios = _usuarioBll.ObtenerTodos();
-                foreach (var u in usuarios)
+                List<Usuario> usuarios = _usuarioBll.ObtenerTodos();
+                foreach (Usuario u in usuarios)
                 {
                     cboFiltrarUsuario.Items.Add(u.Username);
                 }
@@ -87,7 +87,7 @@ namespace GUI
         {
             _timerBusqueda.Stop();
             _timerBusqueda.Dispose();
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
@@ -201,7 +201,7 @@ namespace GUI
             {
                 filtroUsuario = _usuarioBll.ObtenerUsernameEnSesion();
             }
-            string todosText = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
+            string todosText = _manejadorIdioma.ObtenerTexto("BitacoraForm.Todos") ?? "Todos";
 
             foreach (Bitacora b in _listaCompleta)
             {
@@ -390,23 +390,23 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            lblBuscar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblBuscar");
-            lblCriticidad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblCriticidad");
-            lblActividad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblActividad");
-            lblLimite.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblLimite");
-            btnBuscar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.btnBuscar");
-            btnLimpiar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.btnLimpiar");
-            btnExportar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.btnExportar");
-            grpDetalle.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.grpDetalle");
-            lblDetFecha.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetFecha");
-            lblDetUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetUsuario");
-            lblDetModulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetModulo");
-            lblDetActividad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetActividad");
-            lblDetCriticidad.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetCriticidad");
-            lblDetResultado.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetResultado");
-            lblDetDetalle.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetDetalle");
-            lblDetError.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblDetError");
-            lblFiltrarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("BitacoraForm.lblFiltrarUsuario") ?? "Usuario:";
+            lblBuscar.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblBuscar");
+            lblCriticidad.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblCriticidad");
+            lblActividad.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblActividad");
+            lblLimite.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblLimite");
+            btnBuscar.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.btnBuscar");
+            btnLimpiar.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.btnLimpiar");
+            btnExportar.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.btnExportar");
+            grpDetalle.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.grpDetalle");
+            lblDetFecha.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetFecha");
+            lblDetUsuario.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetUsuario");
+            lblDetModulo.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetModulo");
+            lblDetActividad.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetActividad");
+            lblDetCriticidad.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetCriticidad");
+            lblDetResultado.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetResultado");
+            lblDetDetalle.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetDetalle");
+            lblDetError.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblDetError");
+            lblFiltrarUsuario.Text = _manejadorIdioma.ObtenerTexto("BitacoraForm.lblFiltrarUsuario") ?? "Usuario:";
         }
 
         private void DesactivarTabStopReadOnly(Control parent)

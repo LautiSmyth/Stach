@@ -14,8 +14,8 @@ namespace DAL
         public List<Componente> ObtenerComponentes()
         {
             InicializarBaseDatosSiVacio();
-            var dt = _acceso.Leer("SELECT IdComponente, Nombre FROM Componente", null);
-            var lista = new List<Componente>();
+            DataTable dt = _acceso.Leer("SELECT IdComponente, Nombre FROM Componente", null);
+            List<Componente> lista = new List<Componente>();
             foreach (DataRow r in dt.Rows)
             {
                 lista.Add(new Componente
@@ -30,16 +30,16 @@ namespace DAL
         public void InsertarComponente(Componente componente)
         {
             if (componente == null) throw new ArgumentNullException(nameof(componente));
-            var p = new SqlParameter[] { new SqlParameter("@Nombre", componente.Nombre) };
+            SqlParameter[] p = new SqlParameter[] { new SqlParameter("@Nombre", componente.Nombre) };
             _acceso.Escribir("INSERT INTO Componente (Nombre) VALUES (@Nombre)", p);
         }
 
         public List<Traduccion> ObtenerTraduccionesPorIdioma(int idIdioma)
         {
             InicializarBaseDatosSiVacio();
-            var p = new SqlParameter[] { new SqlParameter("@IdIdioma", idIdioma) };
-            var dt = _acceso.Leer("SELECT IdIdioma, IdComponente, Texto FROM Traduccion WHERE IdIdioma = @IdIdioma", p);
-            var lista = new List<Traduccion>();
+            SqlParameter[] p = new SqlParameter[] { new SqlParameter("@IdIdioma", idIdioma) };
+            DataTable dt = _acceso.Leer("SELECT IdIdioma, IdComponente, Texto FROM Traduccion WHERE IdIdioma = @IdIdioma", p);
+            List<Traduccion> lista = new List<Traduccion>();
             foreach (DataRow r in dt.Rows)
             {
                 lista.Add(new Traduccion
@@ -55,18 +55,18 @@ namespace DAL
         public void GuardarTraducciones(List<Traduccion> traducciones)
         {
             if (traducciones == null) throw new ArgumentNullException(nameof(traducciones));
-            foreach (var t in traducciones)
+            foreach (Traduccion t in traducciones)
             {
-                var pUpdate = new SqlParameter[]
+                SqlParameter[] pUpdate = new SqlParameter[]
                 {
                     new SqlParameter("@IdIdioma", t.IdIdioma),
                     new SqlParameter("@IdComponente", t.IdComponente),
                     new SqlParameter("@Texto", t.Texto)
                 };
-                var rows = _acceso.Escribir("UPDATE Traduccion SET Texto = @Texto WHERE IdIdioma = @IdIdioma AND IdComponente = @IdComponente", pUpdate);
+                int rows = _acceso.Escribir("UPDATE Traduccion SET Texto = @Texto WHERE IdIdioma = @IdIdioma AND IdComponente = @IdComponente", pUpdate);
                 if (rows == 0)
                 {
-                    var pInsert = new SqlParameter[]
+                    SqlParameter[] pInsert = new SqlParameter[]
                     {
                         new SqlParameter("@IdIdioma", t.IdIdioma),
                         new SqlParameter("@IdComponente", t.IdComponente),
@@ -79,21 +79,21 @@ namespace DAL
 
         public void InicializarBaseDatosSiVacio()
         {
-            var dtIdiomas = _acceso.Leer("SELECT COUNT(*) FROM Idioma", null);
+            DataTable dtIdiomas = _acceso.Leer("SELECT COUNT(*) FROM Idioma", null);
             if (Convert.ToInt32(dtIdiomas.Rows[0][0]) == 0)
             {
                 _acceso.Escribir("SET IDENTITY_INSERT Idioma ON; INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (1, N'Español', 'es', 1); INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (2, N'English', 'en', 0); INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (3, N'Português', 'pt', 0); SET IDENTITY_INSERT Idioma OFF;", null);
             }
             else
             {
-                var dtPt = _acceso.Leer("SELECT COUNT(*) FROM Idioma WHERE Codigo = 'pt'", null);
+                DataTable dtPt = _acceso.Leer("SELECT COUNT(*) FROM Idioma WHERE Codigo = 'pt'", null);
                 if (Convert.ToInt32(dtPt.Rows[0][0]) == 0)
                 {
                     _acceso.Escribir("SET IDENTITY_INSERT Idioma ON; INSERT INTO Idioma (IdIdioma, Nombre, Codigo, [Default]) VALUES (3, N'Português', 'pt', 0); SET IDENTITY_INSERT Idioma OFF;", null);
                 }
             }
-            var dt = _acceso.Leer("SELECT Nombre FROM Componente", null);
-            var existentes = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            DataTable dt = _acceso.Leer("SELECT Nombre FROM Componente", null);
+            System.Collections.Generic.HashSet<string> existentes = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (DataRow r in dt.Rows)
             {
                 existentes.Add(r["Nombre"].ToString());
@@ -205,29 +205,29 @@ namespace DAL
         private void AgregarSeed(string nombreComponente, string textoEs, string textoEn, string textoPt)
         {
             int idComp;
-            var pSel = new SqlParameter[] { new SqlParameter("@Nombre", nombreComponente) };
-            var dtSel = _acceso.Leer("SELECT IdComponente FROM Componente WHERE Nombre = @Nombre", pSel);
+            SqlParameter[] pSel = new SqlParameter[] { new SqlParameter("@Nombre", nombreComponente) };
+            DataTable dtSel = _acceso.Leer("SELECT IdComponente FROM Componente WHERE Nombre = @Nombre", pSel);
             if (dtSel.Rows.Count > 0)
             {
                 idComp = Convert.ToInt32(dtSel.Rows[0]["IdComponente"]);
             }
             else
             {
-                var pIns = new SqlParameter[] { new SqlParameter("@Nombre", nombreComponente) };
-                var dt = _acceso.Leer("INSERT INTO Componente (Nombre) OUTPUT INSERTED.IdComponente VALUES (@Nombre)", pIns);
+                SqlParameter[] pIns = new SqlParameter[] { new SqlParameter("@Nombre", nombreComponente) };
+                DataTable dt = _acceso.Leer("INSERT INTO Componente (Nombre) OUTPUT INSERTED.IdComponente VALUES (@Nombre)", pIns);
                 idComp = Convert.ToInt32(dt.Rows[0][0]);
             }
             Action<int, string> insTrad = (idIdioma, texto) =>
             {
-                var pCheck = new SqlParameter[]
+                SqlParameter[] pCheck = new SqlParameter[]
                 {
                     new SqlParameter("@IdIdioma", idIdioma),
                     new SqlParameter("@IdComponente", idComp)
                 };
-                var dtCheck = _acceso.Leer("SELECT COUNT(*) FROM Traduccion WHERE IdIdioma = @IdIdioma AND IdComponente = @IdComponente", pCheck);
+                DataTable dtCheck = _acceso.Leer("SELECT COUNT(*) FROM Traduccion WHERE IdIdioma = @IdIdioma AND IdComponente = @IdComponente", pCheck);
                 if (Convert.ToInt32(dtCheck.Rows[0][0]) == 0)
                 {
-                    var pIns = new SqlParameter[]
+                    SqlParameter[] pIns = new SqlParameter[]
                     {
                         new SqlParameter("@IdIdioma", idIdioma),
                         new SqlParameter("@IdComponente", idComp),

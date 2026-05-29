@@ -16,7 +16,7 @@ namespace DAL
         {
             const string consulta = "INSERT INTO HistorialUsuario (IdUsuario, Fecha, Actor, Detalle, Username, PasswordHash, Estado) " +
                                    "VALUES (@IdUsuario, @Fecha, @Actor, @Detalle, @Username, @PasswordHash, @Estado)";
-            var p = new SqlParameter[]
+            SqlParameter[] p = new SqlParameter[]
             {
                 new SqlParameter("@IdUsuario", version.IdUsuario),
                 new SqlParameter("@Fecha", version.FechaModificacion),
@@ -31,9 +31,9 @@ namespace DAL
 
         public List<VersionUsuario> ObtenerPorUsuario(int idUsuario)
         {
-            var p = new SqlParameter[] { new SqlParameter("@IdUsuario", idUsuario) };
-            var dt = _acceso.Leer("SELECT * FROM HistorialUsuario WHERE IdUsuario = @IdUsuario ORDER BY Fecha DESC", p);
-            var lista = new List<VersionUsuario>();
+            SqlParameter[] p = new SqlParameter[] { new SqlParameter("@IdUsuario", idUsuario) };
+            DataTable dt = _acceso.Leer("SELECT * FROM HistorialUsuario WHERE IdUsuario = @IdUsuario ORDER BY Fecha DESC", p);
+            List<VersionUsuario> lista = new List<VersionUsuario>();
             foreach (DataRow r in dt.Rows)
             {
                 lista.Add(Mapear(r));
@@ -43,8 +43,8 @@ namespace DAL
 
         public VersionUsuario ObtenerPorId(int idVersion)
         {
-            var p = new SqlParameter[] { new SqlParameter("@IdVersion", idVersion) };
-            var dt = _acceso.Leer("SELECT * FROM HistorialUsuario WHERE IdVersion = @IdVersion", p);
+            SqlParameter[] p = new SqlParameter[] { new SqlParameter("@IdVersion", idVersion) };
+            DataTable dt = _acceso.Leer("SELECT * FROM HistorialUsuario WHERE IdVersion = @IdVersion", p);
             return dt.Rows.Count == 0 ? null : Mapear(dt.Rows[0]);
         }
 

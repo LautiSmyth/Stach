@@ -2,7 +2,6 @@ using System;
 using System.Configuration;
 using System.Windows.Forms;
 using Abstracciones;
-using Servicios;
 using IoC;
 
 namespace GUI
@@ -15,12 +14,15 @@ namespace GUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var setting = config.AppSettings.Settings["MasterRecoveryKeyHash"];
+            Bootstrapper.RegistrarDependencias();
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            KeyValueConfigurationElement setting = config.AppSettings.Settings["MasterRecoveryKeyHash"];
             if (setting == null || string.IsNullOrEmpty(setting.Value))
             {
                 string recoveryKey = $"STACH-RECOVERY-{Guid.NewGuid().ToString("N").Substring(0, 4).ToUpper()}-{Guid.NewGuid().ToString("N").Substring(4, 4).ToUpper()}";
-                string hash = Encriptador.Hash(recoveryKey);
+                IEncriptador encriptador = IoCContainer.Resolver<IEncriptador>();
+                string hash = encriptador.Hash(recoveryKey);
                 if (setting == null)
                 {
                     config.AppSettings.Settings.Add("MasterRecoveryKeyHash", hash);
@@ -29,7 +31,7 @@ namespace GUI
                 {
                     setting.Value = hash;
                 }
-                var section = config.GetSection("appSettings");
+                ConfigurationSection section = config.GetSection("appSettings");
                 if (section != null && !section.SectionInformation.IsProtected)
                 {
                     section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider");
@@ -46,9 +48,7 @@ namespace GUI
             Application.ThreadException += (sender, args) => ManejarExcepcionGlobal(args.Exception);
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => ManejarExcepcionGlobal(args.ExceptionObject as Exception);
 
-            Bootstrapper.RegistrarDependencias();
-
-            var conexionService = IoCContainer.Resolver<IConexionService>();
+            IConexionService conexionService = IoCContainer.Resolver<IConexionService>();
             if (!conexionService.VerificarConexion())
             {
                 MessageBox.Show(
@@ -59,7 +59,7 @@ namespace GUI
                 return;
             }
 
-            var dvServicio = IoCContainer.Resolver<IDigitoVerificadorService>();
+            IDigitoVerificadorService dvServicio = IoCContainer.Resolver<IDigitoVerificadorService>();
             System.Collections.Generic.List<string> errores;
             if (!dvServicio.VerificarIntegridad(out errores))
             {
@@ -83,7 +83,7 @@ namespace GUI
             if (ex == null) return;
             try
             {
-                var bitacora = IoCContainer.Resolver<IBitacoraService>();
+                IBitacoraService bitacora = IoCContainer.Resolver<IBitacoraService>();
                 bitacora.Registrar("GUI", "Error No Controlado", ex.Message, false, ex.ToString());
             }
             catch

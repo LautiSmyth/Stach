@@ -11,8 +11,8 @@ namespace DAL
 
         public Dictionary<int, string> ObtenerDVHs()
         {
-            var dict = new Dictionary<int, string>();
-            var dt = _acceso.Leer("SELECT IdUsuario, DVH FROM Usuario", null);
+            Dictionary<int, string> dict = new Dictionary<int, string>();
+            DataTable dt = _acceso.Leer("SELECT IdUsuario, DVH FROM Usuario", null);
             foreach (DataRow r in dt.Rows)
             {
                 int id = System.Convert.ToInt32(r["IdUsuario"]);
@@ -24,16 +24,16 @@ namespace DAL
 
         public string ObtenerDVV()
         {
-            var p = new SqlParameter[] { new SqlParameter("@Tabla", "Usuario") };
-            var dt = _acceso.Leer("SELECT DVV FROM VerificacionVertical WHERE Tabla = @Tabla", p);
+            SqlParameter[] p = new SqlParameter[] { new SqlParameter("@Tabla", "Usuario") };
+            DataTable dt = _acceso.Leer("SELECT DVV FROM VerificacionVertical WHERE Tabla = @Tabla", p);
             return dt.Rows.Count == 0 ? string.Empty : dt.Rows[0]["DVV"].ToString();
         }
 
         public void GuardarDV(Dictionary<int, string> dvhs, string dvv)
         {
-            foreach (var kvp in dvhs)
+            foreach (KeyValuePair<int, string> kvp in dvhs)
             {
-                var p = new SqlParameter[]
+                SqlParameter[] p = new SqlParameter[]
                 {
                     new SqlParameter("@IdUsuario", kvp.Key),
                     new SqlParameter("@DVH", (object)kvp.Value ?? System.DBNull.Value)
@@ -41,15 +41,15 @@ namespace DAL
                 _acceso.Escribir("UPDATE Usuario SET DVH = @DVH WHERE IdUsuario = @IdUsuario", p);
             }
 
-            var pDvv = new SqlParameter[]
+            SqlParameter[] pDvv = new SqlParameter[]
             {
                 new SqlParameter("@Tabla", "Usuario"),
                 new SqlParameter("@DVV", dvv)
             };
-            var rows = _acceso.Escribir("UPDATE VerificacionVertical SET DVV = @DVV WHERE Tabla = @Tabla", pDvv);
+            int rows = _acceso.Escribir("UPDATE VerificacionVertical SET DVV = @DVV WHERE Tabla = @Tabla", pDvv);
             if (rows == 0)
             {
-                var pIns = new SqlParameter[]
+                SqlParameter[] pIns = new SqlParameter[]
                 {
                     new SqlParameter("@Tabla", "Usuario"),
                     new SqlParameter("@DVV", dvv)

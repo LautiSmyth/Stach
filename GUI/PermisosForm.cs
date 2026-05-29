@@ -1,6 +1,6 @@
 using BE;
 using BLL;
-using Servicios;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,7 @@ namespace GUI
     {
         private readonly PermisoBLL _permisoBll = IoCContainer.Resolver<PermisoBLL>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private List<ComponentePermiso> _todosPermisos;
         private ComponentePermiso _seleccionado;
         private Usuario _usuarioSeleccionado;
@@ -19,7 +20,7 @@ namespace GUI
         public PermisosForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void PermisosForm_Load(object sender, EventArgs e)
@@ -41,7 +42,7 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
@@ -56,11 +57,11 @@ namespace GUI
         private void CargarArbolEstructura()
         {
             tvEstructura.Nodes.Clear();
-            var raices = _todosPermisos.Where(p => !_todosPermisos.Any(parent => parent.Hijos.Any(child => child.IdPermiso == p.IdPermiso))).ToList();
+            List<ComponentePermiso> raices = _todosPermisos.Where(p => !_todosPermisos.Any(parent => parent.Hijos.Any(child => child.IdPermiso == p.IdPermiso))).ToList();
 
-            foreach (var r in raices)
+            foreach (ComponentePermiso r in raices)
             {
-                var nodo = CrearNodoRecursivo(r);
+                TreeNode nodo = CrearNodoRecursivo(r);
                 tvEstructura.Nodes.Add(nodo);
             }
             tvEstructura.ExpandAll();
@@ -68,10 +69,10 @@ namespace GUI
 
         private TreeNode CrearNodoRecursivo(ComponentePermiso comp)
         {
-            var nodo = new TreeNode(comp.NombreMostrar) { Tag = comp };
+            TreeNode nodo = new TreeNode(comp.NombreMostrar) { Tag = comp };
             if (comp is Familia fam)
             {
-                foreach (var hijo in fam.Hijos)
+                foreach (ComponentePermiso hijo in fam.Hijos)
                 {
                     nodo.Nodes.Add(CrearNodoRecursivo(hijo));
                 }
@@ -81,7 +82,7 @@ namespace GUI
 
         private void CargarUsuarios()
         {
-            var usuarios = _usuarioBll.ObtenerTodos();
+            List<Usuario> usuarios = _usuarioBll.ObtenerTodos();
             cboUsuarios.DataSource = null;
             cboUsuarios.DisplayMember = "Username";
             cboUsuarios.DataSource = usuarios;
@@ -103,13 +104,13 @@ namespace GUI
 
             if (_seleccionado is Familia fam)
             {
-                lblCol2Titulo.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}";
+                lblCol2Titulo.Text = $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}";
 
-                var miembros = fam.Hijos;
+                List<ComponentePermiso> miembros = fam.Hijos;
                 lstMiembros.DisplayMember = "NombreMostrar";
                 lstMiembros.DataSource = miembros;
 
-                var disponibles = _todosPermisos.Where(p =>
+                List<ComponentePermiso> disponibles = _todosPermisos.Where(p =>
                     p.IdPermiso != fam.IdPermiso &&
                     !miembros.Any(m => m.IdPermiso == p.IdPermiso) &&
                     !EsAncestroRecursivo(p, fam.IdPermiso)
@@ -120,14 +121,14 @@ namespace GUI
             }
             else
             {
-                lblCol2Titulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo");
+                lblCol2Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo");
             }
         }
 
         private bool EsAncestroRecursivo(ComponentePermiso parent, int idHijoBuscado)
         {
             if (parent.IdPermiso == idHijoBuscado) return true;
-            foreach (var h in parent.Hijos)
+            foreach (ComponentePermiso h in parent.Hijos)
             {
                 if (EsAncestroRecursivo(h, idHijoBuscado)) return true;
             }
@@ -253,14 +254,14 @@ namespace GUI
 
             if (_usuarioSeleccionado != null)
             {
-                foreach (var p in _usuarioSeleccionado.Permisos)
+                foreach (ComponentePermiso p in _usuarioSeleccionado.Permisos)
                 {
                     tvUsuarioPermisos.Nodes.Add(CrearNodoRecursivo(p));
                 }
                 tvUsuarioPermisos.ExpandAll();
 
-                var planas = _permisoBll.ResolverPatentes(_usuarioSeleccionado.Permisos);
-                foreach (var pl in planas)
+                List<Patente> planas = _permisoBll.ResolverPatentes(_usuarioSeleccionado.Permisos);
+                foreach (Patente pl in planas)
                 {
                     lstPatentesPlanas.Items.Add(pl.Nombre);
                 }
@@ -317,7 +318,7 @@ namespace GUI
                 return;
             }
 
-            var p = _usuarioSeleccionado.Permisos.FirstOrDefault(x => x.IdPermiso == target.IdPermiso);
+            ComponentePermiso p = _usuarioSeleccionado.Permisos.FirstOrDefault(x => x.IdPermiso == target.IdPermiso);
             if (p == null)
             {
                 MessageBox.Show("El usuario no tiene asignado directamente este permiso/rol.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -338,27 +339,27 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            this.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.Text");
-            lblCol1Titulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol1Titulo");
-            lblNombrePermiso.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblNombrePermiso");
-            lblClavePermiso.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblClavePermiso");
-            btnCrearPatente.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnCrearPatente");
-            btnCrearFamilia.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnCrearFamilia");
-            btnEliminarPermiso.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnEliminarPermiso");
+            this.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.Text");
+            lblCol1Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol1Titulo");
+            lblNombrePermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblNombrePermiso");
+            lblClavePermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblClavePermiso");
+            btnCrearPatente.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearPatente");
+            btnCrearFamilia.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearFamilia");
+            btnEliminarPermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnEliminarPermiso");
 
             lblCol2Titulo.Text = _seleccionado is Familia fam
-                 ? $"{ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}"
-                 : ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol2Titulo");
+                 ? $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}"
+                 : _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo");
 
-            lblDisponibles.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblDisponibles");
-            lblMiembros.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblMiembros");
-            btnGuardarRelaciones.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnGuardarRelaciones");
+            lblDisponibles.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblDisponibles");
+            lblMiembros.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblMiembros");
+            btnGuardarRelaciones.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnGuardarRelaciones");
 
-            lblCol3Titulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblCol3Titulo");
-            lblUserPerms.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblUserPerms");
-            lblPatentesPlanas.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.lblPatentesPlanas");
-            btnAsignarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnAsignarUsuario");
-            btnQuitarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("PermisosForm.btnQuitarUsuario");
+            lblCol3Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol3Titulo");
+            lblUserPerms.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblUserPerms");
+            lblPatentesPlanas.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblPatentesPlanas");
+            btnAsignarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnAsignarUsuario");
+            btnQuitarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnQuitarUsuario");
         }
     }
 }

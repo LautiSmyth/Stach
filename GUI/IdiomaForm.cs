@@ -1,5 +1,5 @@
 using BE;
-using Servicios;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +9,14 @@ namespace GUI
 {
     public partial class IdiomaForm : Form, IObserver
     {
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private List<FilaTraduccion> _traduccionesBindeables;
         List<Idioma> idiomas = new List<Idioma>();
 
         public IdiomaForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void IdiomaForm_Load(object sender, EventArgs e)
@@ -46,13 +47,13 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
         private void CargarIdiomas()
         {
-            idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
+            idiomas = _manejadorIdioma.ObtenerIdiomas();
             if (idiomas == null || idiomas.Count == 0)
             {
                 MessageBox.Show("La lista de idiomas en la base de datos está vacía. Verifique la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -84,7 +85,7 @@ namespace GUI
 
             dgvTraducciones.Columns.Clear();
 
-            var colNombre = new DataGridViewTextBoxColumn
+            DataGridViewTextBoxColumn colNombre = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "NombreComponente",
                 HeaderText = "Componente",
@@ -93,7 +94,7 @@ namespace GUI
             };
             dgvTraducciones.Columns.Add(colNombre);
 
-            var colReferencia = new DataGridViewTextBoxColumn
+            DataGridViewTextBoxColumn colReferencia = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "TextoDefault",
                 HeaderText = "Referencia (Default)",
@@ -102,7 +103,7 @@ namespace GUI
             };
             dgvTraducciones.Columns.Add(colReferencia);
 
-            var colTexto = new DataGridViewTextBoxColumn
+            DataGridViewTextBoxColumn colTexto = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "Texto",
                 HeaderText = "Texto / Traducción",
@@ -131,12 +132,12 @@ namespace GUI
         {
             if (cboIdiomaDestino.SelectedItem is Idioma idioma)
             {
-                List<Componente> componentes = ManejadorIdioma.Instancia.ObtenerComponentes();
-                List<Traduccion> traducciones = ManejadorIdioma.Instancia.ObtenerTraduccionesPorIdioma(idioma.IdIdioma);
+                List<Componente> componentes = _manejadorIdioma.ObtenerComponentes();
+                List<Traduccion> traducciones = _manejadorIdioma.ObtenerTraduccionesPorIdioma(idioma.IdIdioma);
 
-                var defaultLang = idiomas.FirstOrDefault(i => i.Default);
+                Idioma defaultLang = idiomas.FirstOrDefault(i => i.Default);
                 List<Traduccion> traduccionesDefault = defaultLang != null
-                    ? ManejadorIdioma.Instancia.ObtenerTraduccionesPorIdioma(defaultLang.IdIdioma)
+                    ? _manejadorIdioma.ObtenerTraduccionesPorIdioma(defaultLang.IdIdioma)
                     : new List<Traduccion>();
 
                 _traduccionesBindeables = new List<FilaTraduccion>();
@@ -178,8 +179,8 @@ namespace GUI
 
             try
             {
-                var nuevo = new Idioma { Nombre = nombre, Codigo = codigo, Default = esDefault };
-                ManejadorIdioma.Instancia.InsertarIdioma(nuevo);
+                Idioma nuevo = new Idioma { Nombre = nombre, Codigo = codigo, Default = esDefault };
+                _manejadorIdioma.InsertarIdioma(nuevo);
 
                 CargarIdiomas();
                 txtNombre.Clear();
@@ -208,7 +209,7 @@ namespace GUI
                 {
                     try
                     {
-                        ManejadorIdioma.Instancia.EliminarIdioma(idioma.IdIdioma);
+                        _manejadorIdioma.EliminarIdioma(idioma.IdIdioma);
                         CargarIdiomas();
                         MessageBox.Show("Idioma eliminado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -226,8 +227,8 @@ namespace GUI
             {
                 dgvTraducciones.EndEdit();
 
-                var listado = new List<Traduccion>();
-                foreach (var fila in _traduccionesBindeables)
+                List<Traduccion> listado = new List<Traduccion>();
+                foreach (FilaTraduccion fila in _traduccionesBindeables)
                 {
                     listado.Add(new Traduccion
                     {
@@ -239,7 +240,7 @@ namespace GUI
 
                 try
                 {
-                    ManejadorIdioma.Instancia.GuardarTraducciones(listado);
+                    _manejadorIdioma.GuardarTraducciones(listado);
                     MessageBox.Show("Traducciones guardadas con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
@@ -251,22 +252,22 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            this.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.Text");
-            lblIdiomasTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.lblIdiomasTitulo");
-            lblNombre.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.lblNombre");
-            lblCodigo.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.lblCodigo");
-            chkDefault.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.chkDefault");
-            btnAgregarIdioma.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.btnAgregarIdioma");
-            btnEliminarIdioma.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.btnEliminarIdioma");
-            lblTraduccionesTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.lblTraduccionesTitulo");
-            lblIdiomaDestino.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.lblIdiomaDestino");
-            btnGuardarTraducciones.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.btnGuardarTraducciones");
+            this.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.Text");
+            lblIdiomasTitulo.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.lblIdiomasTitulo");
+            lblNombre.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.lblNombre");
+            lblCodigo.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.lblCodigo");
+            chkDefault.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.chkDefault");
+            btnAgregarIdioma.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.btnAgregarIdioma");
+            btnEliminarIdioma.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.btnEliminarIdioma");
+            lblTraduccionesTitulo.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.lblTraduccionesTitulo");
+            lblIdiomaDestino.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.lblIdiomaDestino");
+            btnGuardarTraducciones.Text = _manejadorIdioma.ObtenerTexto("IdiomaForm.btnGuardarTraducciones");
 
             if (dgvTraducciones.Columns.Count >= 3)
             {
-                dgvTraducciones.Columns[0].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.colComponente") ?? "Componente";
-                dgvTraducciones.Columns[1].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.colReferencia") ?? "Referencia (Default)";
-                dgvTraducciones.Columns[2].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.colTexto") ?? "Texto / Traducción";
+                dgvTraducciones.Columns[0].HeaderText = _manejadorIdioma.ObtenerTexto("IdiomaForm.colComponente") ?? "Componente";
+                dgvTraducciones.Columns[1].HeaderText = _manejadorIdioma.ObtenerTexto("IdiomaForm.colReferencia") ?? "Referencia (Default)";
+                dgvTraducciones.Columns[2].HeaderText = _manejadorIdioma.ObtenerTexto("IdiomaForm.colTexto") ?? "Texto / Traducción";
             }
         }
 

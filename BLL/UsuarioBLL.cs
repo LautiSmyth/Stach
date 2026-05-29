@@ -35,9 +35,9 @@ namespace BLL
 
         public List<Usuario> ObtenerTodos()
         {
-            var usuarios = _dal.ObtenerTodos();
-            var permisoBll = new PermisoBLL(_permisoDal);
-            foreach (var u in usuarios)
+            List<Usuario> usuarios = _dal.ObtenerTodos();
+            PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
+            foreach (Usuario u in usuarios)
             {
                 u.Permisos = permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
             }
@@ -46,10 +46,10 @@ namespace BLL
 
         public Usuario ObtenerPorId(int idUsuario)
         {
-            var u = _dal.ObtenerPorId(idUsuario);
+            Usuario u = _dal.ObtenerPorId(idUsuario);
             if (u != null)
             {
-                var permisoBll = new PermisoBLL(_permisoDal);
+                PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
                 u.Permisos = permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
             }
             return u;
@@ -59,10 +59,10 @@ namespace BLL
         {
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentException("El nombre de usuario no puede estar vacio.");
-            var u = _dal.ObtenerPorUsername(username);
+            Usuario u = _dal.ObtenerPorUsername(username);
             if (u != null)
             {
-                var permisoBll = new PermisoBLL(_permisoDal);
+                PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
                 u.Permisos = permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
             }
             return u;
@@ -167,7 +167,7 @@ namespace BLL
                 string actor = ObtenerUsernameEnSesion();
                 if (string.IsNullOrEmpty(actor)) actor = "Sistema";
 
-                var v = new VersionUsuario
+                VersionUsuario v = new VersionUsuario
                 {
                     IdUsuario = usuario.IdUsuario,
                     Username = usuario.Username,
@@ -238,7 +238,7 @@ namespace BLL
             string actor = ObtenerUsernameEnSesion();
             if (string.IsNullOrEmpty(actor)) actor = "Sistema";
 
-            var v = new VersionUsuario
+            VersionUsuario v = new VersionUsuario
             {
                 IdUsuario = usuario.IdUsuario,
                 Username = usuario.Username,
@@ -336,7 +336,7 @@ namespace BLL
         {
             Usuario usuario = _sessionManager.Usuario;
             if (usuario == null) return false;
-            var permisoBll = new PermisoBLL(_permisoDal);
+            PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
             return permisoBll.UsuarioTienePermiso(usuario, patenteKey);
         }
 
@@ -346,8 +346,8 @@ namespace BLL
             if (usuario == null) return false;
             if (!_encriptador.Verificar(password, usuario.PasswordHash)) return false;
             if (username.Equals("admin", StringComparison.OrdinalIgnoreCase)) return true;
-            var permisoBll = new PermisoBLL(_permisoDal);
-            foreach (var permiso in permisosRequeridos)
+            PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
+            foreach (string permiso in permisosRequeridos)
             {
                 if (permisoBll.UsuarioTienePermiso(usuario, permiso)) return true;
             }

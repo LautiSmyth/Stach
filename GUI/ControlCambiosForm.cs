@@ -1,6 +1,6 @@
 using BE;
 using BLL;
-using Servicios;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -11,13 +11,14 @@ namespace GUI
     {
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private readonly VersionUsuarioBLL _versionBll = IoCContainer.Resolver<VersionUsuarioBLL>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private List<VersionUsuario> _versiones;
         private VersionUsuario _seleccionado;
 
         public ControlCambiosForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void ControlCambiosForm_Load(object sender, EventArgs e)
@@ -31,13 +32,13 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
         private void CargarUsuarios()
         {
-            var usuarios = _usuarioBll.ObtenerTodos();
+            List<Usuario> usuarios = _usuarioBll.ObtenerTodos();
             cboUsuarios.DataSource = null;
             cboUsuarios.DisplayMember = "Username";
             cboUsuarios.DataSource = usuarios;
@@ -53,7 +54,7 @@ namespace GUI
 
             dgvVersiones.Columns.Clear();
 
-            var colId = new DataGridViewTextBoxColumn
+            DataGridViewTextBoxColumn colId = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "IdVersion",
                 HeaderText = "ID",
@@ -62,7 +63,7 @@ namespace GUI
             };
             dgvVersiones.Columns.Add(colId);
 
-            var colFecha = new DataGridViewTextBoxColumn
+            DataGridViewTextBoxColumn colFecha = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "FechaModificacion",
                 HeaderText = "Fecha y Hora",
@@ -71,7 +72,7 @@ namespace GUI
             };
             dgvVersiones.Columns.Add(colFecha);
 
-            var colActor = new DataGridViewTextBoxColumn
+            DataGridViewTextBoxColumn colActor = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "ModificadoPor",
                 HeaderText = "Modificado Por",
@@ -80,7 +81,7 @@ namespace GUI
             };
             dgvVersiones.Columns.Add(colActor);
 
-            var colDetalle = new DataGridViewTextBoxColumn
+            DataGridViewTextBoxColumn colDetalle = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "DetalleCambios",
                 HeaderText = "Detalle del Cambio",
@@ -162,19 +163,19 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            this.Text = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.Text");
-            lblSeleccionarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.lblSeleccionarUsuario");
-            lblDetalleTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.lblDetalleTitulo");
-            lblDetUsername.Text = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.lblDetUsername");
-            lblDetEstado.Text = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.lblDetEstado");
-            btnRollback.Text = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.btnRollback");
+            this.Text = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.Text");
+            lblSeleccionarUsuario.Text = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.lblSeleccionarUsuario");
+            lblDetalleTitulo.Text = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.lblDetalleTitulo");
+            lblDetUsername.Text = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.lblDetUsername");
+            lblDetEstado.Text = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.lblDetEstado");
+            btnRollback.Text = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.btnRollback");
 
             if (dgvVersiones.Columns.Count >= 4)
             {
-                dgvVersiones.Columns[0].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.colId") ?? "ID";
-                dgvVersiones.Columns[1].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.colFecha") ?? "Fecha y Hora";
-                dgvVersiones.Columns[2].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.colActor") ?? "Modificado Por";
-                dgvVersiones.Columns[3].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("ControlCambiosForm.colDetalle") ?? "Detalle del Cambio";
+                dgvVersiones.Columns[0].HeaderText = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.colId") ?? "ID";
+                dgvVersiones.Columns[1].HeaderText = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.colFecha") ?? "Fecha y Hora";
+                dgvVersiones.Columns[2].HeaderText = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.colActor") ?? "Modificado Por";
+                dgvVersiones.Columns[3].HeaderText = _manejadorIdioma.ObtenerTexto("ControlCambiosForm.colDetalle") ?? "Detalle del Cambio";
             }
         }
 

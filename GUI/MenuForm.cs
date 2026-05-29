@@ -1,8 +1,8 @@
 using BE;
 using BLL;
 using Abstracciones;
-using Servicios;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,12 +12,13 @@ namespace GUI
     {
         private readonly IConexionService _conexionService = IoCContainer.Resolver<IConexionService>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private bool _cargandoIdioma = false;
 
         public MenuForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void MenuForm_Load(object sender, EventArgs e)
@@ -51,7 +52,7 @@ namespace GUI
             if (_cargandoIdioma) return;
             if (cboIdioma.SelectedItem is Idioma idioma)
             {
-                ManejadorIdioma.Instancia.CambiarIdioma(idioma);
+                _manejadorIdioma.CambiarIdioma(idioma);
             }
         }
 
@@ -60,8 +61,8 @@ namespace GUI
             _cargandoIdioma = true;
             try
             {
-                var idiomas = ManejadorIdioma.Instancia.ObtenerIdiomas();
-                var actual = ManejadorIdioma.Instancia.IdiomaActual;
+                List<Idioma> idiomas = _manejadorIdioma.ObtenerIdiomas();
+                Idioma actual = _manejadorIdioma.IdiomaActual;
 
                 cboIdioma.ComboBox.DataSource = null;
                 cboIdioma.ComboBox.DisplayMember = "Nombre";
@@ -169,7 +170,7 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
             Application.Exit();
         }
@@ -239,15 +240,15 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            btnUsuarios.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnUsuarios");
-            btnBitacora.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnBitacora");
-            btnPermisos.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnPermisos") ?? "🔑 Permisos";
-            btnCambios.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnCambios") ?? "📜 Cambios";
-            btnBackup.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnBackup") ?? "💾 Backup";
-            btnIdiomas.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnIdiomas") ?? "🌐 Idiomas";
-            btnCerrarSesion.Text = ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.btnCerrarSesion");
-            lblUsuario.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblSesionInfo")} {_usuarioBll.ObtenerUsernameEnSesion()}";
-            lblBaseDatos.Text = $"{ManejadorIdioma.Instancia.ObtenerTexto("MenuForm.lblServidorInfo")} {_conexionService.ObtenerNombreBaseDatos()}";
+            btnUsuarios.Text = _manejadorIdioma.ObtenerTexto("MenuForm.btnUsuarios");
+            btnBitacora.Text = _manejadorIdioma.ObtenerTexto("MenuForm.btnBitacora");
+            btnPermisos.Text = _manejadorIdioma.ObtenerTexto("MenuForm.btnPermisos") ?? "🔑 Permisos";
+            btnCambios.Text = _manejadorIdioma.ObtenerTexto("MenuForm.btnCambios") ?? "📜 Cambios";
+            btnBackup.Text = _manejadorIdioma.ObtenerTexto("MenuForm.btnBackup") ?? "💾 Backup";
+            btnIdiomas.Text = _manejadorIdioma.ObtenerTexto("MenuForm.btnIdiomas") ?? "🌐 Idiomas";
+            btnCerrarSesion.Text = _manejadorIdioma.ObtenerTexto("MenuForm.btnCerrarSesion");
+            lblUsuario.Text = $"{_manejadorIdioma.ObtenerTexto("MenuForm.lblSesionInfo")} {_usuarioBll.ObtenerUsernameEnSesion()}";
+            lblBaseDatos.Text = $"{_manejadorIdioma.ObtenerTexto("MenuForm.lblServidorInfo")} {_conexionService.ObtenerNombreBaseDatos()}";
             CargarComboIdioma();
         }
 

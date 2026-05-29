@@ -1,7 +1,8 @@
 using BE;
 using BLL;
-using Servicios;
+using Abstracciones;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace GUI
@@ -10,11 +11,12 @@ namespace GUI
     {
         private readonly PermisoBLL _permisoBll = IoCContainer.Resolver<PermisoBLL>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
 
         public MisPermisosForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void MisPermisosForm_Load(object sender, EventArgs e)
@@ -25,7 +27,7 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
@@ -35,7 +37,7 @@ namespace GUI
             if (usuario == null) return;
 
             tvDirectos.Nodes.Clear();
-            foreach (var comp in usuario.Permisos)
+            foreach (ComponentePermiso comp in usuario.Permisos)
             {
                 TreeNode node = CrearNodo(comp);
                 tvDirectos.Nodes.Add(node);
@@ -43,8 +45,8 @@ namespace GUI
             tvDirectos.ExpandAll();
 
             lstResueltos.Items.Clear();
-            var patentes = _permisoBll.ResolverPatentes(usuario.Permisos);
-            foreach (var pat in patentes)
+            List<Patente> patentes = _permisoBll.ResolverPatentes(usuario.Permisos);
+            foreach (Patente pat in patentes)
             {
                 lstResueltos.Items.Add($"{pat.Nombre} ({pat.PermisoKey})");
             }
@@ -56,7 +58,7 @@ namespace GUI
             node.Tag = comp;
             if (comp is Familia fam)
             {
-                foreach (var hijo in fam.Hijos)
+                foreach (ComponentePermiso hijo in fam.Hijos)
                 {
                     node.Nodes.Add(CrearNodo(hijo));
                 }
@@ -66,11 +68,11 @@ namespace GUI
 
         public void ActualizarIdioma()
         {
-            this.Text = ManejadorIdioma.Instancia.ObtenerTexto("MisPermisosForm.Text") ?? "Mis Permisos y Roles";
-            lblTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("MisPermisosForm.lblTitulo") ?? "Mis Roles y Permisos";
-            lblDirectos.Text = ManejadorIdioma.Instancia.ObtenerTexto("MisPermisosForm.lblDirectos") ?? "Roles y Permisos Asignados";
-            lblResueltos.Text = ManejadorIdioma.Instancia.ObtenerTexto("MisPermisosForm.lblResueltos") ?? "Permisos Finales (Resueltos)";
-            btnCerrar.Text = ManejadorIdioma.Instancia.ObtenerTexto("MisPermisosForm.btnCerrar") ?? "Cerrar";
+            this.Text = _manejadorIdioma.ObtenerTexto("MisPermisosForm.Text") ?? "Mis Permisos y Roles";
+            lblTitulo.Text = _manejadorIdioma.ObtenerTexto("MisPermisosForm.lblTitulo") ?? "Mis Roles y Permisos";
+            lblDirectos.Text = _manejadorIdioma.ObtenerTexto("MisPermisosForm.lblDirectos") ?? "Roles y Permisos Asignados";
+            lblResueltos.Text = _manejadorIdioma.ObtenerTexto("MisPermisosForm.lblResueltos") ?? "Permisos Finales (Resueltos)";
+            btnCerrar.Text = _manejadorIdioma.ObtenerTexto("MisPermisosForm.btnCerrar") ?? "Cerrar";
         }
 
         private void BtnCerrar_Click(object sender, EventArgs e)

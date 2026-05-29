@@ -11,7 +11,7 @@ namespace Servicios
         {
             using (Aes aes = Aes.Create())
             {
-                var derive = new Rfc2898DeriveBytes(password, Salt, 10000, HashAlgorithmName.SHA256);
+                Rfc2898DeriveBytes derive = new Rfc2898DeriveBytes(password, Salt, 10000, HashAlgorithmName.SHA256);
                 aes.Key = derive.GetBytes(32);
                 aes.IV = derive.GetBytes(16);
 
@@ -29,7 +29,7 @@ namespace Servicios
         {
             using (Aes aes = Aes.Create())
             {
-                var derive = new Rfc2898DeriveBytes(password, Salt, 10000, HashAlgorithmName.SHA256);
+                Rfc2898DeriveBytes derive = new Rfc2898DeriveBytes(password, Salt, 10000, HashAlgorithmName.SHA256);
                 aes.Key = derive.GetBytes(32);
                 aes.IV = derive.GetBytes(16);
 

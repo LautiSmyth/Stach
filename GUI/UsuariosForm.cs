@@ -1,7 +1,7 @@
 using BE;
 using BE.Enums;
 using BLL;
-using Servicios;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,6 +12,7 @@ namespace GUI
     public partial class UsuariosForm : Form, IObserver
     {
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
+        private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private List<Usuario> _usuarios;
         private Usuario _seleccionado;
         private bool _cargandoSeleccion = false;
@@ -20,7 +21,7 @@ namespace GUI
         public UsuariosForm()
         {
             InitializeComponent();
-            ManejadorIdioma.Instancia.Attach(this);
+            _manejadorIdioma.Attach(this);
         }
 
         private void UsuariosForm_Load(object sender, EventArgs e)
@@ -61,7 +62,7 @@ namespace GUI
             }
             else
             {
-                var filtrados = _usuarios.FindAll(u => u.Username.ToLower().Contains(fil));
+                List<Usuario> filtrados = _usuarios.FindAll(u => u.Username.ToLower().Contains(fil));
                 dgvUsuarios.DataSource = null;
                 dgvUsuarios.DataSource = filtrados;
             }
@@ -131,7 +132,7 @@ namespace GUI
                 txtPassword.Clear();
                 txtConfirmarPassword.Clear();
                 cboEstado.SelectedIndex = 0;
-                btnGuardar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnGuardar");
+                btnGuardar.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.btnGuardar");
             }
             finally
             {
@@ -149,7 +150,7 @@ namespace GUI
                 txtPassword.Clear();
                 txtConfirmarPassword.Clear();
                 cboEstado.SelectedItem = _seleccionado.Estado;
-                btnGuardar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnModificar");
+                btnGuardar.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.btnModificar");
             }
             finally
             {
@@ -165,7 +166,7 @@ namespace GUI
                 Deseleccionar();
                 return;
             }
-            var u = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
+            Usuario u = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
             if (u != null && u != _seleccionado)
             {
                 _seleccionado = u;
@@ -257,23 +258,23 @@ namespace GUI
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            ManejadorIdioma.Instancia.Detach(this);
+            _manejadorIdioma.Detach(this);
             base.OnFormClosed(e);
         }
 
         public void ActualizarIdioma()
         {
-            lblTituloGrilla.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblTituloGrilla");
-            lblBuscarUsuario.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblBuscarUsuario");
-            btnRefrescar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnRefrescar");
-            grpGestion.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.grpGestion");
-            lblUsername.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblUsername");
-            lblPassword.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblPassword");
-            lblConfirmarPassword.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblConfirmarPassword");
-            lblRequisitos.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblRequisitos");
-            lblEstado.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.lblEstado");
-            btnGuardar.Text = _seleccionado == null ? ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnGuardar") : ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnModificar");
-            btnLimpiar.Text = ManejadorIdioma.Instancia.ObtenerTexto("UsuariosForm.btnLimpiar");
+            lblTituloGrilla.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.lblTituloGrilla");
+            lblBuscarUsuario.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.lblBuscarUsuario");
+            btnRefrescar.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.btnRefrescar");
+            grpGestion.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.grpGestion");
+            lblUsername.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.lblUsername");
+            lblPassword.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.lblPassword");
+            lblConfirmarPassword.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.lblConfirmarPassword");
+            lblRequisitos.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.lblRequisitos");
+            lblEstado.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.lblEstado");
+            btnGuardar.Text = _seleccionado == null ? _manejadorIdioma.ObtenerTexto("UsuariosForm.btnGuardar") : _manejadorIdioma.ObtenerTexto("UsuariosForm.btnModificar");
+            btnLimpiar.Text = _manejadorIdioma.ObtenerTexto("UsuariosForm.btnLimpiar");
         }
     }
 }
