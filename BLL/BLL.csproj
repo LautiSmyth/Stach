@@ -41,30 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitacoraBLL.cs" />
-    <Compile Include="CriticidadBLL.cs" />
-    <Compile Include="CriticidadMapper.cs" />
-    <Compile Include="IdiomaBLL.cs" />
-    <Compile Include="PermisoBLL.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TraduccionBLL.cs" />
-    <Compile Include="UsuarioBLL.cs" />
-    <Compile Include="VersionUsuarioBLL.cs" />
-    <Compile Include="DigitoVerificadorBLL.cs" />
-    <Compile Include="BackupBLL.cs" />
+    <Compile Include="**\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE.csproj">
       <Project>{25636c61-d0a6-4416-9d59-cb17d5ebb8a1}</Project>
       <Name>BE</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{730b3fc4-ffd4-4865-a871-73f82208e93b}</Project>
-      <Name>DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Seguridad\Seguridad.csproj">
-      <Project>{a7847e90-c42c-44b4-852f-2a941f107631}</Project>
-      <Name>Seguridad</Name>
+    <ProjectReference Include="..\Abstracciones\Abstracciones.csproj">
+      <Project>{52905808-a51a-4701-ba9a-36d5126b6a8f}</Project>
+      <Name>Abstracciones</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

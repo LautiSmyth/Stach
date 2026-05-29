@@ -1,5 +1,5 @@
 using BE;
-using DAL;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 
@@ -7,8 +7,14 @@ namespace BLL
 {
     public class VersionUsuarioBLL
     {
-        private readonly VersionUsuarioDAL _dal = new VersionUsuarioDAL();
-        private readonly UsuarioBLL _usuarioBll = new UsuarioBLL();
+        private readonly IVersionUsuarioDAL _dal;
+        private readonly UsuarioBLL _usuarioBll;
+
+        public VersionUsuarioBLL(IVersionUsuarioDAL dal, UsuarioBLL usuarioBll)
+        {
+            _dal = dal;
+            _usuarioBll = usuarioBll;
+        }
 
         public void Insertar(VersionUsuario version)
         {

@@ -1,5 +1,5 @@
 using BE;
-using DAL;
+using Abstracciones;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,7 +7,12 @@ namespace BLL
 {
     public class PermisoBLL
     {
-        private readonly PermisoDAL _dal = new PermisoDAL();
+        private readonly IPermisoDAL _dal;
+
+        public PermisoBLL(IPermisoDAL dal)
+        {
+            _dal = dal;
+        }
 
         public List<ComponentePermiso> ObtenerTodos()
         {

@@ -1,6 +1,6 @@
 using BE;
 using BE.Enums;
-using DAL;
+using Abstracciones;
 using System;
 using System.Collections.Generic;
 
@@ -8,17 +8,26 @@ namespace BLL
 {
     public class UsuarioBLL
     {
-        private readonly UsuarioDAL _dal = new UsuarioDAL();
-        private readonly PermisoBLL _permisoBll = new PermisoBLL();
+        private readonly IUsuarioDAL _dal;
+        private readonly IPermisoDAL _permisoDal;
+        private readonly IDigitoVerificadorService _dvService;
 
         private static readonly int[] _minutosBloqueo = { 1, 5, 15, 60 };
+
+        public UsuarioBLL(IUsuarioDAL dal, IPermisoDAL permisoDal, IDigitoVerificadorService dvService)
+        {
+            _dal = dal;
+            _permisoDal = permisoDal;
+            _dvService = dvService;
+        }
 
         public List<Usuario> ObtenerTodos()
         {
             var usuarios = _dal.ObtenerTodos();
+            var permisoBll = new PermisoBLL(_permisoDal);
             foreach (var u in usuarios)
             {
-                u.Permisos = _permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
+                u.Permisos = permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
             }
             return usuarios;
         }
@@ -28,7 +37,8 @@ namespace BLL
             var u = _dal.ObtenerPorId(idUsuario);
             if (u != null)
             {
-                u.Permisos = _permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
+                var permisoBll = new PermisoBLL(_permisoDal);
+                u.Permisos = permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
             }
             return u;
         }
@@ -40,7 +50,8 @@ namespace BLL
             var u = _dal.ObtenerPorUsername(username);
             if (u != null)
             {
-                u.Permisos = _permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
+                var permisoBll = new PermisoBLL(_permisoDal);
+                u.Permisos = permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
             }
             return u;
         }
@@ -193,7 +204,7 @@ namespace BLL
 
         private void ActualizarIntegridad()
         {
-            new DigitoVerificadorBLL().InicializarDVs();
+            _dvService.InicializarDVs();
         }
     }
 }

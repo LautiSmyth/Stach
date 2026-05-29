@@ -1,12 +1,17 @@
 using BE;
-using DAL;
+using Abstracciones;
 using System.Collections.Generic;
 
 namespace BLL
 {
     public class TraduccionBLL
     {
-        private readonly TraduccionDAL _dal = new TraduccionDAL();
+        private readonly ITraduccionDAL _dal;
+
+        public TraduccionBLL(ITraduccionDAL dal)
+        {
+            _dal = dal;
+        }
 
         public List<Componente> ObtenerComponentes()
         {

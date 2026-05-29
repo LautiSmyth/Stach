@@ -1,12 +1,17 @@
 using BE;
-using DAL;
+using Abstracciones;
 using System.Collections.Generic;
 
 namespace BLL
 {
     public class IdiomaBLL
     {
-        private readonly IdiomaDAL _dal = new IdiomaDAL();
+        private readonly IIdiomaDAL _dal;
+
+        public IdiomaBLL(IIdiomaDAL dal)
+        {
+            _dal = dal;
+        }
 
         public List<Idioma> ObtenerTodos()
         {
