@@ -76,23 +76,31 @@ namespace GUI
                 {
                     using (OpenFileDialog ofd = new OpenFileDialog())
                     {
-                        ofd.Filter = "Copia de Seguridad SQL (*.bak)|*.bak";
+                        ofd.Filter = "Copia de Seguridad Cifrada (*.stachbak)|*.stachbak";
                         ofd.Title = "Seleccionar Copia de Seguridad para Restaurar";
                         if (ofd.ShowDialog() == DialogResult.OK)
                         {
                             string confirmMsg = "¿Está seguro de restaurar la base de datos? Esta operación cerrará las sesiones activas, sobrescribirá todos los datos actuales y reiniciará la aplicación.";
                             if (MessageBox.Show(confirmMsg, "Confirmar Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                             {
-                                try
+                                using (var pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese la contraseña para descifrar el archivo de respaldo:", true))
                                 {
-                                    _backupService.RestaurarBackup("Restauracion", ofd.FileName);
-                                    MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    RestauradoExitosamente = true;
-                                    Application.Restart();
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show($"Error al restaurar la base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    if (pwdDlg.ShowDialog() != DialogResult.OK)
+                                    {
+                                        return;
+                                    }
+                                    string password = pwdDlg.InputText;
+                                    try
+                                    {
+                                        _backupService.RestaurarBackup("Restauracion", ofd.FileName, password);
+                                        MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        RestauradoExitosamente = true;
+                                        Application.Restart();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show($"Error al restaurar la base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
                                 }
                             }
                         }

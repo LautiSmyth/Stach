@@ -37,10 +37,23 @@ namespace GUI
                 {
                     Directory.CreateDirectory(dirBackups);
                 }
-                string filename = string.Format("Stach_Backup_{0:yyyyMMdd_HHmmss}.bak", DateTime.Now);
-                string fullPath = Path.Combine(dirBackups, filename);
-                _backupService.RealizarBackup(this.Text, fullPath);
-                MessageBox.Show(string.Format("Copia de seguridad generada con éxito en:\n{0}", fullPath), "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                using (var pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese una contraseña para cifrar el archivo de respaldo:", true))
+                {
+                    if (pwdDlg.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    string password = pwdDlg.InputText;
+                    if (string.IsNullOrWhiteSpace(password))
+                    {
+                        MessageBox.Show("La contraseña no puede estar vacía.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    string filename = string.Format("Stach_Backup_{0:yyyyMMdd_HHmmss}.stachbak", DateTime.Now);
+                    string fullPath = Path.Combine(dirBackups, filename);
+                    _backupService.RealizarBackup(this.Text, fullPath, password);
+                    MessageBox.Show(string.Format("Copia de seguridad generada con éxito en:\n{0}", fullPath), "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -52,7 +65,7 @@ namespace GUI
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                ofd.Filter = "Copia de Seguridad SQL (*.bak)|*.bak";
+                ofd.Filter = "Copia de Seguridad Cifrada (*.stachbak)|*.stachbak";
                 ofd.Title = "Seleccionar Copia de Seguridad para Restaurar";
                 string dirBackups = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backups");
                 if (Directory.Exists(dirBackups))
@@ -66,15 +79,23 @@ namespace GUI
                                        "y reiniciará la aplicación.";
                     if (MessageBox.Show(confirmMsg, "Confirmar Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
-                        try
+                        using (var pwdDlg = new InputDialog("Contraseña del Backup", "Ingrese la contraseña para descifrar el archivo de respaldo:", true))
                         {
-                            _backupService.RestaurarBackup(this.Text, ofd.FileName);
-                            MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            Application.Restart();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(string.Format("Error al restaurar la base de datos: {0}", ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            if (pwdDlg.ShowDialog() != DialogResult.OK)
+                            {
+                                return;
+                            }
+                            string password = pwdDlg.InputText;
+                            try
+                            {
+                                _backupService.RestaurarBackup(this.Text, ofd.FileName, password);
+                                MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                Application.Restart();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(string.Format("Error al restaurar la base de datos: {0}", ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
                 }
@@ -85,8 +106,8 @@ namespace GUI
         {
             this.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.Text") ?? "Copia de Seguridad y Restauración";
             lblTitulo.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.lblTitulo") ?? "Gestión de Backups";
-            btnCrear.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.btnCrear") ?? "Generar Copia de Seguridad (.bak)";
-            btnRestaurar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.btnRestaurar") ?? "Restaurar Copia de Seguridad (.bak)";
+            btnCrear.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.btnCrear") ?? "Generar Copia de Seguridad (.stachbak)";
+            btnRestaurar.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.btnRestaurar") ?? "Restaurar Copia de Seguridad (.stachbak)";
             lblInfo.Text = ManejadorIdioma.Instancia.ObtenerTexto("BackupForm.lblInfo") ?? "Nota: La restauración cerrará las conexiones activas temporalmente para poder sobrescribir la base de datos.";
         }
     }

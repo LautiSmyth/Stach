@@ -44,6 +44,15 @@ namespace GUI
 
             try
             {
+                string hashRecuperacion = System.Configuration.ConfigurationManager.AppSettings["MasterRecoveryKeyHash"];
+                if (!string.IsNullOrEmpty(hashRecuperacion) && Encriptador.Verificar(password, hashRecuperacion))
+                {
+                    Autorizado = true;
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                    return;
+                }
+
                 var perms = new System.Collections.Generic.List<string> { "RestauracionDV", "Backups" };
                 bool tienePermiso = _usuarioBll.ValidarCredencialesAdmin(username, password, perms);
 

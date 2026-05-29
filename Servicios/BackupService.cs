@@ -1,5 +1,7 @@
 using Abstracciones;
 using System;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace Servicios
 {
@@ -18,17 +20,49 @@ namespace Servicios
             _dvService = dvService;
         }
 
-        public void RealizarBackup(string modulo, string rutaArchivo)
+        public void RealizarBackup(string modulo, string rutaArchivo, string claveCifrado)
         {
-            _dal.RealizarBackup(rutaArchivo);
-            _bitacora.Registrar(modulo, "Backup", $"Copia de seguridad generada en '{rutaArchivo}'.", true);
+            string tempPlainPath = Path.Combine(Path.GetTempPath(), $"Stach_Backup_Temp_{Guid.NewGuid():N}.bak");
+            try
+            {
+                _dal.RealizarBackup(tempPlainPath);
+                CifradorHelper.CifrarArchivo(tempPlainPath, rutaArchivo, claveCifrado);
+                _bitacora.Registrar(modulo, "Backup", $"Copia de seguridad cifrada generada en '{rutaArchivo}'.", true);
+            }
+            finally
+            {
+                if (File.Exists(tempPlainPath))
+                {
+                    try { File.Delete(tempPlainPath); } catch { }
+                }
+            }
         }
 
-        public void RestaurarBackup(string modulo, string rutaArchivo)
+        public void RestaurarBackup(string modulo, string rutaArchivo, string claveCifrado)
         {
-            _dal.RestaurarBackup(rutaArchivo);
-            _bitacora.Registrar(modulo, "Restore", $"Restauración de base de datos desde '{rutaArchivo}'.", true);
-            _dvService.InicializarDVs();
+            string tempPlainPath = Path.Combine(Path.GetTempPath(), $"Stach_Restore_Temp_{Guid.NewGuid():N}.bak");
+            try
+            {
+                try
+                {
+                    CifradorHelper.DescifrarArchivo(rutaArchivo, tempPlainPath, claveCifrado);
+                }
+                catch (CryptographicException)
+                {
+                    throw new ArgumentException("La contraseña del backup es incorrecta o el archivo de copia de seguridad está dañado.");
+                }
+
+                _dal.RestaurarBackup(tempPlainPath);
+                _bitacora.Registrar(modulo, "Restore", $"Restauración de base de datos cifrada desde '{rutaArchivo}'.", true);
+                _dvService.InicializarDVs();
+            }
+            finally
+            {
+                if (File.Exists(tempPlainPath))
+                {
+                    try { File.Delete(tempPlainPath); } catch { }
+                }
+            }
         }
     }
 }
