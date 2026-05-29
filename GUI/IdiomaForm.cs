@@ -124,14 +124,14 @@ namespace GUI
         {
             if (cboIdiomaDestino.SelectedItem is Idioma idioma)
             {
-                var componentes = ManejadorIdioma.Instancia.ObtenerComponentes();
-                var traducciones = ManejadorIdioma.Instancia.ObtenerTraduccionesPorIdioma(idioma.IdIdioma);
+                List<Componente> componentes = ManejadorIdioma.Instancia.ObtenerComponentes();
+                List<Traduccion> traducciones = ManejadorIdioma.Instancia.ObtenerTraduccionesPorIdioma(idioma.IdIdioma);
 
                 _traduccionesBindeables = new List<FilaTraduccion>();
 
-                foreach (var comp in componentes)
+                foreach (Componente comp in componentes)
                 {
-                    var trad = traducciones.FirstOrDefault(t => t.IdComponente == comp.IdComponente);
+                    Traduccion trad = traducciones.FirstOrDefault(t => t.IdComponente == comp.IdComponente);
                     _traduccionesBindeables.Add(new FilaTraduccion
                     {
                         IdComponente = comp.IdComponente,
@@ -142,6 +142,7 @@ namespace GUI
 
                 dgvTraducciones.DataSource = null;
                 dgvTraducciones.DataSource = _traduccionesBindeables;
+
             }
         }
 
