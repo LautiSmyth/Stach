@@ -1,9 +1,10 @@
+using Abstracciones;
 using System;
 using System.Security.Cryptography;
 
-namespace Seguridad
+namespace Servicios
 {
-    public static class Encriptador
+    public class Encriptador : IEncriptador
     {
         private const int SaltSize = 16;
         private const int HashSize = 32;
@@ -51,6 +52,21 @@ namespace Seguridad
                 byte[] hash = sha256.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }
+        }
+
+        string IEncriptador.Hash(string contraseña)
+        {
+            return Hash(contraseña);
+        }
+
+        bool IEncriptador.Verificar(string contraseñaIngresada, string hashAlmacenado)
+        {
+            return Verificar(contraseñaIngresada, hashAlmacenado);
+        }
+
+        string IEncriptador.HashSHA256(string input)
+        {
+            return HashSHA256(input);
         }
     }
 }

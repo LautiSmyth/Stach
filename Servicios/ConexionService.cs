@@ -1,10 +1,15 @@
-using DAL;
+using Abstracciones;
 
-namespace Aplicacion
+namespace Servicios
 {
-    public class ConexionServicio
+    public class ConexionService : IConexionService
     {
-        private readonly ConexionDAL _dal = new ConexionDAL();
+        private readonly IConexionDAL _dal;
+
+        public ConexionService(IConexionDAL dal)
+        {
+            _dal = dal;
+        }
 
         public bool VerificarConexion()
         {

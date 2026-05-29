@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A7847E90-C42C-44B4-852F-2A941F107631}</ProjectGuid>
+    <ProjectGuid>{808AFC0A-0CF1-4EFC-BF7A-B24A6A74E1D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Seguridad</RootNamespace>
-    <AssemblyName>Seguridad</AssemblyName>
+    <RootNamespace>Servicios</RootNamespace>
+    <AssemblyName>Servicios</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -33,20 +33,17 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContadorSesion.cs" />
-    <Compile Include="Encriptador.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionManager.cs" />
+    <Compile Include="**\*.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Abstracciones\Abstracciones.csproj">
+      <Project>{52905808-a51a-4701-ba9a-36d5126b6a8f}</Project>
+      <Name>Abstracciones</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BE\BE.csproj">
       <Project>{25636c61-d0a6-4416-9d59-cb17d5ebb8a1}</Project>
       <Name>BE</Name>

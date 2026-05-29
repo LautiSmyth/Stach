@@ -1,15 +1,15 @@
+using Abstracciones;
 using BE;
 using BE.Enums;
-using BLL;
 using System.Collections.Generic;
 
-namespace Aplicacion
+namespace Servicios
 {
-    public class CriticidadServicio
+    public class CriticidadService : ICriticidadService
     {
-        public CriticidadServicio()
+        public CriticidadService(ICriticidadRepositorio repositorio)
         {
-            new CriticidadBLL().Recargar();
+            CriticidadMapper.Recargar(repositorio);
         }
 
         public CriticidadConfig ObtenerConfig(NivelCriticidad criticidad)

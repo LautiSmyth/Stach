@@ -1,22 +1,24 @@
+using Abstracciones;
 using BE;
-using BLL;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aplicacion
+namespace Servicios
 {
-    public class ManejadorIdioma : ISubject
+    public class ManejadorIdioma : IManejadorIdioma
     {
         private static ManejadorIdioma _instancia;
-        private readonly IdiomaBLL _idiomaBll = new IdiomaBLL();
-        private readonly TraduccionBLL _traduccionBll = new TraduccionBLL();
+        private readonly IIdiomaDAL _idiomaDal;
+        private readonly ITraduccionDAL _traduccionDal;
         private readonly List<IObserver> _observers = new List<IObserver>();
         private Dictionary<string, string> _traduccionesActuales = new Dictionary<string, string>();
         private Idioma _idiomaActual;
 
-        private ManejadorIdioma()
+        private ManejadorIdioma(IIdiomaDAL idiomaDal, ITraduccionDAL traduccionDal)
         {
-            var idiomas = _idiomaBll.ObtenerTodos();
+            _idiomaDal = idiomaDal;
+            _traduccionDal = traduccionDal;
+            var idiomas = _idiomaDal.ObtenerTodos();
             var def = idiomas.FirstOrDefault(i => i.Default) ?? idiomas.FirstOrDefault();
             if (def != null)
             {
@@ -30,7 +32,9 @@ namespace Aplicacion
             {
                 if (_instancia == null)
                 {
-                    _instancia = new ManejadorIdioma();
+                    var idiomaDal = IoCContainer.Resolver<IIdiomaDAL>();
+                    var traduccionDal = IoCContainer.Resolver<ITraduccionDAL>();
+                    _instancia = new ManejadorIdioma(idiomaDal, traduccionDal);
                 }
                 return _instancia;
             }
@@ -83,37 +87,37 @@ namespace Aplicacion
 
         public List<Idioma> ObtenerIdiomas()
         {
-            return _idiomaBll.ObtenerTodos();
+            return _idiomaDal.ObtenerTodos();
         }
 
         public void InsertarIdioma(Idioma idioma)
         {
-            _idiomaBll.Insertar(idioma);
+            _idiomaDal.Insertar(idioma);
         }
 
         public void EliminarIdioma(int idIdioma)
         {
-            _idiomaBll.Eliminar(idIdioma);
+            _idiomaDal.Eliminar(idIdioma);
         }
 
         public List<Componente> ObtenerComponentes()
         {
-            return _traduccionBll.ObtenerComponentes();
+            return _traduccionDal.ObtenerComponentes();
         }
 
         public void InsertarComponente(Componente componente)
         {
-            _traduccionBll.InsertarComponente(componente);
+            _traduccionDal.InsertarComponente(componente);
         }
 
         public List<Traduccion> ObtenerTraduccionesPorIdioma(int idIdioma)
         {
-            return _traduccionBll.ObtenerTraduccionesPorIdioma(idIdioma);
+            return _traduccionDal.ObtenerTraduccionesPorIdioma(idIdioma);
         }
 
         public void GuardarTraducciones(List<Traduccion> traducciones)
         {
-            _traduccionBll.GuardarTraducciones(traducciones);
+            _traduccionDal.GuardarTraducciones(traducciones);
             if (_idiomaActual != null && traducciones.Any(t => t.IdIdioma == _idiomaActual.IdIdioma))
             {
                 CargarTraducciones();
@@ -126,8 +130,8 @@ namespace Aplicacion
             _traduccionesActuales.Clear();
             if (_idiomaActual == null) return;
 
-            var traducciones = _traduccionBll.ObtenerTraduccionesPorIdioma(_idiomaActual.IdIdioma);
-            var componentes = _traduccionBll.ObtenerComponentes();
+            var traducciones = _traduccionDal.ObtenerTraduccionesPorIdioma(_idiomaActual.IdIdioma);
+            var componentes = _traduccionDal.ObtenerComponentes();
 
             foreach (var t in traducciones)
             {

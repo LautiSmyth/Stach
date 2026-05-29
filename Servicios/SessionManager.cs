@@ -1,8 +1,9 @@
+using Abstracciones;
 using BE;
 
-namespace Seguridad
+namespace Servicios
 {
-    public sealed class SessionManager
+    public sealed class SessionManager : ISessionManager
     {
         private static volatile SessionManager _instance;
         private static readonly object _lock = new object();
