@@ -1,6 +1,7 @@
+using BE;
 using System.Collections.Generic;
 
-namespace BE.Repositorios
+namespace Abstracciones
 {
     public interface ICriticidadRepositorio
     {

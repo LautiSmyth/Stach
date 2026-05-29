@@ -60,7 +60,6 @@ namespace GUI
                 MessageBox.Show("La lista de idiomas en la base de datos está vacía. Verifique la base de datos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (idiomas.Any(idioma => idioma.Default = true)) chkDefault.Enabled = false;
 
             lstIdiomas.DataSource = null;
             lstIdiomas.DisplayMember = "Nombre";
@@ -96,6 +95,15 @@ namespace GUI
             };
             dgvTraducciones.Columns.Add(colNombre);
 
+            var colReferencia = new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "TextoDefault",
+                HeaderText = "Referencia (Default)",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            };
+            dgvTraducciones.Columns.Add(colReferencia);
+
             var colTexto = new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "Texto",
@@ -112,6 +120,7 @@ namespace GUI
                 txtNombre.Text = idioma.Nombre;
                 txtCodigo.Text = idioma.Codigo;
                 chkDefault.Checked = idioma.Default;
+                btnEliminarIdioma.Enabled = !idioma.Default;
             }
         }
 
@@ -127,22 +136,28 @@ namespace GUI
                 List<Componente> componentes = ManejadorIdioma.Instancia.ObtenerComponentes();
                 List<Traduccion> traducciones = ManejadorIdioma.Instancia.ObtenerTraduccionesPorIdioma(idioma.IdIdioma);
 
+                var defaultLang = idiomas.FirstOrDefault(i => i.Default);
+                List<Traduccion> traduccionesDefault = defaultLang != null
+                    ? ManejadorIdioma.Instancia.ObtenerTraduccionesPorIdioma(defaultLang.IdIdioma)
+                    : new List<Traduccion>();
+
                 _traduccionesBindeables = new List<FilaTraduccion>();
 
                 foreach (Componente comp in componentes)
                 {
                     Traduccion trad = traducciones.FirstOrDefault(t => t.IdComponente == comp.IdComponente);
+                    Traduccion tradDef = traduccionesDefault.FirstOrDefault(t => t.IdComponente == comp.IdComponente);
                     _traduccionesBindeables.Add(new FilaTraduccion
                     {
                         IdComponente = comp.IdComponente,
                         NombreComponente = comp.Nombre,
+                        TextoDefault = tradDef != null ? tradDef.Texto : string.Empty,
                         Texto = trad != null ? trad.Texto : string.Empty
                     });
                 }
 
                 dgvTraducciones.DataSource = null;
                 dgvTraducciones.DataSource = _traduccionesBindeables;
-
             }
         }
 
@@ -248,10 +263,11 @@ namespace GUI
             lblIdiomaDestino.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.lblIdiomaDestino");
             btnGuardarTraducciones.Text = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.btnGuardarTraducciones");
 
-            if (dgvTraducciones.Columns.Count >= 2)
+            if (dgvTraducciones.Columns.Count >= 3)
             {
                 dgvTraducciones.Columns[0].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.colComponente") ?? "Componente";
-                dgvTraducciones.Columns[1].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.colTexto") ?? "Texto / Traducción";
+                dgvTraducciones.Columns[1].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.colReferencia") ?? "Referencia (Default)";
+                dgvTraducciones.Columns[2].HeaderText = ManejadorIdioma.Instancia.ObtenerTexto("IdiomaForm.colTexto") ?? "Texto / Traducción";
             }
         }
 
@@ -259,6 +275,7 @@ namespace GUI
         {
             public int IdComponente { get; set; }
             public string NombreComponente { get; set; }
+            public string TextoDefault { get; set; }
             public string Texto { get; set; }
         }
     }

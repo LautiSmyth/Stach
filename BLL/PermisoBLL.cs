@@ -16,11 +16,25 @@ namespace BLL
 
         public void Insertar(ComponentePermiso permiso)
         {
+            if (permiso == null) throw new System.ArgumentNullException(nameof(permiso));
+            var todos = _dal.ObtenerTodos();
+            if (todos.Any(p => p.Nombre.Equals(permiso.Nombre, System.StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new System.ArgumentException("Ya existe un permiso o rol con el mismo nombre.");
+            }
+            if (!string.IsNullOrEmpty(permiso.PermisoKey) && todos.Any(p => !string.IsNullOrEmpty(p.PermisoKey) && p.PermisoKey.Equals(permiso.PermisoKey, System.StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new System.ArgumentException("Ya existe un permiso o rol con la misma clave.");
+            }
             _dal.Insertar(permiso);
         }
 
         public void Eliminar(int idPermiso)
         {
+            if (_dal.EstaEnUso(idPermiso))
+            {
+                throw new System.InvalidOperationException("No se puede eliminar el permiso/rol porque está asignado a un usuario o forma parte de otro rol (familia).");
+            }
             _dal.Eliminar(idPermiso);
         }
 

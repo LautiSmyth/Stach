@@ -79,6 +79,23 @@ namespace DAL
             permiso.IdPermiso = Convert.ToInt32(dt.Rows[0][0]);
         }
 
+        public bool EstaEnUso(int idPermiso)
+        {
+            var p1 = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };
+            var dt1 = _acceso.Leer("SELECT COUNT(*) FROM UsuarioPermiso WHERE IdPermiso = @IdPermiso", p1);
+            if (Convert.ToInt32(dt1.Rows[0][0]) > 0)
+            {
+                return true;
+            }
+            var p2 = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };
+            var dt2 = _acceso.Leer("SELECT COUNT(*) FROM PermisoRelacion WHERE IdHijo = @IdPermiso", p2);
+            if (Convert.ToInt32(dt2.Rows[0][0]) > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public void Eliminar(int idPermiso)
         {
             var p1 = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };

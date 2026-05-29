@@ -2,6 +2,7 @@ using BE;
 using BLL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aplicacion
 {
@@ -83,6 +84,16 @@ namespace Aplicacion
         {
             try
             {
+                var logueado = Seguridad.SessionManager.GetInstance().Usuario;
+                if (logueado != null && logueado.IdUsuario == idUsuario)
+                {
+                    var resolved = ResolverPatentes(permisos);
+                    if (!resolved.Any(p => p.PermisoKey != null && p.PermisoKey.Equals("Permisos", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        throw new ArgumentException("No puedes remover el permiso de Gestión de Permisos de tu propia cuenta.");
+                    }
+                }
+
                 _bll.GuardarPermisosUsuario(idUsuario, permisos);
                 _bitacora.Registrar(modulo, "ModificacionPermisosUsuario", $"Asignación de permisos al usuario '{username}'.", true);
             }

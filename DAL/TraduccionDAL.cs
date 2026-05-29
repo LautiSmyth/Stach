@@ -158,6 +158,7 @@ namespace DAL
             seed("IdiomaForm.lblIdiomaDestino", "Idioma a traducir", "Language to translate", "Idioma a traduzir");
             seed("IdiomaForm.btnGuardarTraducciones", "Guardar traducciones", "Save translations", "Salvar traduções");
             seed("IdiomaForm.colComponente", "Componente", "Component", "Componente");
+            seed("IdiomaForm.colReferencia", "Referencia (Default)", "Reference (Default)", "Referência (Padrão)");
             seed("IdiomaForm.colTexto", "Texto / Traducción", "Translation text", "Texto / Tradução");
             seed("PermisosForm.Text", "Gestión de Perfiles y Permisos", "Role & Permission Management", "Gestão de Perfis e Permissões");
             seed("PermisosForm.lblCol1Titulo", "Estructura de Permisos", "Permission Structure", "Estrutura de Permissões");

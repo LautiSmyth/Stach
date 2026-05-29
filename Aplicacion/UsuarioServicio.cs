@@ -48,6 +48,15 @@ namespace Aplicacion
                 if (usuario == null)
                     throw new ArgumentException("El usuario no existe.");
 
+                Usuario logueado = ObtenerUsuarioLogueado();
+                if (logueado != null && logueado.IdUsuario == idUsuario)
+                {
+                    if (nuevoEstado != EstadoUsuario.Activo)
+                    {
+                        throw new ArgumentException("No puedes desactivar o bloquear tu propia cuenta.");
+                    }
+                }
+
                 var versionServ = new VersionUsuarioServicio();
                 string actor = ObtenerUsernameEnSesion();
                 if (string.IsNullOrEmpty(actor)) actor = "Sistema";
