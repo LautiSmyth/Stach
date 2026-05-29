@@ -4,5 +4,6 @@
   <Project Path="BLL/BLL.csproj" Id="78c6548d-e141-4f91-b3b9-bcdeff6396ea" />
   <Project Path="DAL/DAL.csproj" Id="730b3fc4-ffd4-4865-a871-73f82208e93b" />
   <Project Path="GUI/GUI.csproj" Id="68ee5009-daa6-455c-ab5c-5b4074a294ff" />
+  <Project Path="IoC/IoC.csproj" Id="96041a17-3bfb-4b2a-89a0-c6517a22ef7a" />
   <Project Path="Servicios/Servicios.csproj" Id="808afc0a-0cf1-4efc-bf7a-b24a6a74e1d2" />
 </Solution>

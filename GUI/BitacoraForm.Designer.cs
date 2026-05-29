@@ -505,7 +505,7 @@ namespace GUI
             this.splitCuerpo.Panel2.Controls.Add(this.grpDetalle);
             this.splitCuerpo.Panel2.Padding = new System.Windows.Forms.Padding(7);
             this.splitCuerpo.Size = new System.Drawing.Size(1068, 570);
-            this.splitCuerpo.SplitterDistance = 723;
+            this.splitCuerpo.SplitterDistance = 724;
             this.splitCuerpo.SplitterWidth = 3;
             this.splitCuerpo.TabIndex = 0;
             // 
@@ -550,7 +550,7 @@ namespace GUI
             this.dgvBitacora.RowHeadersVisible = false;
             this.dgvBitacora.RowTemplate.Height = 34;
             this.dgvBitacora.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvBitacora.Size = new System.Drawing.Size(723, 570);
+            this.dgvBitacora.Size = new System.Drawing.Size(724, 570);
             this.dgvBitacora.TabIndex = 0;
             this.dgvBitacora.SelectionChanged += new System.EventHandler(this.DgvBitacora_SelectionChanged);
             // 
@@ -563,7 +563,7 @@ namespace GUI
             this.grpDetalle.Location = new System.Drawing.Point(7, 7);
             this.grpDetalle.Name = "grpDetalle";
             this.grpDetalle.Padding = new System.Windows.Forms.Padding(7, 10, 7, 7);
-            this.grpDetalle.Size = new System.Drawing.Size(328, 556);
+            this.grpDetalle.Size = new System.Drawing.Size(327, 556);
             this.grpDetalle.TabIndex = 0;
             this.grpDetalle.TabStop = false;
             this.grpDetalle.Text = "Detalle del Registro";
@@ -603,7 +603,7 @@ namespace GUI
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
-            this.tblDetalle.Size = new System.Drawing.Size(314, 522);
+            this.tblDetalle.Size = new System.Drawing.Size(313, 522);
             this.tblDetalle.TabIndex = 0;
             // 
             // lblDetFecha
@@ -614,7 +614,7 @@ namespace GUI
             this.lblDetFecha.Location = new System.Drawing.Point(0, 2);
             this.lblDetFecha.Margin = new System.Windows.Forms.Padding(0, 2, 0, 1);
             this.lblDetFecha.Name = "lblDetFecha";
-            this.lblDetFecha.Size = new System.Drawing.Size(157, 14);
+            this.lblDetFecha.Size = new System.Drawing.Size(156, 14);
             this.lblDetFecha.TabIndex = 0;
             this.lblDetFecha.Text = "Fecha y Hora";
             // 
@@ -623,7 +623,7 @@ namespace GUI
             this.lblDetUsuario.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetUsuario.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.lblDetUsuario.Location = new System.Drawing.Point(162, 2);
+            this.lblDetUsuario.Location = new System.Drawing.Point(161, 2);
             this.lblDetUsuario.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetUsuario.Name = "lblDetUsuario";
             this.lblDetUsuario.Size = new System.Drawing.Size(152, 14);
@@ -641,7 +641,7 @@ namespace GUI
             this.txtDetFecha.Margin = new System.Windows.Forms.Padding(0, 0, 5, 3);
             this.txtDetFecha.Name = "txtDetFecha";
             this.txtDetFecha.ReadOnly = true;
-            this.txtDetFecha.Size = new System.Drawing.Size(152, 23);
+            this.txtDetFecha.Size = new System.Drawing.Size(151, 23);
             this.txtDetFecha.TabIndex = 2;
             // 
             // txtDetUsuario
@@ -651,7 +651,7 @@ namespace GUI
             this.txtDetUsuario.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDetUsuario.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtDetUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.txtDetUsuario.Location = new System.Drawing.Point(162, 17);
+            this.txtDetUsuario.Location = new System.Drawing.Point(161, 17);
             this.txtDetUsuario.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetUsuario.Name = "txtDetUsuario";
             this.txtDetUsuario.ReadOnly = true;
@@ -666,7 +666,7 @@ namespace GUI
             this.lblDetModulo.Location = new System.Drawing.Point(0, 43);
             this.lblDetModulo.Margin = new System.Windows.Forms.Padding(0, 2, 0, 1);
             this.lblDetModulo.Name = "lblDetModulo";
-            this.lblDetModulo.Size = new System.Drawing.Size(157, 14);
+            this.lblDetModulo.Size = new System.Drawing.Size(156, 14);
             this.lblDetModulo.TabIndex = 4;
             this.lblDetModulo.Text = "Módulo";
             // 
@@ -675,7 +675,7 @@ namespace GUI
             this.lblDetActividad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetActividad.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetActividad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.lblDetActividad.Location = new System.Drawing.Point(162, 43);
+            this.lblDetActividad.Location = new System.Drawing.Point(161, 43);
             this.lblDetActividad.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetActividad.Name = "lblDetActividad";
             this.lblDetActividad.Size = new System.Drawing.Size(152, 14);
@@ -693,7 +693,7 @@ namespace GUI
             this.txtDetModulo.Margin = new System.Windows.Forms.Padding(0, 0, 5, 3);
             this.txtDetModulo.Name = "txtDetModulo";
             this.txtDetModulo.ReadOnly = true;
-            this.txtDetModulo.Size = new System.Drawing.Size(152, 23);
+            this.txtDetModulo.Size = new System.Drawing.Size(151, 23);
             this.txtDetModulo.TabIndex = 6;
             // 
             // txtDetActividad
@@ -703,7 +703,7 @@ namespace GUI
             this.txtDetActividad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDetActividad.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtDetActividad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.txtDetActividad.Location = new System.Drawing.Point(162, 58);
+            this.txtDetActividad.Location = new System.Drawing.Point(161, 58);
             this.txtDetActividad.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetActividad.Name = "txtDetActividad";
             this.txtDetActividad.ReadOnly = true;
@@ -718,7 +718,7 @@ namespace GUI
             this.lblDetCriticidad.Location = new System.Drawing.Point(0, 84);
             this.lblDetCriticidad.Margin = new System.Windows.Forms.Padding(0, 2, 0, 1);
             this.lblDetCriticidad.Name = "lblDetCriticidad";
-            this.lblDetCriticidad.Size = new System.Drawing.Size(157, 14);
+            this.lblDetCriticidad.Size = new System.Drawing.Size(156, 14);
             this.lblDetCriticidad.TabIndex = 8;
             this.lblDetCriticidad.Text = "Criticidad";
             // 
@@ -727,7 +727,7 @@ namespace GUI
             this.lblDetResultado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetResultado.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetResultado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.lblDetResultado.Location = new System.Drawing.Point(162, 84);
+            this.lblDetResultado.Location = new System.Drawing.Point(161, 84);
             this.lblDetResultado.Margin = new System.Windows.Forms.Padding(5, 2, 0, 1);
             this.lblDetResultado.Name = "lblDetResultado";
             this.lblDetResultado.Size = new System.Drawing.Size(152, 14);
@@ -745,7 +745,7 @@ namespace GUI
             this.txtDetCriticidad.Margin = new System.Windows.Forms.Padding(0, 0, 5, 3);
             this.txtDetCriticidad.Name = "txtDetCriticidad";
             this.txtDetCriticidad.ReadOnly = true;
-            this.txtDetCriticidad.Size = new System.Drawing.Size(152, 23);
+            this.txtDetCriticidad.Size = new System.Drawing.Size(151, 23);
             this.txtDetCriticidad.TabIndex = 10;
             // 
             // txtDetResultado
@@ -755,7 +755,7 @@ namespace GUI
             this.txtDetResultado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDetResultado.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtDetResultado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
-            this.txtDetResultado.Location = new System.Drawing.Point(162, 99);
+            this.txtDetResultado.Location = new System.Drawing.Point(161, 99);
             this.txtDetResultado.Margin = new System.Windows.Forms.Padding(5, 0, 0, 3);
             this.txtDetResultado.Name = "txtDetResultado";
             this.txtDetResultado.ReadOnly = true;
@@ -771,7 +771,7 @@ namespace GUI
             this.lblDetDetalle.Location = new System.Drawing.Point(0, 126);
             this.lblDetDetalle.Margin = new System.Windows.Forms.Padding(0, 3, 0, 1);
             this.lblDetDetalle.Name = "lblDetDetalle";
-            this.lblDetDetalle.Size = new System.Drawing.Size(314, 13);
+            this.lblDetDetalle.Size = new System.Drawing.Size(313, 13);
             this.lblDetDetalle.TabIndex = 12;
             this.lblDetDetalle.Text = "Detalle";
             // 
@@ -788,7 +788,7 @@ namespace GUI
             this.txtDetDetalle.Name = "txtDetDetalle";
             this.txtDetDetalle.ReadOnly = true;
             this.txtDetDetalle.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDetDetalle.Size = new System.Drawing.Size(308, 158);
+            this.txtDetDetalle.Size = new System.Drawing.Size(307, 158);
             this.txtDetDetalle.TabIndex = 13;
             // 
             // lblDetError
@@ -800,7 +800,7 @@ namespace GUI
             this.lblDetError.Location = new System.Drawing.Point(0, 307);
             this.lblDetError.Margin = new System.Windows.Forms.Padding(0, 3, 0, 1);
             this.lblDetError.Name = "lblDetError";
-            this.lblDetError.Size = new System.Drawing.Size(314, 13);
+            this.lblDetError.Size = new System.Drawing.Size(313, 13);
             this.lblDetError.TabIndex = 14;
             this.lblDetError.Text = "Detalle del Error";
             // 
@@ -817,7 +817,7 @@ namespace GUI
             this.txtDetError.Name = "txtDetError";
             this.txtDetError.ReadOnly = true;
             this.txtDetError.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDetError.Size = new System.Drawing.Size(308, 195);
+            this.txtDetError.Size = new System.Drawing.Size(307, 195);
             this.txtDetError.TabIndex = 15;
             // 
             // pnlEstado
