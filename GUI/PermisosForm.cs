@@ -29,20 +29,6 @@ namespace GUI
 
             txtNombrePermiso.MaxLength = 100;
             txtClavePermiso.MaxLength = 100;
-            txtClavePermiso.KeyPress += TxtClavePermiso_KeyPress;
-
-            tvEstructura.AfterSelect += TvEstructura_AfterSelect;
-            btnCrearPatente.Click += BtnCrearPatente_Click;
-            btnCrearFamilia.Click += BtnCrearFamilia_Click;
-            btnEliminarPermiso.Click += BtnEliminarPermiso_Click;
-
-            btnAgregarRelacion.Click += BtnAgregarRelacion_Click;
-            btnQuitarRelacion.Click += BtnQuitarRelacion_Click;
-            btnGuardarRelaciones.Click += BtnGuardarRelaciones_Click;
-
-            cboUsuarios.SelectedIndexChanged += CboUsuarios_SelectedIndexChanged;
-            btnAsignarUsuario.Click += BtnAsignarUsuario_Click;
-            btnQuitarUsuario.Click += BtnQuitarUsuario_Click;
         }
 
         private void TxtClavePermiso_KeyPress(object sender, KeyPressEventArgs e)

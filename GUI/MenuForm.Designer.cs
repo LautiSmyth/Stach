@@ -15,6 +15,7 @@ namespace GUI
         {
             this.components = new System.ComponentModel.Container();
             this._timer = new System.Windows.Forms.Timer(this.components);
+            this._timer.Tick += new System.EventHandler(this.Timer_Tick);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.lblUsuario = new System.Windows.Forms.ToolStripLabel();
             this.sepNavegacion = new System.Windows.Forms.ToolStripSeparator();
@@ -134,6 +135,7 @@ namespace GUI
             this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboIdioma.Name = "cboIdioma";
             this.cboIdioma.Size = new System.Drawing.Size(120, 32);
+            this.cboIdioma.SelectedIndexChanged += new System.EventHandler(this.CboIdioma_SelectedIndexChanged);
 
             this.btnIdiomas.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnIdiomas.Font = new System.Drawing.Font("Segoe UI", 9.5F);

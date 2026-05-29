@@ -29,7 +29,6 @@ namespace GUI
 
                 txtNombre.MaxLength = 100;
                 txtCodigo.MaxLength = 10;
-                txtCodigo.KeyPress += TxtCodigo_KeyPress;
             }
             catch (Exception ex)
             {

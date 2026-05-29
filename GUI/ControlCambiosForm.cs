@@ -25,10 +25,6 @@ namespace GUI
             CargarUsuarios();
             ConfigurarGrilla();
             ActualizarIdioma();
-
-            cboUsuarios.SelectedIndexChanged += CboUsuarios_SelectedIndexChanged;
-            dgvVersiones.SelectionChanged += DgvVersiones_SelectionChanged;
-            btnRollback.Click += BtnRollback_Click;
             CargarVersiones();
             DesactivarTabStopReadOnly(this);
         }

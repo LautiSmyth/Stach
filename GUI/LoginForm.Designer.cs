@@ -64,6 +64,7 @@ namespace GUI
             this.pnlIzquierda.Padding = new System.Windows.Forms.Padding(34, 35, 34, 35);
             this.pnlIzquierda.Size = new System.Drawing.Size(302, 479);
             this.pnlIzquierda.TabIndex = 0;
+            this.pnlIzquierda.Paint += new System.Windows.Forms.PaintEventHandler(this.PnlIzquierda_Paint);
             // 
             // lblStach
             // 
@@ -139,6 +140,7 @@ namespace GUI
             this.pnlCard.Padding = new System.Windows.Forms.Padding(31, 28, 31, 28);
             this.pnlCard.Size = new System.Drawing.Size(331, 353);
             this.pnlCard.TabIndex = 0;
+            this.pnlCard.Paint += new System.Windows.Forms.PaintEventHandler(this.PnlCard_Paint);
             // 
             // lblErrorValidacion
             // 
@@ -218,6 +220,7 @@ namespace GUI
             this.txtPassword.TabIndex = 1;
             this.txtPassword.UseSystemPasswordChar = true;
             this.txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtPassword_KeyDown);
+            this.txtPassword.TextChanged += new System.EventHandler(this.TxtInput_TextChanged);
             // 
             // lblPassword
             // 
@@ -244,6 +247,7 @@ namespace GUI
             this.txtUsername.Size = new System.Drawing.Size(267, 24);
             this.txtUsername.TabIndex = 0;
             this.txtUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtUsername_KeyDown);
+            this.txtUsername.TextChanged += new System.EventHandler(this.TxtInput_TextChanged);
             // 
             // lblUsername
             // 

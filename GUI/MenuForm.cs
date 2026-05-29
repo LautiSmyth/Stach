@@ -28,12 +28,10 @@ namespace GUI
                     c.BackColor = System.Drawing.Color.FromArgb(248, 244, 255);
             }
 
-            cboIdioma.SelectedIndexChanged += CboIdioma_SelectedIndexChanged;
             ActualizarIdioma();
             ValidarPermisosMenu();
 
             _timer.Interval = 1000;
-            _timer.Tick += Timer_Tick;
             _timer.Start();
             ActualizarHora();
         }

@@ -64,6 +64,7 @@ namespace GUI
             this.cboUsuarios.Name = "cboUsuarios";
             this.cboUsuarios.Size = new System.Drawing.Size(300, 25);
             this.cboUsuarios.TabIndex = 1;
+            this.cboUsuarios.SelectedIndexChanged += new System.EventHandler(this.CboUsuarios_SelectedIndexChanged);
 
             this.lblSeleccionarUsuario.AutoSize = true;
             this.lblSeleccionarUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
@@ -94,6 +95,7 @@ namespace GUI
             this.dgvVersiones.Name = "dgvVersiones";
             this.dgvVersiones.Size = new System.Drawing.Size(575, 418);
             this.dgvVersiones.TabIndex = 0;
+            this.dgvVersiones.SelectionChanged += new System.EventHandler(this.DgvVersiones_SelectionChanged);
 
             this.pnlDetalle.BackColor = System.Drawing.Color.White;
             this.pnlDetalle.Controls.Add(this.btnRollback);
@@ -119,6 +121,7 @@ namespace GUI
             this.btnRollback.TabIndex = 5;
             this.btnRollback.Text = "Revertir a esta versión";
             this.btnRollback.UseVisualStyleBackColor = false;
+            this.btnRollback.Click += new System.EventHandler(this.BtnRollback_Click);
 
             this.txtDetEstado.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.txtDetEstado.Location = new System.Drawing.Point(18, 150);

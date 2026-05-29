@@ -26,7 +26,6 @@ namespace GUI
         private void UsuariosForm_Load(object sender, EventArgs e)
         {
             txtUsername.MaxLength = 100;
-            txtUsername.KeyPress += TxtUsername_KeyPress;
             cboEstado.DataSource = Enum.GetValues(typeof(EstadoUsuario));
             CargarDatos();
             ActualizarIdioma();

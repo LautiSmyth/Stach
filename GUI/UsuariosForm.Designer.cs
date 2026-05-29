@@ -438,6 +438,7 @@ namespace GUI
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestión de usuarios";
             this.Load += new System.EventHandler(this.UsuariosForm_Load);
+            this.txtUsername.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtUsername_KeyPress);
             this.Shown += new System.EventHandler(this.UsuariosForm_Shown);
             this.splitPrincipal.Panel1.ResumeLayout(false);
             this.splitPrincipal.Panel2.ResumeLayout(false);

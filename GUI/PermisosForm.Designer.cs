@@ -364,6 +364,17 @@ namespace GUI
             this.Name = "PermisosForm";
             this.Text = "Gestión de Perfiles y Permisos";
             this.Load += new System.EventHandler(this.PermisosForm_Load);
+            this.txtClavePermiso.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtClavePermiso_KeyPress);
+            this.tvEstructura.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvEstructura_AfterSelect);
+            this.btnCrearPatente.Click += new System.EventHandler(this.BtnCrearPatente_Click);
+            this.btnCrearFamilia.Click += new System.EventHandler(this.BtnCrearFamilia_Click);
+            this.btnEliminarPermiso.Click += new System.EventHandler(this.BtnEliminarPermiso_Click);
+            this.btnAgregarRelacion.Click += new System.EventHandler(this.BtnAgregarRelacion_Click);
+            this.btnQuitarRelacion.Click += new System.EventHandler(this.BtnQuitarRelacion_Click);
+            this.btnGuardarRelaciones.Click += new System.EventHandler(this.BtnGuardarRelaciones_Click);
+            this.cboUsuarios.SelectedIndexChanged += new System.EventHandler(this.CboUsuarios_SelectedIndexChanged);
+            this.btnAsignarUsuario.Click += new System.EventHandler(this.BtnAsignarUsuario_Click);
+            this.btnQuitarUsuario.Click += new System.EventHandler(this.BtnQuitarUsuario_Click);
             this.tblMain.ResumeLayout(false);
             this.pnlCol1.ResumeLayout(false);
             this.pnlCol1.PerformLayout();

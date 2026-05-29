@@ -15,14 +15,12 @@ namespace GUI
         {
             InitializeComponent();
             Autorizado = false;
-            this.Load += ConfirmarAdminForm_Load;
         }
 
         private void ConfirmarAdminForm_Load(object sender, EventArgs e)
         {
             txtUsuario.MaxLength = 100;
             txtPassword.MaxLength = 100;
-            txtUsuario.KeyPress += TxtUsuario_KeyPress;
         }
 
         private void TxtUsuario_KeyPress(object sender, KeyPressEventArgs e)

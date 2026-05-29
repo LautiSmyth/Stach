@@ -18,8 +18,6 @@ namespace GUI
         public LoginForm()
         {
             InitializeComponent();
-            txtUsername.TextChanged += TxtInput_TextChanged;
-            txtPassword.TextChanged += TxtInput_TextChanged;
             ManejadorIdioma.Instancia.Attach(this);
             ActualizarIdioma();
         }
@@ -32,14 +30,7 @@ namespace GUI
         private void LoginForm_Load(object sender, EventArgs e)
         {
             txtUsername.MaxLength = 100;
-            ConfigurarEventosPaint();
             CargarComboIdioma();
-        }
-
-        private void ConfigurarEventosPaint()
-        {
-            pnlCard.Paint += PnlCard_Paint;
-            pnlIzquierda.Paint += PnlIzquierda_Paint;
         }
 
         private void PnlCard_Paint(object sender, PaintEventArgs e)

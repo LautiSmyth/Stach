@@ -55,6 +55,7 @@ namespace GUI
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(314, 24);
             this.txtUsuario.TabIndex = 2;
+            this.txtUsuario.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtUsuario_KeyPress);
             // 
             // lblPassword
             // 
@@ -134,6 +135,7 @@ namespace GUI
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.CancelButton = this.btnCancelar;
             this.ClientSize = new System.Drawing.Size(350, 310);
+            this.Load += new System.EventHandler(this.ConfirmarAdminForm_Load);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnConfirmar);

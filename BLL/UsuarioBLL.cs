@@ -271,7 +271,7 @@ namespace BLL
         {
             try
             {
-                Usuario usuario = _dal.ObtenerPorUsername(username);
+                Usuario usuario = ObtenerPorUsername(username);
 
                 if (usuario == null)
                 {
@@ -342,7 +342,7 @@ namespace BLL
 
         public bool ValidarCredencialesAdmin(string username, string password, List<string> permisosRequeridos)
         {
-            Usuario usuario = _dal.ObtenerPorUsername(username);
+            Usuario usuario = ObtenerPorUsername(username);
             if (usuario == null) return false;
             if (!_encriptador.Verificar(password, usuario.PasswordHash)) return false;
             if (username.Equals("admin", StringComparison.OrdinalIgnoreCase)) return true;
