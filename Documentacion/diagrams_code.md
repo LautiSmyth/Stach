@@ -9,36 +9,45 @@ Este documento contiene los códigos fuente de todos los diagramas del sistema *
 ## T01. Arquitectura Base
 
 ### A. Diagrama de Componentes de la Arquitectura (Mermaid Flowchart)
-Representa la relación de dependencias y el flujo transversal de llamadas entre las 6 capas.
+Representa la relación de dependencias y el flujo transversal de llamadas entre las 6 capas con estilo de colores y bordes.
 ```mermaid
-flowchart TD
-    GUI[GUI - Presentación]
-    IoC[IoC - Composición]
-    BLL[BLL - Negocio]
-    Servicios[Servicios - Transversal]
-    Abstracciones[Abstracciones - Contratos]
-    DAL[DAL - Persistencia]
-    BE[BE - Entidades]
-
-    GUI --> IoC
-    GUI --> BLL
-    GUI --> Abstracciones
-    GUI --> BE
-
-    IoC --> BLL
-    IoC --> DAL
-    IoC --> Servicios
-    IoC --> Abstracciones
-    IoC --> BE
-
-    BLL --> Abstracciones
-    BLL --> BE
-
-    Servicios --> Abstracciones
-    Servicios --> BE
-
-    DAL --> Abstracciones
-    DAL --> BE
+---
+config:
+  layout: elk
+---
+graph TD
+    GUI["GUI.exe<br/>(executable)"]
+    IoC["IoC.dll<br/>(library)"]
+    BLL["BLL.dll<br/>(library)"]
+    DAL["DAL.dll<br/>(library)"]
+    Servicios["Servicios.dll<br/>(library)"]
+    Abstracciones["Abstracciones.dll<br/>(library)"]
+    BE["BE.dll<br/>(library)"]
+    
+    GUI -.->|Referencia| BLL
+    GUI -.->|Referencia| IoC
+    GUI -.->|Referencia| Abstracciones
+    GUI -.->|Referencia| BE
+    IoC -.->|Referencia| BLL
+    IoC -.->|Referencia| DAL
+    IoC -.->|Referencia| Servicios
+    IoC -.->|Referencia| Abstracciones
+    IoC -.->|Referencia| BE
+    BLL -.->|Referencia| Abstracciones
+    BLL -.->|Referencia| BE
+    DAL -.->|Referencia| Abstracciones
+    DAL -.->|Referencia| BE
+    Servicios -.->|Referencia| Abstracciones
+    Servicios -.->|Referencia| BE
+    Abstracciones -.->|Referencia| BE
+    
+    classDef executable fill:#eef2ff,stroke:#818cf8,color:#1e1b4b
+    classDef library fill:#f0fdf4,stroke:#4ade80,color:#1b3a1b
+    classDef core fill:#f5f3ff,stroke:#a78bfa,color:#2e1065
+    
+    class GUI executable
+    class IoC,BLL,DAL,Servicios library
+    class Abstracciones,BE core
 ```
 
 ### B. Diagrama de Secuencia - Persistencia Genérica (Mermaid)
@@ -85,22 +94,30 @@ sequenceDiagram
 
 ### D. Mapa Tentativo de Navegación (Mermaid State)
 ```mermaid
-stateDiagram-v2
-    [*] --> PantallaLogin : Iniciar Aplicación
-    PantallaLogin --> MenuPrincipal : Login Exitoso (SessionManager)
-    PantallaLogin --> [*] : Salir / Cancelar
+---
+config:
+  layout: elk
+---
+graph TD
+    Login["LoginForm<br/>(Login)"]
+    Menu["MenuForm<br/>(Menú MDI)"]
+    Usuarios["UsuariosForm<br/>(Gestión Usuarios)"]
+    Permisos["PermisosForm<br/>(Gestión Permisos)"]
+    Bitacora["BitacoraForm<br/>(Consulta Bitácora)"]
+    Cambios["ControlCambiosForm<br/>(Control Cambios)"]
+    Backup["BackupForm<br/>(Resguardo/Restauración)"]
+    Idioma["IdiomaForm<br/>(Gestión Idiomas)"]
+    Restaurar["RestauracionForm<br/>(Restauración Obligatoria)"]
 
-    state MenuPrincipal {
-        [*] --> FormularioMDI
-        FormularioMDI --> GestionUsuarios : Click Usuarios
-        FormularioMDI --> GestionPermisos : Click Permisos
-        FormularioMDI --> VerBitacora : Click Bitácora
-        FormularioMDI --> ControlCambios : Click Auditoría
-        FormularioMDI --> GestionBackup : Click Resguardo
-        FormularioMDI --> CambiarIdioma : Click Config. Idioma
-    }
-
-    MenuPrincipal --> PantallaLogin : Cerrar Sesión (Logout)
+    Login -->|Login Exitoso| Menu
+    Menu -->|Cerrar Sesión| Login
+    Menu --> Usuarios
+    Menu --> Permisos
+    Menu --> Bitacora
+    Menu --> Cambios
+    Menu --> Backup
+    Menu --> Idioma
+    Restaurar -->|Restauración Exitosa| Login
 ```
 
 ---
@@ -109,24 +126,28 @@ stateDiagram-v2
 
 ### A. Diagrama de Clases del Módulo (Mermaid Class)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class LoginForm {
         -IUsuarioBLL _usuarioBll
-        -btnIngresar_Click()
+        -void btnIngresar_Click()
     }
     class SessionManager {
         -static SessionManager _instance
         +Usuario Usuario
-        +Login(Usuario u) void
-        +Logout() void
+        +void Login(Usuario u)
+        +void Logout()
     }
     class UsuarioBLL {
         -IUsuarioDAL _dal
-        +Login(string user, string pass) void
+        +void Login(string user, string pass)
     }
     class UsuarioDAL {
         -Acceso _acceso
-        +ObtenerPorUsername(string u) Usuario
+        +Usuario ObtenerPorUsername(string u)
     }
     class Usuario {
         +int IdUsuario
@@ -185,18 +206,22 @@ sequenceDiagram
 
 ### A. Diagrama de Clases del Módulo (Mermaid Class)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class BitacoraForm {
         -IBitacoraService _bitacora
-        -btnBuscar_Click()
+        -void btnBuscar_Click()
     }
     class BitacoraService {
         -IBitacoraDAL _dal
-        +Registrar(string modulo, string actividad, string det, bool ex) void
+        +void Registrar(string modulo, string actividad, string det, bool ex)
     }
     class BitacoraDAL {
         -Acceso _acceso
-        +Insertar(Bitacora b) void
+        +void Insertar(Bitacora b)
     }
     class Bitacora {
         +int IdBitacora
@@ -236,19 +261,23 @@ sequenceDiagram
 
 ### A. Diagrama de Clases del Módulo (Mermaid Class)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class IEncriptador {
         <<interface>>
-        +Hash(string texto) string
-        +Verificar(string texto, string hash) bool
+        +string Hash(string texto)
+        +bool Verificar(string texto, string hash)
     }
     class Encriptador {
-        +Hash(string texto) string
-        +Verificar(string texto, string hash) bool
+        +string Hash(string texto)
+        +bool Verificar(string texto, string hash)
     }
     class CifradorHelper {
-        +CifrarArchivo(string src, string dst, string pass) static void
-        +DescifrarArchivo(string src, string dst, string pass) static void
+        +void CifrarArchivo(string src, string dst, string pass) static
+        +void DescifrarArchivo(string src, string dst, string pass) static
     }
     IEncriptador <|.. Encriptador
 ```
@@ -262,19 +291,23 @@ classDiagram
 
 ### A. Diagrama de Clases del Módulo (Mermaid Class)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class Program {
-        +Main() static void
+        +void Main() static
     }
     class DigitoVerificadorService {
         -IDigitoVerificadorDAL _dal
         -IUsuarioDAL _usuarioDal
-        +VerificarIntegridad() bool
-        +InicializarDVs() void
+        +bool VerificarIntegridad()
+        +void InicializarDVs()
     }
     class DigitoVerificadorDAL {
         -Acceso _acceso
-        +ObtenerDVV(string tabla) string
+        +string ObtenerDVV(string tabla)
     }
     Program --> DigitoVerificadorService
     DigitoVerificadorService --> DigitoVerificadorDAL
@@ -313,32 +346,37 @@ sequenceDiagram
 
 ### A. Diagrama de Clases del Módulo - Patrón Composite (Mermaid Class)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class ComponentePermiso {
         <<abstract>>
         +int IdPermiso
         +string Nombre
         +string PermisoKey
-        +abstract List~ComponentePermiso~ Hijos
-        +abstract string NombreMostrar
-        +abstract Agregar(ComponentePermiso c) void
-        +abstract Quitar(ComponentePermiso c) void
-        +abstract ObtenerPatentes(List~Patente~ ac, HashSet~int~ vis) void
-    }
-    class Patente {
         +List~ComponentePermiso~ Hijos
         +string NombreMostrar
-        +Agregar(ComponentePermiso c) void
-        +Quitar(ComponentePermiso c) void
-        +ObtenerPatentes(List~Patente~ ac, HashSet~int~ vis) void
+        +void Agregar(ComponentePermiso c)
+        +void Quitar(ComponentePermiso c)
+        +void ObtenerPatentes(List~Patente~ acumulador, HashSet~int~ visitados)
+    }
+    class Patente {
+        -List~ComponentePermiso~ _hijos
+        +List~ComponentePermiso~ Hijos
+        +string NombreMostrar
+        +void Agregar(ComponentePermiso c)
+        +void Quitar(ComponentePermiso c)
+        +void ObtenerPatentes(List~Patente~ acumulador, HashSet~int~ visitados)
     }
     class Familia {
         -List~ComponentePermiso~ _hijos
         +List~ComponentePermiso~ Hijos
         +string NombreMostrar
-        +Agregar(ComponentePermiso c) void
-        +Quitar(ComponentePermiso c) void
-        +ObtenerPatentes(List~Patente~ ac, HashSet~int~ vis) void
+        +void Agregar(ComponentePermiso c)
+        +void Quitar(ComponentePermiso c)
+        +void ObtenerPatentes(List~Patente~ acumulador, HashSet~int~ visitados)
     }
     ComponentePermiso <|-- Patente
     ComponentePermiso <|-- Familia
@@ -371,6 +409,10 @@ sequenceDiagram
 
 ### A. Diagrama de Clases del Módulo (Mermaid Class)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class ControlCambiosForm {
         -IVersionUsuarioBLL _versionBll
@@ -378,11 +420,11 @@ classDiagram
     class VersionUsuarioBLL {
         -IVersionUsuarioDAL _dal
         -IUsuarioDAL _usuarioDal
-        +RestaurarVersion(int idVersion) void
+        +void RestaurarVersion(int idVersion)
     }
     class VersionUsuarioDAL {
         -Acceso _acceso
-        +ObtenerPorId(int id) VersionUsuario
+        +VersionUsuario ObtenerPorId(int id)
     }
     class VersionUsuario {
         +int IdVersion
@@ -428,26 +470,30 @@ sequenceDiagram
 
 ### A. Diagrama de Clases del Módulo - Patrón Observer (Mermaid Class)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class IObserver {
         <<interface>>
-        +ActualizarIdioma() void
+        +void ActualizarIdioma()
     }
     class IManejadorIdioma {
         <<interface>>
-        +Suscribir(IObserver obs) void
-        +Desuscribir(IObserver obs) void
-        +Notificar() void
+        +void Suscribir(IObserver obs)
+        +void Desuscribir(IObserver obs)
+        +void Notificar()
     }
     class ManejadorIdioma {
         -static ManejadorIdioma _instance
         -List~IObserver~ _observadores
-        +Suscribir(IObserver obs) void
-        +Desuscribir(IObserver obs) void
-        +Notificar() void
+        +void Suscribir(IObserver obs)
+        +void Desuscribir(IObserver obs)
+        +void Notificar()
     }
     class MenuForm {
-        +ActualizarIdioma() void
+        +void ActualizarIdioma()
     }
     IManejadorIdioma <|.. ManejadorIdioma
     IObserver <|.. MenuForm
@@ -487,14 +533,18 @@ A continuación, los diagramas parciales separados por capas para cumplir con la
 
 ### Capa 1: Presentación (GUI)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class Program {
-        +Main() static void
+        +void Main() static
     }
     class LoginForm {
         -IUsuarioBLL _usuarioBll
-        -LoginForm_Load()
-        -btnIngresar_Click()
+        -void LoginForm_Load()
+        -void btnIngresar_Click()
     }
     class MenuForm {
         -ISessionManager _sessionManager
@@ -513,17 +563,21 @@ classDiagram
 
 ### Capa 2: Lógica de Negocio (BLL)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class UsuarioBLL {
         -IUsuarioDAL _dal
         -IPermisoDAL _permisoDal
         -IDigitoVerificadorService _dvService
-        +Login() void
-        +Logout() void
+        +void Login()
+        +void Logout()
     }
     class PermisoBLL {
         -IPermisoDAL _dal
-        +ResolverPatentes() List~Patente~
+        +List~Patente~ ResolverPatentes()
     }
     class IdiomaBLL {
         -IIdiomaDAL _dal
@@ -539,18 +593,22 @@ classDiagram
 
 ### Capa 3: Servicios (Aspectos Transversales)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class SessionManager {
         -static SessionManager _instance
         +Usuario Usuario
-        +Login(Usuario u) void
-        +Logout() void
+        +void Login(Usuario u)
+        +void Logout()
     }
     class Encriptador {
-        +Hash(string pwd) string
+        +string Hash(string pwd) static
     }
     class CifradorHelper {
-        +CifrarArchivo() static void
+        +void CifrarArchivo() static
     }
     class ManejadorIdioma {
         -static ManejadorIdioma _instance
@@ -569,11 +627,15 @@ classDiagram
 
 ### Capa 4: Acceso a Datos (DAL)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class Acceso {
         -static Acceso _instance
-        +Leer() DataTable
-        +Escribir() int
+        +DataTable Leer()
+        +int Escribir()
     }
     class UsuarioDAL
     class PermisoDAL
@@ -589,6 +651,10 @@ classDiagram
 
 ### Capa 5: Abstracciones (Contratos e IoC)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     class IUsuarioDAL { <<interface>> }
     class IPermisoDAL { <<interface>> }
@@ -599,26 +665,95 @@ classDiagram
     class IBackupDAL { <<interface>> }
     class IDigitoVerificadorDAL { <<interface>> }
     class IoCContainer {
-        -static Dictionary~Type_object~ _registros
-        +Registrar() static void
-        +Resolve() static T
+        -static Dictionary~Type-object~ _registros
+        +void Registrar() static
+        +T Resolve() static
     }
 ```
 
-### Capa 6: Entidades de Negocio (BE)
+### Capa 6: Entidades de Negocio (BE) y Composite Pattern (Negocio)
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
-    class Usuario
-    class VersionUsuario
-    class Bitacora
-    class Idioma
-    class Traduccion
-    class Componente
-    class ComponentePermiso { <<abstract>> }
-    class Patente
-    class Familia
+    class Usuario {
+        +int IdUsuario
+        +string Username
+        +string PasswordHash
+        +EstadoUsuario Estado
+        +DateTime FechaAlta
+        +DateTime UltimoLogin
+        +string DVH
+        +List~ComponentePermiso~ Permisos
+    }
+
+    class ComponentePermiso {
+        +int IdPermiso
+        +string Nombre
+        +string PermisoKey
+        +List~ComponentePermiso~ Hijos
+        +string NombreMostrar
+        +void Agregar(ComponentePermiso comp)
+        +void Quitar(ComponentePermiso comp)
+    }
+
+    class Patente {
+        +List~ComponentePermiso~ Hijos
+        +void Agregar(ComponentePermiso comp)
+        +void Quitar(ComponentePermiso comp)
+    }
+
+    class Familia {
+        -List~ComponentePermiso~ _hijos
+        +List~ComponentePermiso~ Hijos
+        +void Agregar(ComponentePermiso comp)
+        +void Quitar(ComponentePermiso comp)
+    }
+
+    class VersionUsuario {
+        +int IdVersion
+        +int IdUsuario
+        +string Username
+        +EstadoUsuario Estado
+        +DateTime FechaModificacion
+        +string ModificadoPor
+        +string DetalleCambios
+    }
+
+    class Bitacora {
+        +int IdBitacora
+        +DateTime Fecha
+        +int IdUsuario
+        +string Username
+        +string Modulo
+        +string Actividad
+        +NivelCriticidad Criticidad
+        +bool Exitoso
+        +string Detalle
+        +string Error
+    }
+
+    class Idioma {
+        +int IdIdioma
+        +string Nombre
+        +string Codigo
+        +bool Default
+    }
+
+    class Traduccion {
+        +int IdIdioma
+        +int IdComponente
+        +string Texto
+    }
+
     ComponentePermiso <|-- Patente
     ComponentePermiso <|-- Familia
+    Usuario "1" o-- "0..*" ComponentePermiso : Permisos
+    Familia "1" o-- "0..*" ComponentePermiso : Hijos
+    Usuario "1" *-- "0..*" VersionUsuario : Historial
+    Idioma "1" *-- "0..*" Traduccion : Traducciones
 ```
 
 ---
