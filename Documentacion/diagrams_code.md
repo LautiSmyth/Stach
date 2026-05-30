@@ -1,6 +1,6 @@
 # Código de Diagramas UML y DER (Mermaid)
 
-Este documento contiene los códigos fuente de todos los diagramas del sistema **Stach**, escritos **100% en formato Mermaid** para garantizar total compatibilidad con visualizadores gratuitos en línea como [Mermaid Live Editor](https://mermaid.live).
+Este documento contiene los códigos fuente de todos los diagramas del sistema **Stach**, escritos **100% en formato Mermaid** con la incorporación explícita de la capa de **Abstracciones** (contratos/interfaces e IoCContainer) para reflejar con precisión el desacoplamiento de la arquitectura de 6 capas y garantizar total compatibilidad con [Mermaid Live Editor](https://mermaid.live).
 
 ---
 
@@ -51,23 +51,30 @@ graph TD
 ```
 
 ### B. Diagrama de Secuencia - Persistencia Genérica (Mermaid)
+Muestra cómo las llamadas fluyen a través de las abstracciones y el contenedor IoC para desacoplar la persistencia.
 ```mermaid
 sequenceDiagram
     autonumber
-    participant GUI as Form / Presentación
-    participant BLL as Logic (BLL)
-    participant DAL as Repository (DAL)
-    participant Acc as Acceso (Singleton)
+    participant GUI as Form / Presentación (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant BLL as EntidadBLL (BLL)
+    participant IDAL as IEntidadDAL (Abstracciones)
+    participant DAL as EntidadDAL (DAL)
+    participant Acc as Acceso (DAL)
     participant DB as SQL Server
 
+    GUI->>IoC: Resolver<EntidadBLL>()
+    IoC-->>GUI: Instancia de EntidadBLL
     GUI->>BLL: RegistrarEntidad(objetoBE)
     BLL->>BLL: Validar Reglas de Negocio
-    BLL->>DAL: Insertar(objetoBE)
+    BLL->>IDAL: Insertar(objetoBE)
+    IDAL->>DAL: Insertar(objetoBE)
     DAL->>Acc: Escribir(consultaSQL, parametros)
     Acc->>DB: ExecuteNonQuery()
     DB-->>Acc: Filas Afectadas
     Acc-->>DAL: Entero
-    DAL-->>BLL: Ok (ID Asignado)
+    DAL-->>IDAL: Ok (ID Asignado)
+    IDAL-->>BLL: Ok
     BLL-->>GUI: Éxito
 ```
 
@@ -75,20 +82,26 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant GUI as Form / Presentación
-    participant BLL as Logic (BLL)
-    participant DAL as Repository (DAL)
-    participant Acc as Acceso (Singleton)
+    participant GUI as Form / Presentación (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant BLL as EntidadBLL (BLL)
+    participant IDAL as IEntidadDAL (Abstracciones)
+    participant DAL as EntidadDAL (DAL)
+    participant Acc as Acceso (DAL)
     participant DB as SQL Server
 
+    GUI->>IoC: Resolver<EntidadBLL>()
+    IoC-->>GUI: Instancia de EntidadBLL
     GUI->>BLL: ObtenerListado()
-    BLL->>DAL: ObtenerTodos()
+    BLL->>IDAL: ObtenerTodos()
+    IDAL->>DAL: ObtenerTodos()
     DAL->>Acc: Leer(consultaSQL, parametros)
     Acc->>DB: Fill(dataTable)
     DB-->>Acc: DataTable lleno
     Acc-->>DAL: DataTable
     DAL->>DAL: Mapear DataTable a List<EntidadBE>
-    DAL-->>BLL: List<EntidadBE>
+    DAL-->>IDAL: List<EntidadBE>
+    IDAL-->>BLL: List<EntidadBE>
     BLL-->>GUI: List<EntidadBE>
 ```
 
@@ -125,6 +138,7 @@ graph TD
 ## T02. Gestión de Login / Logout y Gestión de Usuarios
 
 ### A. Diagrama de Clases del Módulo (Mermaid Class)
+Muestra la dependencia de LoginForm y BLL hacia los contratos (Abstracciones), logrando un desacoplamiento completo de la capa de datos.
 ```mermaid
 ---
 config:
@@ -132,54 +146,81 @@ config:
 ---
 classDiagram
     class LoginForm {
-        -IUsuarioBLL _usuarioBll
+        -UsuarioBLL _usuarioBll
+        -IConexionService _conexionService
+        -IManejadorIdioma _manejadorIdioma
         -void btnIngresar_Click()
-    }
-    class SessionManager {
-        -static SessionManager _instance
-        +Usuario Usuario
-        +void Login(Usuario u)
-        +void Logout()
     }
     class UsuarioBLL {
         -IUsuarioDAL _dal
-        +void Login(string user, string pass)
+        -IPermisoDAL _permisoDal
+        -IDigitoVerificadorService _dvService
+        -IVersionUsuarioDAL _versionDal
+        -ISessionManager _sessionManager
+        -IBitacoraService _bitacora
+        -IEncriptador _encriptador
+        -IContadorSesion _contadorSesion
+        +void Login(string modulo, string username, string password)
+        +List~Usuario~ ObtenerTodos()
+    }
+    class IUsuarioDAL {
+        <<interface>>
+        +List~Usuario~ ObtenerTodos()
+        +Usuario ObtenerPorId(int idUsuario)
+        +Usuario ObtenerPorUsername(string username)
+        +void Insertar(Usuario usuario)
+        +void Actualizar(Usuario usuario)
     }
     class UsuarioDAL {
         -Acceso _acceso
-        +Usuario ObtenerPorUsername(string u)
+        +List~Usuario~ ObtenerTodos()
+        +Usuario ObtenerPorId(int idUsuario)
+        +Usuario ObtenerPorUsername(string username)
+        +void Insertar(Usuario usuario)
+        +void Actualizar(Usuario usuario)
     }
     class Usuario {
         +int IdUsuario
         +string Username
         +string PasswordHash
     }
-    LoginForm --> UsuarioBLL
-    UsuarioBLL --> SessionManager
-    UsuarioBLL --> UsuarioDAL
-    UsuarioDAL --> Usuario
+    class IoCContainer {
+        +T Resolver() static
+    }
+
+    LoginForm --> IoCContainer : "resuelve con"
+    LoginForm --> UsuarioBLL : "usa"
+    UsuarioBLL --> IUsuarioDAL : "usa contract"
+    UsuarioDAL ..|> IUsuarioDAL : "implementa"
+    UsuarioDAL --> Usuario : "mapea"
 ```
 
 ### B. Diagrama de Secuencia - Login (Mermaid)
+Ilustra la resolución dinámica de dependencias mediante el contenedor de IoC y llamadas desacopladas vía interfaces.
 ```mermaid
 sequenceDiagram
     autonumber
     actor Admin as Usuario / Admin
-    participant GUI as LoginForm
-    participant BLL as UsuarioBLL
-    participant DAL as UsuarioDAL
-    participant DB as Base de Datos
+    participant GUI as LoginForm (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant BLL as UsuarioBLL (BLL)
+    participant IDAL as IUsuarioDAL (Abstracciones)
+    participant DAL as UsuarioDAL (DAL)
+    participant DB as Base de Datos (SQL Server)
 
     Admin->>GUI: Ingresa Credenciales (Click Ingresar)
+    GUI->>IoC: Resolver<UsuarioBLL>()
+    IoC-->>GUI: Instancia de UsuarioBLL (con dependencias inyectadas)
     GUI->>BLL: Login("Login", username, password)
-    BLL->>DAL: ObtenerPorUsername(username)
+    BLL->>IDAL: ObtenerPorUsername(username)
+    IDAL->>DAL: ObtenerPorUsername(username)
     DAL->>DB: SELECT * FROM Usuario WHERE Username = ...
     DB-->>DAL: Fila de Usuario
-    DAL-->>BLL: Objeto Usuario
-    BLL->>BLL: Verificar contraseña con PBKDF2 (100k iteraciones)
+    DAL-->>IDAL: Objeto Usuario
+    IDAL-->>BLL: Objeto Usuario
+    BLL->>BLL: Verificar contraseña con PBKDF2
     BLL->>BLL: ValidarEstado(usuario)
     BLL-->>GUI: Éxito
-    GUI->>SessionManager: Login(usuario)
     GUI-->>Admin: Muestra Pantalla de Menú MDI
 ```
 
@@ -188,13 +229,18 @@ sequenceDiagram
 sequenceDiagram
     autonumber
     actor Admin as Usuario
-    participant GUI as MenuForm
-    participant Srv as SessionManager
-    participant Bit as BitacoraService
+    participant GUI as MenuForm (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant Srv as ISessionManager (Abstracciones)
+    participant Bit as IBitacoraService (Abstracciones)
 
     Admin->>GUI: Click en "Cerrar Sesión"
+    GUI->>IoC: Resolver<IBitacoraService>()
+    IoC-->>GUI: Instancia de BitacoraService
     GUI->>Bit: Registrar("Logout", "Cierre de sesión", true)
     Bit-->>GUI: Ok
+    GUI->>IoC: Resolver<ISessionManager>()
+    IoC-->>GUI: Instancia de SessionManager
     GUI->>Srv: Logout()
     Srv-->>GUI: Ok (Usuario seteado en null)
     GUI->>GUI: Reiniciar Aplicación (Abre LoginForm)
@@ -215,9 +261,17 @@ classDiagram
         -IBitacoraService _bitacora
         -void btnBuscar_Click()
     }
+    class IBitacoraService {
+        <<interface>>
+        +void Registrar(string modulo, string actividad, string det, bool ex)
+    }
     class BitacoraService {
         -IBitacoraDAL _dal
         +void Registrar(string modulo, string actividad, string det, bool ex)
+    }
+    class IBitacoraDAL {
+        <<interface>>
+        +void Insertar(Bitacora b)
     }
     class BitacoraDAL {
         -Acceso _acceso
@@ -231,8 +285,10 @@ classDiagram
         +string Actividad
         +NivelCriticidad Criticidad
     }
-    BitacoraForm --> BitacoraService
-    BitacoraService --> BitacoraDAL
+    BitacoraForm --> IBitacoraService
+    BitacoraService ..|> IBitacoraService
+    BitacoraService --> IBitacoraDAL
+    BitacoraDAL ..|> IBitacoraDAL
     BitacoraDAL --> Bitacora
 ```
 
@@ -241,16 +297,20 @@ classDiagram
 sequenceDiagram
     autonumber
     participant App as BLL / Servicio
-    participant Srv as BitacoraService
-    participant Session as SessionManager
-    participant DAL as BitacoraDAL
+    participant Srv as IBitacoraService (Abstracciones)
+    participant RealSrv as BitacoraService (Servicios)
+    participant Session as ISessionManager (Abstracciones)
+    participant IDAL as IBitacoraDAL (Abstracciones)
+    participant DAL as BitacoraDAL (DAL)
     participant DB as SQL Server
 
     App->>Srv: Registrar(modulo, actividad, detalle, ex)
-    Srv->>Session: ObtenerUsuarioLogueado()
-    Session-->>Srv: Objeto Usuario (username)
-    Srv->>Srv: Determinar criticidad por diccionario
-    Srv->>DAL: Insertar(entidadBitacora)
+    Srv->>RealSrv: Registrar(modulo, actividad, detalle, ex)
+    RealSrv->>Session: ObtenerUsuarioLogueado()
+    Session-->>RealSrv: Objeto Usuario (username)
+    RealSrv->>RealSrv: Determinar criticidad por diccionario
+    RealSrv->>IDAL: Insertar(entidadBitacora)
+    IDAL->>DAL: Insertar(entidadBitacora)
     DAL->>DB: INSERT INTO Bitacora VALUES (...)
     DB-->>DAL: Ok
 ```
@@ -299,45 +359,67 @@ classDiagram
     class Program {
         +void Main() static
     }
+    class IDigitoVerificadorService {
+        <<interface>>
+        +bool VerificarIntegridad()
+        +void InicializarDVs()
+    }
     class DigitoVerificadorService {
         -IDigitoVerificadorDAL _dal
         -IUsuarioDAL _usuarioDal
         +bool VerificarIntegridad()
         +void InicializarDVs()
     }
+    class IDigitoVerificadorDAL {
+        <<interface>>
+        +string ObtenerDVV(string tabla)
+    }
     class DigitoVerificadorDAL {
         -Acceso _acceso
         +string ObtenerDVV(string tabla)
     }
-    Program --> DigitoVerificadorService
-    DigitoVerificadorService --> DigitoVerificadorDAL
+    Program --> IDigitoVerificadorService
+    DigitoVerificadorService ..|> IDigitoVerificadorService
+    DigitoVerificadorService --> IDigitoVerificadorDAL
+    DigitoVerificadorService --> IUsuarioDAL
+    DigitoVerificadorDAL ..|> IDigitoVerificadorDAL
 ```
 
 ### B. Diagrama de Secuencia - Verificación en Arranque (Mermaid)
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Init as Program.cs
-    participant Srv as DigitoVerificadorService
-    participant UDAL as UsuarioDAL
-    participant DAL as DigitoVerificadorDAL
+    participant Init as Program.cs (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant IDV as IDigitoVerificadorService (Abstracciones)
+    participant Srv as DigitoVerificadorService (Servicios)
+    participant IUDAL as IUsuarioDAL (Abstracciones)
+    participant UDAL as UsuarioDAL (DAL)
+    participant IDVDAL as IDigitoVerificadorDAL (Abstracciones)
+    participant DAL as DigitoVerificadorDAL (DAL)
     participant DB as Base de Datos
-    participant GUI as RestauracionForm
 
-    Init->>Srv: VerificarIntegridad()
-    Srv->>UDAL: ObtenerTodos()
+    Init->>IoC: Resolver<IDigitoVerificadorService>()
+    IoC-->>Init: Instancia de DigitoVerificadorService
+    Init->>IDV: VerificarIntegridad()
+    IDV->>Srv: VerificarIntegridad()
+    Srv->>IUDAL: ObtenerTodos()
+    IUDAL->>UDAL: ObtenerTodos()
     UDAL->>DB: SELECT * FROM Usuario
     DB-->>UDAL: Lista de Usuarios
-    UDAL-->>Srv: Lista de Usuarios
+    UDAL-->>IUDAL: Lista de Usuarios
+    IUDAL-->>Srv: Lista de Usuarios
     Srv->>Srv: Recalcular y comparar DVH individual
-    Srv->>DAL: ObtenerDVV("Usuario")
+    Srv->>IDVDAL: ObtenerDVV("Usuario")
+    IDVDAL->>DAL: ObtenerDVV("Usuario")
     DAL->>DB: SELECT DVV FROM DigitoVerificador WHERE Tabla = 'Usuario'
     DB-->>DAL: Hash DVV Guardado
-    DAL-->>Srv: Hash DVV Guardado
+    DAL-->>IDVDAL: Hash DVV Guardado
+    IDVDAL-->>Srv: Hash DVV Guardado
     Srv->>Srv: Calcular DVV global de la tabla y comparar
-    Srv-->>Init: Retorna false (Integridad violada)
-    Init->>GUI: new RestauracionForm(errores).ShowDialog()
-    GUI-->>Init: Abre panel de restauración obligatoria
+    Srv-->>IDV: Retorna false (Integridad violada)
+    IDV-->>Init: Retorna false
+    Init->>Init: Mostrar RestauracionForm
 ```
 
 ---
@@ -388,19 +470,24 @@ classDiagram
 sequenceDiagram
     autonumber
     actor Admin as Administrador
-    participant GUI as PermisosForm
-    participant BLL as PermisoBLL
-    participant DAL as PermisoDAL
+    participant GUI as PermisosForm (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant BLL as PermisoBLL (BLL)
+    participant IDAL as IPermisoDAL (Abstracciones)
+    participant DAL as PermisoDAL (DAL)
     participant DB as Base de Datos
 
     Admin->>GUI: Selecciona Permisos y hace clic en "Guardar Relaciones"
+    GUI->>IoC: Resolver<PermisoBLL>()
+    IoC-->>GUI: Instancia de PermisoBLL
     GUI->>BLL: GuardarRelaciones(modulo, familiaObjeto)
-    BLL->>DAL: GuardarRelaciones(familiaObjeto)
+    BLL->>IDAL: GuardarRelaciones(familiaObjeto)
+    IDAL->>DAL: GuardarRelaciones(familiaObjeto)
     DAL->>DB: DELETE FROM PermisoRelacion WHERE IdPadre = ...
     DAL->>DB: INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (...)
     DB-->>DAL: Ok
     BLL-->>GUI: Éxito
-    GUI-->>Admin: Muestra Mensaje "Permisos guardados con éxito"
+    GUI-->>Admin: Muestra Mensaje
 ```
 
 ---
@@ -422,6 +509,10 @@ classDiagram
         -IUsuarioDAL _usuarioDal
         +void RestaurarVersion(int idVersion)
     }
+    class IVersionUsuarioDAL {
+        <<interface>>
+        +VersionUsuario ObtenerPorId(int id)
+    }
     class VersionUsuarioDAL {
         -Acceso _acceso
         +VersionUsuario ObtenerPorId(int id)
@@ -434,8 +525,8 @@ classDiagram
         +DateTime FechaModificacion
     }
     ControlCambiosForm --> VersionUsuarioBLL
-    VersionUsuarioBLL --> VersionUsuarioDAL
-    VersionUsuarioDAL --> VersionUsuario
+    VersionUsuarioBLL --> IVersionUsuarioDAL
+    VersionUsuarioDAL ..|> IVersionUsuarioDAL
 ```
 
 ### B. Diagrama de Secuencia - Recomposición / Rollback (Mermaid)
@@ -443,25 +534,37 @@ classDiagram
 sequenceDiagram
     autonumber
     actor Admin as Administrador
-    participant GUI as ControlCambiosForm
-    participant BLL as VersionUsuarioBLL
-    participant DAL as VersionUsuarioDAL
-    participant UDAL as UsuarioDAL
+    participant GUI as ControlCambiosForm (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant BLL as VersionUsuarioBLL (BLL)
+    participant IDAL as IVersionUsuarioDAL (Abstracciones)
+    participant DAL as VersionUsuarioDAL (DAL)
+    participant IUDAL as IUsuarioDAL (Abstracciones)
+    participant UDAL as UsuarioDAL (DAL)
     participant DB as Base de Datos
 
     Admin->>GUI: Selecciona Versión e Inicia Rollback
+    GUI->>IoC: Resolver<VersionUsuarioBLL>()
+    IoC-->>GUI: Instancia de VersionUsuarioBLL
     GUI->>BLL: RestaurarVersion("Rollback", idVersion, actor)
-    BLL->>DAL: ObtenerPorId(idVersion)
+    BLL->>IDAL: ObtenerPorId(idVersion)
+    IDAL->>DAL: ObtenerPorId(idVersion)
     DAL->>DB: SELECT * FROM VersionUsuario WHERE IdVersion = ...
     DB-->>DAL: Fila de Versión
-    DAL-->>BLL: Objeto VersionUsuario
-    BLL->>UDAL: ObtenerPorId(idUsuario)
-    UDAL-->>BLL: Objeto Usuario
-    BLL->>UDAL: Actualizar(usuarioConDatosDeVersion)
+    DAL-->>IDAL: Objeto VersionUsuario
+    IDAL-->>BLL: Objeto VersionUsuario
+    BLL->>IUDAL: ObtenerPorId(idUsuario)
+    IUDAL->>UDAL: ObtenerPorId(idUsuario)
+    UDAL-->>IUDAL: Objeto Usuario
+    IUDAL-->>BLL: Objeto Usuario
+    BLL->>IUDAL: Actualizar(usuarioConDatosDeVersion)
+    IUDAL->>UDAL: Actualizar(usuarioConDatosDeVersion)
     UDAL->>DB: UPDATE Usuario SET Username = ..., PasswordHash = ... WHERE IdUsuario = ...
     DB-->>UDAL: Ok
+    UDAL-->>IUDAL: Ok
+    IUDAL-->>BLL: Ok
     BLL-->>GUI: Recomposición Exitosa
-    GUI-->>Admin: Mensaje "Usuario restaurado a versión histórica"
+    GUI-->>Admin: Mensaje
 ```
 
 ---
@@ -505,21 +608,28 @@ classDiagram
 sequenceDiagram
     autonumber
     actor Admin as Administrador
-    participant GUI as MenuForm
-    participant Srv as ManejadorIdioma
+    participant GUI as MenuForm (GUI)
+    participant IoC as IoCContainer (Abstracciones)
+    participant Srv as IManejadorIdioma (Abstracciones)
+    participant RealSrv as ManejadorIdioma (Servicios)
     participant Obs as Formularios Activos (IObserver)
 
     Admin->>GUI: Selecciona Idioma desde Menu
+    GUI->>IoC: Resolver<IManejadorIdioma>()
+    IoC-->>GUI: Instancia de ManejadorIdioma
     GUI->>Srv: CambiarIdioma(nuevoIdioma)
-    Srv->>Srv: Cargar traducciones del idioma en memoria
-    Srv->>Srv: Notificar()
-    loop Por cada observador en _observadores
-        Srv->>Obs: ActualizarIdioma()
+    Srv->>RealSrv: CambiarIdioma(nuevoIdioma)
+    RealSrv->>RealSrv: Cargar traducciones en memoria
+    RealSrv->>Srv: Notificar()
+    Srv->>RealSrv: Notificar()
+    loop Por cada observador
+        RealSrv->>Obs: ActualizarIdioma()
         Obs->>Srv: ObtenerTexto(leyendaKey)
-        Srv-->>Obs: Texto traducido
-        Obs->>Obs: Modificar Text de los Controles (Labels/Buttons)
+        Srv->>RealSrv: ObtenerTexto(leyendaKey)
+        RealSrv-->>Obs: Texto traducido
+        Obs->>Obs: Modificar Text de los Controles
     end
-    Srv-->>GUI: Completado
+    RealSrv-->>GUI: Completado
 ```
 
 ---
@@ -542,7 +652,7 @@ classDiagram
         +void Main() static
     }
     class LoginForm {
-        -IUsuarioBLL _usuarioBll
+        -UsuarioBLL _usuarioBll
         -void LoginForm_Load()
         -void btnIngresar_Click()
     }
