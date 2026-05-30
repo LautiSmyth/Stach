@@ -21,5 +21,10 @@ namespace BE
         {
             throw new InvalidOperationException("No se pueden quitar hijos de una patente.");
         }
+
+        public override string NombreMostrar
+        {
+            get { return "🔑 " + Nombre; }
+        }
     }
 }

@@ -26,5 +26,10 @@ namespace BE
                 _hijos.Remove(c);
             }
         }
+
+        public override string NombreMostrar
+        {
+            get { return "📁 " + Nombre; }
+        }
     }
 }
