@@ -37,7 +37,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" Exclude="obj\**;bin\**" />
+    <Compile Include="BackupService.cs" />
+    <Compile Include="BitacoraService.cs" />
+    <Compile Include="CifradorHelper.cs" />
+    <Compile Include="ConexionService.cs" />
+    <Compile Include="ContadorSesion.cs" />
+    <Compile Include="CriticidadMapper.cs" />
+    <Compile Include="CriticidadService.cs" />
+    <Compile Include="DigitoVerificadorService.cs" />
+    <Compile Include="Encriptador.cs" />
+    <Compile Include="ManejadorIdioma.cs" />
+    <Compile Include="SessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Abstracciones\Abstracciones.csproj">
