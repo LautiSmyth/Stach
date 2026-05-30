@@ -3,6 +3,7 @@ using BE.Enums;
 using Abstracciones;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL
 {
@@ -18,6 +19,9 @@ namespace BLL
         private readonly IBitacoraService _bitacora;
         private readonly IEncriptador _encriptador;
         private readonly IContadorSesion _contadorSesion;
+
+        private const string IntentoFallidoActividad = "IntentoFallido";
+        private const string CredencialesInvalidasDetalle = "Credenciales invalidas.";
 
         private static readonly int[] _minutosBloqueo = { 1, 5, 15, 60 };
 
@@ -100,7 +104,7 @@ namespace BLL
                 throw new UnauthorizedAccessException("Usuario inactivo. Contacte al administrador.");
         }
 
-        public void ValidarPassword(string password)
+        public static void ValidarPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentException("La contraseña no puede estar vacia.");
@@ -153,9 +157,7 @@ namespace BLL
         {
             try
             {
-                Usuario usuario = _dal.ObtenerPorId(idUsuario);
-                if (usuario == null)
-                    throw new ArgumentException("El usuario no existe.");
+                Usuario usuario = _dal.ObtenerPorId(idUsuario) ?? throw new ArgumentException("El usuario no existe.");
 
                 Usuario logueado = ObtenerUsuarioLogueado();
                 if (logueado != null && logueado.IdUsuario == idUsuario && nuevoEstado != EstadoUsuario.Activo)
@@ -275,7 +277,7 @@ namespace BLL
                 if (usuario == null)
                 {
                     _contadorSesion.RegistrarIntento();
-                    _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Credenciales invalidas.", false, "Credenciales invalidas.");
+                    _bitacora.RegistrarSinSesion(username, modulo, IntentoFallidoActividad, CredencialesInvalidasDetalle, false, CredencialesInvalidasDetalle);
                     throw new UnauthorizedAccessException("Usuario o contraseña incorrectos.");
                 }
 
@@ -283,7 +285,7 @@ namespace BLL
                 {
                     RegistrarIntentoFallido(usuario);
                     _contadorSesion.RegistrarIntento();
-                    _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Credenciales invalidas.", false, "Credenciales invalidas.");
+                    _bitacora.RegistrarSinSesion(username, modulo, IntentoFallidoActividad, CredencialesInvalidasDetalle, false, CredencialesInvalidasDetalle);
                     throw new UnauthorizedAccessException("Usuario o contraseña incorrectos.");
                 }
 
@@ -294,7 +296,7 @@ namespace BLL
                 catch (UnauthorizedAccessException)
                 {
                     _contadorSesion.RegistrarIntento();
-                    _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Cuenta bloqueada.", false, "Cuenta bloqueada.");
+                    _bitacora.RegistrarSinSesion(username, modulo, IntentoFallidoActividad, "Cuenta bloqueada.", false, "Cuenta bloqueada.");
                     throw new UnauthorizedAccessException("Usuario o contraseña incorrectos.");
                 }
 
@@ -309,7 +311,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                _bitacora.RegistrarSinSesion(username, modulo, "IntentoFallido", "Error inesperado.", false, ex.Message);
+                _bitacora.RegistrarSinSesion(username, modulo, IntentoFallidoActividad, "Error inesperado.", false, ex.Message);
                 throw;
             }
         }
@@ -346,11 +348,7 @@ namespace BLL
             if (!_encriptador.Verificar(password, usuario.PasswordHash)) return false;
             if (username.Equals("admin", StringComparison.OrdinalIgnoreCase)) return true;
             PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
-            foreach (string permiso in permisosRequeridos)
-            {
-                if (permisoBll.UsuarioTienePermiso(usuario, permiso)) return true;
-            }
-            return false;
+            return permisosRequeridos.Any(permiso => permisoBll.UsuarioTienePermiso(usuario, permiso));
         }
 
         public Usuario ObtenerUsuarioLogueado()

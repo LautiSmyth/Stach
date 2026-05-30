@@ -46,8 +46,7 @@ namespace Servicios
 
         public static NivelCriticidad Obtener(string actividad)
         {
-            NivelCriticidad nivel;
-            if (_diccionario.TryGetValue(actividad, out nivel))
+            if (_diccionario.TryGetValue(actividad, out NivelCriticidad nivel))
                 return nivel;
 
             return NivelCriticidad.Informativo;
@@ -55,8 +54,7 @@ namespace Servicios
 
         public static CriticidadConfig ObtenerConfig(NivelCriticidad criticidad)
         {
-            CriticidadConfig config;
-            if (_configBD.TryGetValue(criticidad, out config))
+            if (_configBD.TryGetValue(criticidad, out CriticidadConfig config))
                 return config;
 
             return null;

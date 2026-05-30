@@ -17,13 +17,15 @@ namespace DAL
             ConnectionStringSettings entrada = ConfigurationManager.ConnectionStrings["ConexionSQL"];
             if (entrada != null)
             {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(entrada.ConnectionString);
-                builder.InitialCatalog = "master";
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(entrada.ConnectionString)
+                {
+                    InitialCatalog = "master"
+                };
                 _cadenaConexionMaster = builder.ConnectionString;
             }
         }
 
-        private string ObtenerDirectorioBackupDefault()
+        private static string ObtenerDirectorioBackupDefault()
         {
             string dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TempBackups");
             try
@@ -55,7 +57,7 @@ namespace DAL
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Trace.WriteLine(ex.Message);
+                    System.Diagnostics.Trace.TraceError(ex.Message);
                 }
             }
             return dir;
@@ -94,7 +96,7 @@ namespace DAL
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Trace.WriteLine(ex.Message);
+                        System.Diagnostics.Trace.TraceError(ex.Message);
                     }
                 }
             }
@@ -132,7 +134,7 @@ namespace DAL
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Trace.WriteLine(ex.Message);
+                        System.Diagnostics.Trace.TraceError(ex.Message);
                     }
                 }
             }

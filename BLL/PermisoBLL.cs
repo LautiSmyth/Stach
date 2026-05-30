@@ -8,6 +8,8 @@ namespace BLL
 {
     public class PermisoBLL
     {
+        private const string AltaPermisoActividad = "AltaPermiso";
+
         private readonly IPermisoDAL _dal;
         private readonly IBitacoraService _bitacora;
         private readonly ISessionManager _sessionManager;
@@ -50,11 +52,11 @@ namespace BLL
             {
                 Patente p = new Patente { Nombre = nombre, PermisoKey = key };
                 Insertar(p);
-                _bitacora.Registrar(modulo, "AltaPermiso", $"Creación de patente '{nombre}' con clave '{key}'.", true);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de patente '{nombre}' con clave '{key}'.", true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, "AltaPermiso", $"Error al crear patente '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear patente '{nombre}'.", false, ex.Message);
                 throw;
             }
         }
@@ -65,11 +67,11 @@ namespace BLL
             {
                 Familia f = new Familia { Nombre = nombre, PermisoKey = key };
                 Insertar(f);
-                _bitacora.Registrar(modulo, "AltaPermiso", $"Creación de familia '{nombre}' con clave '{key}'.", true);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de familia '{nombre}' con clave '{key}'.", true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, "AltaPermiso", $"Error al crear familia '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear familia '{nombre}'.", false, ex.Message);
                 throw;
             }
         }
@@ -119,7 +121,7 @@ namespace BLL
                 if (logueado != null && logueado.IdUsuario == idUsuario)
                 {
                     List<Patente> resolved = ResolverPatentes(permisos);
-                    if (!resolved.Any(p => p.PermisoKey != null && p.PermisoKey.Equals("Permisos", StringComparison.OrdinalIgnoreCase)))
+                    if (!resolved.Any(p => p.PermisoKey?.Equals("Permisos", StringComparison.OrdinalIgnoreCase) == true))
                     {
                         throw new ArgumentException("No puedes remover el permiso de Gestión de Permisos de tu propia cuenta.");
                     }

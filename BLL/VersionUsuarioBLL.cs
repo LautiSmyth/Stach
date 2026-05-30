@@ -34,17 +34,9 @@ namespace BLL
         {
             try
             {
-                VersionUsuario version = _dal.ObtenerPorId(idVersion);
-                if (version == null)
-                {
-                    throw new ArgumentException("La versión no existe.");
-                }
+                VersionUsuario version = _dal.ObtenerPorId(idVersion) ?? throw new ArgumentException("La versión no existe.");
 
-                Usuario usuario = _usuarioDal.ObtenerPorId(version.IdUsuario);
-                if (usuario == null)
-                {
-                    throw new ArgumentException("El usuario de esta versión ya no existe.");
-                }
+                Usuario usuario = _usuarioDal.ObtenerPorId(version.IdUsuario) ?? throw new ArgumentException("El usuario de esta versión ya no existe.");
 
                 usuario.Username = version.Username;
                 usuario.PasswordHash = version.PasswordHash;
