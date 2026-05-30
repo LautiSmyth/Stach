@@ -1,6 +1,6 @@
-# Código de Diagramas UML y DER (PlantUML / Mermaid)
+# Código de Diagramas UML y DER (Mermaid)
 
-Este documento contiene los códigos fuente de todos los diagramas del sistema **Stach**, organizados estrictamente en base al **Plan de Entregas de Excel** (Entrega 1 y Entrega 2).
+Este documento contiene los códigos fuente de todos los diagramas del sistema **Stach**, escritos **100% en formato Mermaid** para garantizar total compatibilidad con visualizadores gratuitos en línea como [Mermaid Live Editor](https://mermaid.live).
 
 ---
 
@@ -8,42 +8,40 @@ Este documento contiene los códigos fuente de todos los diagramas del sistema *
 
 ## T01. Arquitectura Base
 
-### A. Diagrama de Componentes de la Arquitectura (PlantUML)
-Muestra la relación de dependencias y desacoplamiento de las capas a través de la inyección de dependencias (IoC) y Abstracciones.
-```plantuml
-@startuml
-package GUI as "GUI (Presentation Layer)"
-package IoC as "IoC (Composition Root)"
-package BLL as "BLL (Business Logic Layer)"
-package Servicios as "Servicios (Cross-Cutting Layer)"
-package Abstracciones as "Abstracciones (Contracts Layer)"
-package DAL as "DAL (Data Access Layer)"
-package BE as "BE (Business Entities)"
+### A. Diagrama de Componentes de la Arquitectura (Mermaid Flowchart)
+Representa la relación de dependencias y el flujo transversal de llamadas entre las 6 capas.
+```mermaid
+flowchart TD
+    GUI[GUI - Presentación]
+    IoC[IoC - Composición]
+    BLL[BLL - Negocio]
+    Servicios[Servicios - Transversal]
+    Abstracciones[Abstracciones - Contratos]
+    DAL[DAL - Persistencia]
+    BE[BE - Entidades]
 
-GUI ..> IoC
-GUI ..> BLL
-GUI ..> Abstracciones
-GUI ..> BE
+    GUI --> IoC
+    GUI --> BLL
+    GUI --> Abstracciones
+    GUI --> BE
 
-IoC ..> BLL
-IoC ..> DAL
-IoC ..> Servicios
-IoC ..> Abstracciones
-IoC ..> BE
+    IoC --> BLL
+    IoC --> DAL
+    IoC --> Servicios
+    IoC --> Abstracciones
+    IoC --> BE
 
-BLL ..> Abstracciones
-BLL ..> BE
+    BLL --> Abstracciones
+    BLL --> BE
 
-Servicios ..> Abstracciones
-Servicios ..> BE
+    Servicios --> Abstracciones
+    Servicios --> BE
 
-DAL ..> Abstracciones
-DAL ..> BE
-@enduml
+    DAL --> Abstracciones
+    DAL --> BE
 ```
 
 ### B. Diagrama de Secuencia - Persistencia Genérica (Mermaid)
-Representa el flujo de escritura típico del sistema.
 ```mermaid
 sequenceDiagram
     autonumber
@@ -65,7 +63,6 @@ sequenceDiagram
 ```
 
 ### C. Diagrama de Secuencia - Consulta Genérica (Mermaid)
-Representa el flujo de lectura típico del sistema, con mapeo de tabla a entidades BE.
 ```mermaid
 sequenceDiagram
     autonumber
@@ -86,63 +83,60 @@ sequenceDiagram
     BLL-->>GUI: List<EntidadBE>
 ```
 
-### D. Mapa Tentativo de Navegación (PlantUML)
-Representa el flujo de navegación de la interfaz gráfica MDI.
-```plantuml
-@startuml
-[*] --> PantallaLogin : Iniciar Aplicación
-PantallaLogin --> MenuPrincipal : Login Exitoso (SessionManager)
-PantallaLogin --> [*] : Salir / Cancelar
+### D. Mapa Tentativo de Navegación (Mermaid State)
+```mermaid
+stateDiagram-v2
+    [*] --> PantallaLogin : Iniciar Aplicación
+    PantallaLogin --> MenuPrincipal : Login Exitoso (SessionManager)
+    PantallaLogin --> [*] : Salir / Cancelar
 
-state MenuPrincipal {
-    [*] --> FormularioMDI
-    FormularioMDI --> GestionUsuarios : Click Usuarios
-    FormularioMDI --> GestionPermisos : Click Permisos
-    FormularioMDI --> VerBitacora : Click Bitácora
-    FormularioMDI --> ControlCambios : Click Auditoría
-    FormularioMDI --> GestionBackup : Click Resguardo
-    FormularioMDI --> CambiarIdioma : Click Config. Idioma
-}
+    state MenuPrincipal {
+        [*] --> FormularioMDI
+        FormularioMDI --> GestionUsuarios : Click Usuarios
+        FormularioMDI --> GestionPermisos : Click Permisos
+        FormularioMDI --> VerBitacora : Click Bitácora
+        FormularioMDI --> ControlCambios : Click Auditoría
+        FormularioMDI --> GestionBackup : Click Resguardo
+        FormularioMDI --> CambiarIdioma : Click Config. Idioma
+    }
 
-MenuPrincipal --> PantallaLogin : Cerrar Sesión (Logout)
-@enduml
+    MenuPrincipal --> PantallaLogin : Cerrar Sesión (Logout)
 ```
 
 ---
 
 ## T02. Gestión de Login / Logout y Gestión de Usuarios
 
-### A. Diagrama de Clases del Módulo (PlantUML)
-```plantuml
-@startuml
-class LoginForm {
-    -IUsuarioBLL _usuarioBll
-    -btnIngresar_Click()
-}
-class SessionManager {
-    -static SessionManager _instance
-    +Usuario Usuario {get;}
-    +void Login(Usuario u)
-    +void Logout()
-}
-class UsuarioBLL {
-    -IUsuarioDAL _dal
-    +void Login(string user, string pass)
-}
-class UsuarioDAL {
-    -Acceso _acceso
-    +Usuario ObtenerPorUsername(string u)
-}
-class Usuario {
-    +int IdUsuario
-    +string Username
-    +string PasswordHash
-}
-LoginForm ..> UsuarioBLL
-UsuarioBLL ..> SessionManager
-UsuarioBLL ..> UsuarioDAL
-UsuarioDAL ..> Usuario
-@enduml
+### A. Diagrama de Clases del Módulo (Mermaid Class)
+```mermaid
+classDiagram
+    class LoginForm {
+        -IUsuarioBLL _usuarioBll
+        -btnIngresar_Click()
+    }
+    class SessionManager {
+        -static SessionManager _instance
+        +Usuario Usuario
+        +Login(Usuario u) void
+        +Logout() void
+    }
+    class UsuarioBLL {
+        -IUsuarioDAL _dal
+        +Login(string user, string pass) void
+    }
+    class UsuarioDAL {
+        -Acceso _acceso
+        +ObtenerPorUsername(string u) Usuario
+    }
+    class Usuario {
+        +int IdUsuario
+        +string Username
+        +string PasswordHash
+    }
+    LoginForm --> UsuarioBLL
+    UsuarioBLL --> SessionManager
+    UsuarioBLL --> UsuarioDAL
+    UsuarioDAL --> Usuario
 ```
 
 ### B. Diagrama de Secuencia - Login (Mermaid)
@@ -189,33 +183,32 @@ sequenceDiagram
 
 ## T06a. Gestión de Bitácora
 
-### A. Diagrama de Clases del Módulo (PlantUML)
-```plantuml
-@startuml
-class BitacoraForm {
-    -IBitacoraService _bitacora
-    -btnBuscar_Click()
-}
-class BitacoraService {
-    -IBitacoraDAL _dal
-    +void Registrar(string modulo, string actividad, string det, bool ex)
-}
-class BitacoraDAL {
-    -Acceso _acceso
-    +void Insertar(Bitacora b)
-}
-class Bitacora {
-    +int IdBitacora
-    +DateTime Fecha
-    +string Username
-    +string Modulo
-    +string Actividad
-    +NivelCriticidad Criticidad
-}
-BitacoraForm ..> BitacoraService
-BitacoraService ..> BitacoraDAL
-BitacoraDAL ..> Bitacora
-@enduml
+### A. Diagrama de Clases del Módulo (Mermaid Class)
+```mermaid
+classDiagram
+    class BitacoraForm {
+        -IBitacoraService _bitacora
+        -btnBuscar_Click()
+    }
+    class BitacoraService {
+        -IBitacoraDAL _dal
+        +Registrar(string modulo, string actividad, string det, bool ex) void
+    }
+    class BitacoraDAL {
+        -Acceso _acceso
+        +Insertar(Bitacora b) void
+    }
+    class Bitacora {
+        +int IdBitacora
+        +DateTime Fecha
+        +string Username
+        +string Modulo
+        +string Actividad
+        +NivelCriticidad Criticidad
+    }
+    BitacoraForm --> BitacoraService
+    BitacoraService --> BitacoraDAL
+    BitacoraDAL --> Bitacora
 ```
 
 ### B. Diagrama de Secuencia - Registro en Bitácora Genérico (Mermaid)
@@ -241,23 +234,23 @@ sequenceDiagram
 
 ## T03. Gestión de Encriptado
 
-### A. Diagrama de Clases del Módulo (PlantUML)
-```plantuml
-@startuml
-interface IEncriptador {
-    +string Hash(string texto)
-    +bool Verificar(string texto, string hash)
-}
-class Encriptador {
-    +string Hash(string texto)
-    +bool Verificar(string texto, string hash)
-}
-class CifradorHelper {
-    +static void CifrarArchivo(string src, string dst, string pass)
-    +static void DescifrarArchivo(string src, string dst, string pass)
-}
-IEncriptador <|.. Encriptador
-@enduml
+### A. Diagrama de Clases del Módulo (Mermaid Class)
+```mermaid
+classDiagram
+    class IEncriptador {
+        <<interface>>
+        +Hash(string texto) string
+        +Verificar(string texto, string hash) bool
+    }
+    class Encriptador {
+        +Hash(string texto) string
+        +Verificar(string texto, string hash) bool
+    }
+    class CifradorHelper {
+        +CifrarArchivo(string src, string dst, string pass) static void
+        +DescifrarArchivo(string src, string dst, string pass) static void
+    }
+    IEncriptador <|.. Encriptador
 ```
 
 ---
@@ -267,25 +260,24 @@ IEncriptador <|.. Encriptador
 
 ## T07. Gestión de Dígitos Verificadores (DV)
 
-### A. Diagrama de Clases del Módulo (PlantUML)
-```plantuml
-@startuml
-class Program {
-    +static void Main()
-}
-class DigitoVerificadorService {
-    -IDigitoVerificadorDAL _dal
-    -IUsuarioDAL _usuarioDal
-    +bool VerificarIntegridad()
-    +void InicializarDVs()
-}
-class DigitoVerificadorDAL {
-    -Acceso _acceso
-    +string ObtenerDVV(string tabla)
-}
-Program ..> DigitoVerificadorService
-DigitoVerificadorService ..> DigitoVerificadorDAL
-@enduml
+### A. Diagrama de Clases del Módulo (Mermaid Class)
+```mermaid
+classDiagram
+    class Program {
+        +Main() static void
+    }
+    class DigitoVerificadorService {
+        -IDigitoVerificadorDAL _dal
+        -IUsuarioDAL _usuarioDal
+        +VerificarIntegridad() bool
+        +InicializarDVs() void
+    }
+    class DigitoVerificadorDAL {
+        -Acceso _acceso
+        +ObtenerDVV(string tabla) string
+    }
+    Program --> DigitoVerificadorService
+    DigitoVerificadorService --> DigitoVerificadorDAL
 ```
 
 ### B. Diagrama de Secuencia - Verificación en Arranque (Mermaid)
@@ -319,38 +311,38 @@ sequenceDiagram
 
 ## T04. Gestión de Perfiles de Usuario (Patrón Composite)
 
-### A. Diagrama de Clases del Módulo - Patrón Composite (PlantUML)
-```plantuml
-@startuml
-abstract class ComponentePermiso {
-    +int IdPermiso
-    +string Nombre
-    +string PermisoKey
-    +abstract List<ComponentePermiso> Hijos {get;}
-    +abstract string NombreMostrar {get;}
-    +abstract void Agregar(ComponentePermiso c)
-    +abstract void Quitar(ComponentePermiso c)
-    +abstract void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados)
-}
-class Patente {
-    +List<ComponentePermiso> Hijos {get;}
-    +string NombreMostrar {get;}
-    +void Agregar(ComponentePermiso c)
-    +void Quitar(ComponentePermiso c)
-    +void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados)
-}
-class Familia {
-    -List<ComponentePermiso> _hijos
-    +List<ComponentePermiso> Hijos {get;}
-    +string NombreMostrar {get;}
-    +void Agregar(ComponentePermiso c)
-    +void Quitar(ComponentePermiso c)
-    +void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados)
-}
-ComponentePermiso <|-- Patente
-ComponentePermiso <|-- Familia
-Familia "1" o-- "0..*" ComponentePermiso : Hijos
-@enduml
+### A. Diagrama de Clases del Módulo - Patrón Composite (Mermaid Class)
+```mermaid
+classDiagram
+    class ComponentePermiso {
+        <<abstract>>
+        +int IdPermiso
+        +string Nombre
+        +string PermisoKey
+        +abstract List~ComponentePermiso~ Hijos
+        +abstract string NombreMostrar
+        +abstract Agregar(ComponentePermiso c) void
+        +abstract Quitar(ComponentePermiso c) void
+        +abstract ObtenerPatentes(List~Patente~ ac, HashSet~int~ vis) void
+    }
+    class Patente {
+        +List~ComponentePermiso~ Hijos
+        +string NombreMostrar
+        +Agregar(ComponentePermiso c) void
+        +Quitar(ComponentePermiso c) void
+        +ObtenerPatentes(List~Patente~ ac, HashSet~int~ vis) void
+    }
+    class Familia {
+        -List~ComponentePermiso~ _hijos
+        +List~ComponentePermiso~ Hijos
+        +string NombreMostrar
+        +Agregar(ComponentePermiso c) void
+        +Quitar(ComponentePermiso c) void
+        +ObtenerPatentes(List~Patente~ ac, HashSet~int~ vis) void
+    }
+    ComponentePermiso <|-- Patente
+    ComponentePermiso <|-- Familia
+    Familia "1" o-- "0..*" ComponentePermiso : Hijos
 ```
 
 ### B. Diagrama de Secuencia - Asignación de Permisos (Mermaid)
@@ -377,32 +369,31 @@ sequenceDiagram
 
 ## T06b. Control de Cambios
 
-### A. Diagrama de Clases del Módulo (PlantUML)
-```plantuml
-@startuml
-class ControlCambiosForm {
-    -IVersionUsuarioBLL _versionBll
-}
-class VersionUsuarioBLL {
-    -IVersionUsuarioDAL _dal
-    -IUsuarioDAL _usuarioDal
-    +void RestaurarVersion(int idVersion)
-}
-class VersionUsuarioDAL {
-    -Acceso _acceso
-    +VersionUsuario ObtenerPorId(int id)
-}
-class VersionUsuario {
-    +int IdVersion
-    +int IdUsuario
-    +string Username
-    +EstadoUsuario Estado
-    +DateTime FechaModificacion
-}
-ControlCambiosForm ..> VersionUsuarioBLL
-VersionUsuarioBLL ..> VersionUsuarioDAL
-VersionUsuarioDAL ..> VersionUsuario
-@enduml
+### A. Diagrama de Clases del Módulo (Mermaid Class)
+```mermaid
+classDiagram
+    class ControlCambiosForm {
+        -IVersionUsuarioBLL _versionBll
+    }
+    class VersionUsuarioBLL {
+        -IVersionUsuarioDAL _dal
+        -IUsuarioDAL _usuarioDal
+        +RestaurarVersion(int idVersion) void
+    }
+    class VersionUsuarioDAL {
+        -Acceso _acceso
+        +ObtenerPorId(int id) VersionUsuario
+    }
+    class VersionUsuario {
+        +int IdVersion
+        +int IdUsuario
+        +string Username
+        +EstadoUsuario Estado
+        +DateTime FechaModificacion
+    }
+    ControlCambiosForm --> VersionUsuarioBLL
+    VersionUsuarioBLL --> VersionUsuarioDAL
+    VersionUsuarioDAL --> VersionUsuario
 ```
 
 ### B. Diagrama de Secuencia - Recomposición / Rollback (Mermaid)
@@ -435,31 +426,32 @@ sequenceDiagram
 
 ## T05. Gestión de Múltiples Idiomas
 
-### A. Diagrama de Clases del Módulo - Patrón Observer (PlantUML)
-```plantuml
-@startuml
-interface IObserver {
-    +void ActualizarIdioma()
-}
-interface IManejadorIdioma {
-    +void Suscribir(IObserver obs)
-    +void Desuscribir(IObserver obs)
-    +void Notificar()
-}
-class ManejadorIdioma {
-    -static ManejadorIdioma _instance
-    -List<IObserver> _observadores
-    +void Suscribir(IObserver obs)
-    +void Desuscribir(IObserver obs)
-    +void Notificar()
-}
-class MenuForm {
-    +void ActualizarIdioma()
-}
-IManejadorIdioma <|.. ManejadorIdioma
-IObserver <|.. MenuForm
-ManejadorIdioma "1" o-- "0..*" IObserver : _observadores
-@enduml
+### A. Diagrama de Clases del Módulo - Patrón Observer (Mermaid Class)
+```mermaid
+classDiagram
+    class IObserver {
+        <<interface>>
+        +ActualizarIdioma() void
+    }
+    class IManejadorIdioma {
+        <<interface>>
+        +Suscribir(IObserver obs) void
+        +Desuscribir(IObserver obs) void
+        +Notificar() void
+    }
+    class ManejadorIdioma {
+        -static ManejadorIdioma _instance
+        -List~IObserver~ _observadores
+        +Suscribir(IObserver obs) void
+        +Desuscribir(IObserver obs) void
+        +Notificar() void
+    }
+    class MenuForm {
+        +ActualizarIdioma() void
+    }
+    IManejadorIdioma <|.. ManejadorIdioma
+    IObserver <|.. MenuForm
+    ManejadorIdioma "1" o-- "0..*" IObserver : _observadores
 ```
 
 ### B. Diagrama de Secuencia - Cambio Dinámico de Idioma (Mermaid)
@@ -489,150 +481,144 @@ sequenceDiagram
 
 # PARTE 3: INTEGRACIONES GENERALES (G06 Y G07)
 
-## G06. Diagramas de Clases por Capas (PlantUML)
+## G06. Diagramas de Clases por Capas (Mermaid Class)
 
 A continuación, los diagramas parciales separados por capas para cumplir con la especificación de separar infraestructura de negocio.
 
 ### Capa 1: Presentación (GUI)
-```plantuml
-@startuml
-class Program {
-    +static void Main()
-}
-class LoginForm {
-    -IUsuarioBLL _usuarioBll
-    -LoginForm_Load()
-    -btnIngresar_Click()
-}
-class MenuForm {
-    -ISessionManager _sessionManager
-    -IManejadorIdioma _manejadorIdioma
-}
-class UsuariosForm
-class PermisosForm
-class BitacoraForm
-class ControlCambiosForm
-class BackupForm
-class IdiomaForm
-class RestauracionForm
-LoginForm ..> Program
-MenuForm ..> LoginForm
-@enduml
+```mermaid
+classDiagram
+    class Program {
+        +Main() static void
+    }
+    class LoginForm {
+        -IUsuarioBLL _usuarioBll
+        -LoginForm_Load()
+        -btnIngresar_Click()
+    }
+    class MenuForm {
+        -ISessionManager _sessionManager
+        -IManejadorIdioma _manejadorIdioma
+    }
+    class UsuariosForm
+    class PermisosForm
+    class BitacoraForm
+    class ControlCambiosForm
+    class BackupForm
+    class IdiomaForm
+    class RestauracionForm
+    LoginForm --> Program
+    MenuForm --> LoginForm
 ```
 
 ### Capa 2: Lógica de Negocio (BLL)
-```plantuml
-@startuml
-class UsuarioBLL {
-    -IUsuarioDAL _dal
-    -IPermisoDAL _permisoDal
-    -IDigitoVerificadorService _dvService
-    +void Login()
-    +void Logout()
-}
-class PermisoBLL {
-    -IPermisoDAL _dal
-    +List<Patente> ResolverPatentes()
-}
-class IdiomaBLL {
-    -IIdiomaDAL _dal
-}
-class TraduccionBLL {
-    -ITraduccionDAL _dal
-}
-class VersionUsuarioBLL {
-    -IVersionUsuarioDAL _dal
-    -IUsuarioDAL _usuarioDal
-}
-@enduml
+```mermaid
+classDiagram
+    class UsuarioBLL {
+        -IUsuarioDAL _dal
+        -IPermisoDAL _permisoDal
+        -IDigitoVerificadorService _dvService
+        +Login() void
+        +Logout() void
+    }
+    class PermisoBLL {
+        -IPermisoDAL _dal
+        +ResolverPatentes() List~Patente~
+    }
+    class IdiomaBLL {
+        -IIdiomaDAL _dal
+    }
+    class TraduccionBLL {
+        -ITraduccionDAL _dal
+    }
+    class VersionUsuarioBLL {
+        -IVersionUsuarioDAL _dal
+        -IUsuarioDAL _usuarioDal
+    }
 ```
 
 ### Capa 3: Servicios (Aspectos Transversales)
-```plantuml
-@startuml
-class SessionManager {
-    -static SessionManager _instance
-    +Usuario Usuario {get;}
-    +void Login(Usuario u)
-    +void Logout()
-}
-class Encriptador {
-    +string Hash(string pwd)
-}
-class CifradorHelper {
-    +static void CifrarArchivo()
-}
-class ManejadorIdioma {
-    -static ManejadorIdioma _instance
-    -List<IObserver> _observadores
-}
-class BitacoraService {
-    -IBitacoraDAL _dal
-}
-class DigitoVerificadorService {
-    -IDigitoVerificadorDAL _dal
-}
-class BackupService {
-    -IBackupDAL _dal
-}
-@enduml
+```mermaid
+classDiagram
+    class SessionManager {
+        -static SessionManager _instance
+        +Usuario Usuario
+        +Login(Usuario u) void
+        +Logout() void
+    }
+    class Encriptador {
+        +Hash(string pwd) string
+    }
+    class CifradorHelper {
+        +CifrarArchivo() static void
+    }
+    class ManejadorIdioma {
+        -static ManejadorIdioma _instance
+        -List~IObserver~ _observadores
+    }
+    class BitacoraService {
+        -IBitacoraDAL _dal
+    }
+    class DigitoVerificadorService {
+        -IDigitoVerificadorDAL _dal
+    }
+    class BackupService {
+        -IBackupDAL _dal
+    }
 ```
 
 ### Capa 4: Acceso a Datos (DAL)
-```plantuml
-@startuml
-class Acceso {
-    -static Acceso _instance
-    +DataTable Leer()
-    +int Escribir()
-}
-class UsuarioDAL
-class PermisoDAL
-class IdiomaDAL
-class TraduccionDAL
-class BitacoraDAL
-class VersionUsuarioDAL
-class BackupDAL
-class DigitoVerificadorDAL
-UsuarioDAL ..> Acceso
-PermisoDAL ..> Acceso
-@enduml
+```mermaid
+classDiagram
+    class Acceso {
+        -static Acceso _instance
+        +Leer() DataTable
+        +Escribir() int
+    }
+    class UsuarioDAL
+    class PermisoDAL
+    class IdiomaDAL
+    class TraduccionDAL
+    class BitacoraDAL
+    class VersionUsuarioDAL
+    class BackupDAL
+    class DigitoVerificadorDAL
+    UsuarioDAL --> Acceso
+    PermisoDAL --> Acceso
 ```
 
 ### Capa 5: Abstracciones (Contratos e IoC)
-```plantuml
-@startuml
-interface IUsuarioDAL
-interface IPermisoDAL
-interface IIdiomaDAL
-interface ITraduccionDAL
-interface IBitacoraDAL
-interface IVersionUsuarioDAL
-interface IBackupDAL
-interface IDigitoVerificadorDAL
-class IoCContainer {
-    -static Dictionary<Type, object> _registros
-    +static void Registrar()
-    +static T Resolve()
-}
-@enduml
+```mermaid
+classDiagram
+    class IUsuarioDAL { <<interface>> }
+    class IPermisoDAL { <<interface>> }
+    class IIdiomaDAL { <<interface>> }
+    class ITraduccionDAL { <<interface>> }
+    class IBitacoraDAL { <<interface>> }
+    class IVersionUsuarioDAL { <<interface>> }
+    class IBackupDAL { <<interface>> }
+    class IDigitoVerificadorDAL { <<interface>> }
+    class IoCContainer {
+        -static Dictionary~Type_object~ _registros
+        +Registrar() static void
+        +Resolve() static T
+    }
 ```
 
 ### Capa 6: Entidades de Negocio (BE)
-```plantuml
-@startuml
-class Usuario
-class VersionUsuario
-class Bitacora
-class Idioma
-class Traduccion
-class Componente
-abstract class ComponentePermiso
-class Patente
-class Familia
-ComponentePermiso <|-- Patente
-ComponentePermiso <|-- Familia
-@enduml
+```mermaid
+classDiagram
+    class Usuario
+    class VersionUsuario
+    class Bitacora
+    class Idioma
+    class Traduccion
+    class Componente
+    class ComponentePermiso { <<abstract>> }
+    class Patente
+    class Familia
+    ComponentePermiso <|-- Patente
+    ComponentePermiso <|-- Familia
 ```
 
 ---
