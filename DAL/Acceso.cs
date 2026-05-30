@@ -87,7 +87,7 @@ namespace DAL
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al leer de la base de datos: {ex.Message}", ex);
+                throw new InvalidOperationException($"Error al leer de la base de datos: {ex.Message}", ex);
             }
         }
 
@@ -107,7 +107,7 @@ namespace DAL
             }
             catch (SqlException ex)
             {
-                throw new Exception($"Error al escribir en la base de datos: {ex.Message}", ex);
+                throw new InvalidOperationException($"Error al escribir en la base de datos: {ex.Message}", ex);
             }
         }
     }

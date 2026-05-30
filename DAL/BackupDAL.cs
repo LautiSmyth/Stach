@@ -53,8 +53,9 @@ namespace DAL
                         Directory.CreateDirectory(dir);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    System.Diagnostics.Trace.WriteLine(ex.Message);
                 }
             }
             return dir;
@@ -91,8 +92,9 @@ namespace DAL
                     {
                         File.Delete(rutaTemp);
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        System.Diagnostics.Trace.WriteLine(ex.Message);
                     }
                 }
             }
@@ -128,8 +130,9 @@ namespace DAL
                     {
                         File.Delete(rutaTemp);
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        System.Diagnostics.Trace.WriteLine(ex.Message);
                     }
                 }
             }

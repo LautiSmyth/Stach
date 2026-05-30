@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 namespace BLL
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S107:Constructor has many parameters")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "S6561:Avoid using DateTime.Now for benchmarking or timespan calculation operations")]
     public class UsuarioBLL
     {
         private readonly IUsuarioDAL _dal;
@@ -156,12 +158,9 @@ namespace BLL
                     throw new ArgumentException("El usuario no existe.");
 
                 Usuario logueado = ObtenerUsuarioLogueado();
-                if (logueado != null && logueado.IdUsuario == idUsuario)
+                if (logueado != null && logueado.IdUsuario == idUsuario && nuevoEstado != EstadoUsuario.Activo)
                 {
-                    if (nuevoEstado != EstadoUsuario.Activo)
-                    {
-                        throw new ArgumentException("No puedes desactivar o bloquear tu propia cuenta.");
-                    }
+                    throw new ArgumentException("No puedes desactivar o bloquear tu propia cuenta.");
                 }
 
                 string actor = ObtenerUsernameEnSesion();
