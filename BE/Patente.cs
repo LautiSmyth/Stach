@@ -26,5 +26,13 @@ namespace BE
         {
             get { return "🔑 " + Nombre; }
         }
+
+        public override void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados)
+        {
+            if (visitados.Add(IdPermiso))
+            {
+                acumulador.Add(this);
+            }
+        }
     }
 }

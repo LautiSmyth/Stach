@@ -13,6 +13,8 @@ namespace BE
 
         public abstract void Quitar(ComponentePermiso c);
 
+        public abstract void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados);
+
         public abstract string NombreMostrar { get; }
 
         public override string ToString()

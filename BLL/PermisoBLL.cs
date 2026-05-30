@@ -143,30 +143,9 @@ namespace BLL
             HashSet<int> visitados = new HashSet<int>();
             foreach (ComponentePermiso comp in componentes)
             {
-                ResolverPatentesRecursivo(comp, patentes, visitados);
+                comp.ObtenerPatentes(patentes, visitados);
             }
             return patentes;
-        }
-
-        private void ResolverPatentesRecursivo(ComponentePermiso componente, List<Patente> acumulador, HashSet<int> visitados)
-        {
-            if (componente == null || visitados.Contains(componente.IdPermiso)) return;
-            visitados.Add(componente.IdPermiso);
-
-            if (componente is Patente patente)
-            {
-                if (acumulador.All(p => p.IdPermiso != patente.IdPermiso))
-                {
-                    acumulador.Add(patente);
-                }
-            }
-            else if (componente is Familia familia)
-            {
-                foreach (ComponentePermiso hijo in familia.Hijos)
-                {
-                    ResolverPatentesRecursivo(hijo, acumulador, visitados);
-                }
-            }
         }
 
         public bool UsuarioTienePermiso(Usuario usuario, string patenteKey)
