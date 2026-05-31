@@ -1,5 +1,6 @@
 using BE;
 using Abstracciones;
+using Servicios;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -20,6 +21,7 @@ namespace GUI
         private void BackupForm_Load(object sender, EventArgs e)
         {
             ActualizarIdioma();
+            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)

@@ -2,6 +2,7 @@ using BE;
 using BE.Enums;
 using BLL;
 using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -44,6 +45,7 @@ namespace GUI
                 SuscribirFiltros();
                 ActualizarIdioma();
                 DesactivarTabStopReadOnly(this);
+                ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
             }
             catch (Exception ex)
             {

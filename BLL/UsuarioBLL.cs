@@ -333,12 +333,12 @@ namespace BLL
             return usuario == null ? string.Empty : usuario.Username;
         }
 
-        public bool UsuarioLogueadoTienePermiso(string patenteKey)
+        public bool UsuarioLogueadoTienePermiso(string permisoKey)
         {
             Usuario usuario = _sessionManager.Usuario;
             if (usuario == null) return false;
             PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
-            return permisoBll.UsuarioTienePermiso(usuario, patenteKey);
+            return permisoBll.UsuarioTienePermiso(usuario, permisoKey);
         }
 
         public bool ValidarCredencialesAdmin(string username, string password, List<string> permisosRequeridos)

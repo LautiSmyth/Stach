@@ -1,6 +1,7 @@
 using BE;
 using BLL;
 using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -28,6 +29,7 @@ namespace GUI
             ActualizarIdioma();
             CargarVersiones();
             DesactivarTabStopReadOnly(this);
+            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)

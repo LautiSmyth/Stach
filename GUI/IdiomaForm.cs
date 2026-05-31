@@ -1,5 +1,6 @@
 using BE;
 using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace GUI
 
                 txtNombre.MaxLength = 100;
                 txtCodigo.MaxLength = 10;
+                ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
             }
             catch (Exception ex)
             {

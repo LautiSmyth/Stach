@@ -39,39 +39,35 @@ namespace BLL
             {
                 throw new ArgumentException("Ya existe un permiso o rol con el mismo nombre.");
             }
-            if (!string.IsNullOrEmpty(permiso.PermisoKey) && todos.Any(p => !string.IsNullOrEmpty(p.PermisoKey) && p.PermisoKey.Equals(permiso.PermisoKey, StringComparison.OrdinalIgnoreCase)))
-            {
-                throw new ArgumentException("Ya existe un permiso o rol con la misma clave.");
-            }
             _dal.Insertar(permiso);
         }
 
-        public void CrearPatente(string modulo, string nombre, string key)
+        public void CrearPermiso(string modulo, string nombre)
         {
             try
             {
-                Patente p = new Patente { Nombre = nombre, PermisoKey = key };
+                Permiso p = new Permiso { Nombre = nombre };
                 Insertar(p);
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de patente '{nombre}' con clave '{key}'.", true);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de permiso '{nombre}'.", true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear patente '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear permiso '{nombre}'.", false, ex.Message);
                 throw;
             }
         }
 
-        public void CrearFamilia(string modulo, string nombre, string key)
+        public void CrearRol(string modulo, string nombre)
         {
             try
             {
-                Familia f = new Familia { Nombre = nombre, PermisoKey = key };
-                Insertar(f);
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de familia '{nombre}' con clave '{key}'.", true);
+                Rol r = new Rol { Nombre = nombre };
+                Insertar(r);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de rol '{nombre}'.", true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear familia '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear rol '{nombre}'.", false, ex.Message);
                 throw;
             }
         }
@@ -82,28 +78,28 @@ namespace BLL
             {
                 if (_dal.EstaEnUso(idPermiso))
                 {
-                    throw new InvalidOperationException("No se puede eliminar el permiso/rol porque está asignado a un usuario o forma parte de otro rol (familia).");
+                    throw new InvalidOperationException("No se puede eliminar el permiso/rol porque está asignado a un usuario o forma parte de otro rol.");
                 }
                 _dal.Eliminar(idPermiso);
-                _bitacora.Registrar(modulo, "BajaPermiso", $"Eliminación de permiso '{nombre}'.", true);
+                _bitacora.Registrar(modulo, "BajaPermiso", $"Eliminación de permiso/rol '{nombre}'.", true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, "BajaPermiso", $"Error al eliminar permiso '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, "BajaPermiso", $"Error al eliminar permiso/rol '{nombre}'.", false, ex.Message);
                 throw;
             }
         }
 
-        public void GuardarRelaciones(string modulo, Familia familia)
+        public void GuardarRelaciones(string modulo, Rol rol)
         {
             try
             {
-                _dal.GuardarRelaciones(familia);
-                _bitacora.Registrar(modulo, "ModificacionPermiso", $"Modificación de relaciones de la familia '{familia.Nombre}'. Hijos: {familia.Hijos.Count}.", true);
+                _dal.GuardarRelaciones(rol);
+                _bitacora.Registrar(modulo, "ModificacionPermiso", $"Modificación de relaciones de la familia/rol '{rol.Nombre}'. Hijos: {rol.Hijos.Count}.", true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, "ModificacionPermiso", $"Error al modificar relaciones de la familia '{familia.Nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, "ModificacionPermiso", $"Error al modificar relaciones de la familia/rol '{rol.Nombre}'.", false, ex.Message);
                 throw;
             }
         }
@@ -120,8 +116,8 @@ namespace BLL
                 Usuario logueado = _sessionManager.Usuario;
                 if (logueado != null && logueado.IdUsuario == idUsuario)
                 {
-                    List<Patente> resolved = ResolverPatentes(permisos);
-                    if (!resolved.Any(p => p.PermisoKey?.Equals("Permisos", StringComparison.OrdinalIgnoreCase) == true))
+                    List<Permiso> resolved = ResolverPermisos(permisos);
+                    if (!resolved.Any(p => p.Nombre.Equals("Gestión de Permisos", StringComparison.OrdinalIgnoreCase)))
                     {
                         throw new ArgumentException("No puedes remover el permiso de Gestión de Permisos de tu propia cuenta.");
                     }
@@ -137,22 +133,37 @@ namespace BLL
             }
         }
 
-        public List<Patente> ResolverPatentes(List<ComponentePermiso> componentes)
+        public List<Permiso> ResolverPermisos(List<ComponentePermiso> componentes)
         {
-            List<Patente> patentes = new List<Patente>();
+            List<Permiso> permisos = new List<Permiso>();
             HashSet<int> visitados = new HashSet<int>();
             foreach (ComponentePermiso comp in componentes)
             {
-                comp.ObtenerPatentes(patentes, visitados);
+                comp.ObtenerPermisos(permisos, visitados);
             }
-            return patentes;
+            return permisos;
         }
 
-        public bool UsuarioTienePermiso(Usuario usuario, string patenteKey)
+        public bool UsuarioTienePermiso(Usuario usuario, string nombrePermiso)
         {
             if (usuario == null) return false;
-            List<Patente> patentes = ResolverPatentes(usuario.Permisos);
-            return patentes.Any(p => p.PermisoKey.Equals(patenteKey, StringComparison.OrdinalIgnoreCase));
+            List<Permiso> permisos = ResolverPermisos(usuario.Permisos);
+            return permisos.Any(p => p.Nombre.Equals(nombrePermiso, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void GuardarControlesAsociados(int idPermiso, List<ControlMapeado> controles)
+        {
+            _dal.GuardarControlesAsociados(idPermiso, controles);
+        }
+
+        public List<ControlMapeado> ObtenerControlesPorPermiso(int idPermiso)
+        {
+            return _dal.ObtenerControlesPorPermiso(idPermiso);
+        }
+
+        public List<ControlMapeado> ObtenerTodosLosControlesProtegidos()
+        {
+            return _dal.ObtenerTodosLosControlesProtegidos();
         }
     }
 }

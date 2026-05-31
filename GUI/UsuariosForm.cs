@@ -2,6 +2,7 @@ using BE;
 using BE.Enums;
 using BLL;
 using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,6 +31,7 @@ namespace GUI
             cboEstado.DataSource = Enum.GetValues(typeof(EstadoUsuario));
             CargarDatos();
             ActualizarIdioma();
+            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
         }
 
         private void TxtUsername_KeyPress(object sender, KeyPressEventArgs e)

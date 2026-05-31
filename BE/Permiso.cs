@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BE
 {
-    public class Patente : ComponentePermiso
+    public class Permiso : ComponentePermiso
     {
         private readonly List<ComponentePermiso> _hijos = new List<ComponentePermiso>();
 
@@ -14,12 +14,12 @@ namespace BE
 
         public override void Agregar(ComponentePermiso c)
         {
-            throw new InvalidOperationException("No se pueden agregar hijos a una patente.");
+            throw new InvalidOperationException("No se pueden agregar hijos a un permiso.");
         }
 
         public override void Quitar(ComponentePermiso c)
         {
-            throw new InvalidOperationException("No se pueden quitar hijos de una patente.");
+            throw new InvalidOperationException("No se pueden quitar hijos de un permiso.");
         }
 
         public override string NombreMostrar
@@ -27,7 +27,7 @@ namespace BE
             get { return "🔑 " + Nombre; }
         }
 
-        public override void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados)
+        public override void ObtenerPermisos(List<Permiso> acumulador, HashSet<int> visitados)
         {
             if (visitados.Add(IdPermiso))
             {

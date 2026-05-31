@@ -1,6 +1,7 @@
 using BE;
 using BLL;
 using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,16 @@ namespace GUI
             ActualizarIdioma();
 
             txtNombrePermiso.MaxLength = 100;
-            txtClavePermiso.MaxLength = 100;
-        }
 
-        private void TxtClavePermiso_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != '_')
-            {
-                e.Handled = true;
-            }
+            var formTypes = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => typeof(Form).IsAssignableFrom(t) && !t.IsAbstract)
+                .OrderBy(t => t.Name)
+                .ToList();
+
+            cboFormularios.DataSource = formTypes;
+            cboFormularios.DisplayMember = "Name";
+
+            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -70,7 +72,7 @@ namespace GUI
         private TreeNode CrearNodoRecursivo(ComponentePermiso comp)
         {
             TreeNode nodo = new TreeNode(comp.NombreMostrar) { Tag = comp };
-            if (comp is Familia fam)
+            if (comp is Rol fam)
             {
                 foreach (ComponentePermiso hijo in fam.Hijos)
                 {
@@ -94,6 +96,7 @@ namespace GUI
             {
                 _seleccionado = e.Node.Tag as ComponentePermiso;
                 CargarListasRelacion();
+                CargarControlesMapeados();
             }
         }
 
@@ -102,7 +105,7 @@ namespace GUI
             lstDisponibles.DataSource = null;
             lstMiembros.DataSource = null;
 
-            if (_seleccionado is Familia fam)
+            if (_seleccionado is Rol fam)
             {
                 lblCol2Titulo.Text = $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}";
 
@@ -135,22 +138,20 @@ namespace GUI
             return false;
         }
 
-        private void BtnCrearPatente_Click(object sender, EventArgs e)
+        private void BtnCrearPermiso_Click(object sender, EventArgs e)
         {
             string nombre = txtNombrePermiso.Text.Trim();
-            string clave = txtClavePermiso.Text.Trim();
 
-            if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(clave))
+            if (string.IsNullOrEmpty(nombre))
             {
-                MessageBox.Show("Por favor, complete nombre y clave.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, ingrese un nombre.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             try
             {
-                _permisoBll.CrearPatente(this.Text, nombre, clave);
+                _permisoBll.CrearPermiso(this.Text, nombre);
                 txtNombrePermiso.Clear();
-                txtClavePermiso.Clear();
                 CargarDatos();
             }
             catch (Exception ex)
@@ -159,22 +160,20 @@ namespace GUI
             }
         }
 
-        private void BtnCrearFamilia_Click(object sender, EventArgs e)
+        private void BtnCrearRol_Click(object sender, EventArgs e)
         {
             string nombre = txtNombrePermiso.Text.Trim();
-            string clave = txtClavePermiso.Text.Trim();
 
-            if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(clave))
+            if (string.IsNullOrEmpty(nombre))
             {
-                MessageBox.Show("Por favor, complete nombre y clave.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, ingrese un nombre.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             try
             {
-                _permisoBll.CrearFamilia(this.Text, nombre, clave);
+                _permisoBll.CrearRol(this.Text, nombre);
                 txtNombrePermiso.Clear();
-                txtClavePermiso.Clear();
                 CargarDatos();
             }
             catch (Exception ex)
@@ -208,7 +207,7 @@ namespace GUI
 
         private void BtnAgregarRelacion_Click(object sender, EventArgs e)
         {
-            if (_seleccionado is Familia fam && lstDisponibles.SelectedItem is ComponentePermiso comp)
+            if (_seleccionado is Rol fam && lstDisponibles.SelectedItem is ComponentePermiso comp)
             {
                 fam.Agregar(comp);
                 CargarListasRelacion();
@@ -217,7 +216,7 @@ namespace GUI
 
         private void BtnQuitarRelacion_Click(object sender, EventArgs e)
         {
-            if (_seleccionado is Familia fam && lstMiembros.SelectedItem is ComponentePermiso comp)
+            if (_seleccionado is Rol fam && lstMiembros.SelectedItem is ComponentePermiso comp)
             {
                 fam.Quitar(comp);
                 CargarListasRelacion();
@@ -226,7 +225,7 @@ namespace GUI
 
         private void BtnGuardarRelaciones_Click(object sender, EventArgs e)
         {
-            if (_seleccionado is Familia fam)
+            if (_seleccionado is Rol fam)
             {
                 try
                 {
@@ -250,7 +249,7 @@ namespace GUI
         private void CargarPermisosUsuario()
         {
             tvUsuarioPermisos.Nodes.Clear();
-            lstPatentesPlanas.Items.Clear();
+            lstPermisosPlanas.Items.Clear();
 
             if (_usuarioSeleccionado != null)
             {
@@ -260,10 +259,10 @@ namespace GUI
                 }
                 tvUsuarioPermisos.ExpandAll();
 
-                List<Patente> planas = _permisoBll.ResolverPatentes(_usuarioSeleccionado.Permisos);
-                foreach (Patente pl in planas)
+                List<Permiso> planas = _permisoBll.ResolverPermisos(_usuarioSeleccionado.Permisos);
+                foreach (Permiso pl in planas)
                 {
-                    lstPatentesPlanas.Items.Add(pl.Nombre);
+                    lstPermisosPlanas.Items.Add(pl.Nombre);
                 }
             }
         }
@@ -342,12 +341,11 @@ namespace GUI
             this.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.Text");
             lblCol1Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol1Titulo");
             lblNombrePermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblNombrePermiso");
-            lblClavePermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblClavePermiso");
-            btnCrearPatente.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearPatente");
-            btnCrearFamilia.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearFamilia");
+            btnCrearPermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearPermiso");
+            btnCrearRol.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearRol");
             btnEliminarPermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnEliminarPermiso");
 
-            lblCol2Titulo.Text = _seleccionado is Familia fam
+            lblCol2Titulo.Text = _seleccionado is Rol fam
                  ? $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}"
                  : _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo");
 
@@ -355,11 +353,205 @@ namespace GUI
             lblMiembros.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblMiembros");
             btnGuardarRelaciones.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnGuardarRelaciones");
 
+            lblCol2ControlesTitulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2ControlesTitulo") ?? "Mapeo de Controles";
+            lblFormulario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblFormulario") ?? "Formulario:";
+            lblControlesDisponibles.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblControlesDisponibles") ?? "Disponibles";
+            lblControlesAsociados.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblControlesAsociados") ?? "Asociados";
+            btnGuardarControles.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnGuardarControles") ?? "Guardar Controles";
+
             lblCol3Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol3Titulo");
             lblUserPerms.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblUserPerms");
-            lblPatentesPlanas.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblPatentesPlanas");
+            lblPermisosPlanas.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblPermisosPlanas");
             btnAsignarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnAsignarUsuario");
             btnQuitarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnQuitarUsuario");
+        }
+
+        private List<ControlMapeado> _controlesDelPermiso = new List<ControlMapeado>();
+
+        private void CargarControlesMapeados()
+        {
+            if (_seleccionado == null)
+            {
+                _controlesDelPermiso = new List<ControlMapeado>();
+                lstControlesDisponibles.DataSource = null;
+                lstControlesAsociados.DataSource = null;
+                return;
+            }
+
+            try
+            {
+                _controlesDelPermiso = _permisoBll.ObtenerControlesPorPermiso(_seleccionado.IdPermiso);
+                ActualizarListasControles();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al cargar controles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ActualizarListasControles()
+        {
+            lstControlesDisponibles.DataSource = null;
+            lstControlesAsociados.DataSource = null;
+
+            if (_seleccionado == null || cboFormularios.SelectedItem == null) return;
+
+            Type formType = cboFormularios.SelectedItem as Type;
+            if (formType == null) return;
+
+            string selectedFormName = formType.Name;
+
+            List<string> todosControles = ObtenerControlesDeFormulario(formType);
+            List<string> asociados = _controlesDelPermiso
+                .Where(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase))
+                .Select(c => c.NombreControl)
+                .ToList();
+
+            List<string> disponibles = todosControles
+                .Where(c => !asociados.Contains(c))
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+
+            lstControlesDisponibles.DataSource = disponibles;
+            lstControlesAsociados.DataSource = asociados.OrderBy(c => c).ToList();
+        }
+
+        private List<string> ObtenerControlesDeFormulario(Type formType)
+        {
+            List<string> nombres = new List<string>();
+            try
+            {
+                using (Form temp = (Form)Activator.CreateInstance(formType))
+                {
+                    AgregarControlesRecursivo(temp.Controls, nombres);
+                }
+            }
+            catch { }
+            return nombres;
+        }
+
+        private void AgregarControlesRecursivo(Control.ControlCollection controls, List<string> nombres)
+        {
+            foreach (Control c in controls)
+            {
+                if (c is Button)
+                {
+                    if (!string.IsNullOrEmpty(c.Name))
+                    {
+                        nombres.Add(c.Name);
+                    }
+                }
+                else if (c is ToolStrip ts)
+                {
+                    AgregarItemsToolStrip(ts, nombres);
+                }
+                if (c.Controls.Count > 0)
+                {
+                    AgregarControlesRecursivo(c.Controls, nombres);
+                }
+            }
+        }
+
+        private void AgregarItemsToolStrip(ToolStrip ts, List<string> nombres)
+        {
+            foreach (ToolStripItem item in ts.Items)
+            {
+                if (!string.IsNullOrEmpty(item.Name))
+                {
+                    nombres.Add(item.Name);
+                }
+                if (item is ToolStripDropDownItem dropDown)
+                {
+                    AgregarItemsDropDownItem(dropDown, nombres);
+                }
+            }
+        }
+
+        private void AgregarItemsDropDownItem(ToolStripDropDownItem parent, List<string> nombres)
+        {
+            foreach (ToolStripItem item in parent.DropDownItems)
+            {
+                if (!string.IsNullOrEmpty(item.Name))
+                {
+                    nombres.Add(item.Name);
+                }
+                if (item is ToolStripDropDownItem dropDown)
+                {
+                    AgregarItemsDropDownItem(dropDown, nombres);
+                }
+            }
+        }
+
+        private void CboFormularios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarListasControles();
+        }
+
+        private void BtnAgregarControl_Click(object sender, EventArgs e)
+        {
+            if (_seleccionado == null)
+            {
+                MessageBox.Show("Seleccione un permiso o rol en la estructura.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Type selectedType = cboFormularios.SelectedItem as Type;
+            if (selectedType == null || lstControlesDisponibles.SelectedItem == null) return;
+
+            string selectedFormName = selectedType.Name;
+            string ctrlName = lstControlesDisponibles.SelectedItem.ToString();
+
+            if (!_controlesDelPermiso.Any(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) && c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase)))
+            {
+                _controlesDelPermiso.Add(new ControlMapeado
+                {
+                    IdPermiso = _seleccionado.IdPermiso,
+                    Formulario = selectedFormName,
+                    NombreControl = ctrlName
+                });
+                ActualizarListasControles();
+            }
+        }
+
+        private void BtnQuitarControl_Click(object sender, EventArgs e)
+        {
+            if (_seleccionado == null) return;
+
+            Type selectedType = cboFormularios.SelectedItem as Type;
+            if (selectedType == null || lstControlesAsociados.SelectedItem == null) return;
+
+            string selectedFormName = selectedType.Name;
+            string ctrlName = lstControlesAsociados.SelectedItem.ToString();
+
+            var target = _controlesDelPermiso.FirstOrDefault(c =>
+                c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) &&
+                c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase));
+
+            if (target != null)
+            {
+                _controlesDelPermiso.Remove(target);
+                ActualizarListasControles();
+            }
+        }
+
+        private void BtnGuardarControles_Click(object sender, EventArgs e)
+        {
+            if (_seleccionado == null)
+            {
+                MessageBox.Show("Seleccione un permiso o rol en la estructura.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                _permisoBll.GuardarControlesAsociados(_seleccionado.IdPermiso, _controlesDelPermiso);
+                MessageBox.Show("Controles guardados con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al guardar controles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

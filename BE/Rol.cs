@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace BE
 {
-    public class Familia : ComponentePermiso
+    public class Rol : ComponentePermiso
     {
         private readonly List<ComponentePermiso> _hijos = new List<ComponentePermiso>();
 
@@ -32,13 +32,13 @@ namespace BE
             get { return "📁 " + Nombre; }
         }
 
-        public override void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados)
+        public override void ObtenerPermisos(List<Permiso> acumulador, HashSet<int> visitados)
         {
             if (visitados.Add(IdPermiso))
             {
                 foreach (ComponentePermiso hijo in Hijos)
                 {
-                    hijo.ObtenerPatentes(acumulador, visitados);
+                    hijo.ObtenerPermisos(acumulador, visitados);
                 }
             }
         }

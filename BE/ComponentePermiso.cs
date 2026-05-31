@@ -6,14 +6,13 @@ namespace BE
     {
         public int IdPermiso { get; set; }
         public string Nombre { get; set; }
-        public string PermisoKey { get; set; }
         public abstract List<ComponentePermiso> Hijos { get; }
 
         public abstract void Agregar(ComponentePermiso c);
 
         public abstract void Quitar(ComponentePermiso c);
 
-        public abstract void ObtenerPatentes(List<Patente> acumulador, HashSet<int> visitados);
+        public abstract void ObtenerPermisos(List<Permiso> acumulador, HashSet<int> visitados);
 
         public abstract string NombreMostrar { get; }
 

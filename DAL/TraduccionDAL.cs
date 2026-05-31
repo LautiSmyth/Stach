@@ -165,8 +165,8 @@ namespace DAL
             seed("PermisosForm.lblCol1Titulo", "Estructura de Permisos", "Permission Structure", "Estrutura de Permissões");
             seed("PermisosForm.lblNombrePermiso", "Nombre", "Name", "Nome");
             seed("PermisosForm.lblClavePermiso", "Clave", "Key", "Chave");
-            seed("PermisosForm.btnCrearPatente", "Nueva Patente", "New Patent/Permission", "Nova Patente");
-            seed("PermisosForm.btnCrearFamilia", "Nueva Familia", "New Family/Role", "Nova Família");
+            seed("PermisosForm.btnCrearPermiso", "Nueva Permiso", "New Patent/Permission", "Nova Permiso");
+            seed("PermisosForm.btnCrearRol", "Nueva Rol", "New Family/Role", "Nova Família");
             seed("PermisosForm.btnEliminarPermiso", "Eliminar Seleccionado", "Delete Selected", "Excluir Selecionado");
             seed("PermisosForm.lblCol2Titulo", "Configurador de Relaciones", "Relationship Configurator", "Configurador de Relações");
             seed("PermisosForm.lblDisponibles", "Permisos Disponibles", "Available Permissions", "Permissões Disponíveis");
@@ -174,7 +174,7 @@ namespace DAL
             seed("PermisosForm.btnGuardarRelaciones", "Guardar Relaciones del Rol", "Save Role Relationships", "Salvar Relações do Grupo");
             seed("PermisosForm.lblCol3Titulo", "Gestión de Usuarios", "User Management", "Gestão de Usuários");
             seed("PermisosForm.lblUserPerms", "Permisos del Usuario", "User Permissions", "Permissões do Usuário");
-            seed("PermisosForm.lblPatentesPlanas", "Patentes Resultantes", "Resulting Patents/Permissions", "Patentes Resultantes");
+            seed("PermisosForm.lblPermisosPlanas", "Permisos Resultantes", "Resulting Patents/Permissions", "Permisos Resultantes");
             seed("PermisosForm.btnAsignarUsuario", "Asignar a Usuario >>", "Assign to User >>", "Atribuir ao Usuário >>");
             seed("PermisosForm.btnQuitarUsuario", "<< Quitar de Usuario", "<< Remove from User", "<< Remover do Usuário");
             seed("ControlCambiosForm.Text", "Historial de Cambios y Rollback", "Change History & Rollback", "Histórico de Alterações e Rollback");

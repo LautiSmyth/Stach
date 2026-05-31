@@ -1,6 +1,7 @@
 using BE;
 using BLL;
 using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,21 +31,11 @@ namespace GUI
             }
 
             ActualizarIdioma();
-            ValidarPermisosMenu();
+            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
 
             _timer.Interval = 1000;
             _timer.Start();
             ActualizarHora();
-        }
-
-        private void ValidarPermisosMenu()
-        {
-            btnUsuarios.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Usuarios");
-            btnBitacora.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Bitacora");
-            btnPermisos.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Permisos");
-            btnCambios.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("ControlCambios");
-            btnIdiomas.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Idiomas");
-            btnBackup.Enabled = _usuarioBll.UsuarioLogueadoTienePermiso("Backups");
         }
 
         private void CboIdioma_SelectedIndexChanged(object sender, EventArgs e)

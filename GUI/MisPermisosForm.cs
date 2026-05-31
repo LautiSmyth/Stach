@@ -1,6 +1,7 @@
 using BE;
 using BLL;
 using Abstracciones;
+using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace GUI
         {
             ActualizarIdioma();
             CargarPermisos();
+            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -45,10 +47,10 @@ namespace GUI
             tvDirectos.ExpandAll();
 
             lstResueltos.Items.Clear();
-            List<Patente> patentes = _permisoBll.ResolverPatentes(usuario.Permisos);
-            foreach (Patente pat in patentes)
+            List<Permiso> permisos = _permisoBll.ResolverPermisos(usuario.Permisos);
+            foreach (Permiso pat in permisos)
             {
-                lstResueltos.Items.Add($"{pat.Nombre} ({pat.PermisoKey})");
+                lstResueltos.Items.Add(pat.Nombre);
             }
         }
 
@@ -56,7 +58,7 @@ namespace GUI
         {
             TreeNode node = new TreeNode(comp.Nombre);
             node.Tag = comp;
-            if (comp is Familia fam)
+            if (comp is Rol fam)
             {
                 foreach (ComponentePermiso hijo in fam.Hijos)
                 {

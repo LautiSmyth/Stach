@@ -180,6 +180,7 @@
       <Project>{96041a17-3bfb-4b2a-89a0-c6517a22ef7a}</Project>
       <Name>IoC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Servicios\Servicios.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
