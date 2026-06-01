@@ -55,7 +55,7 @@ namespace GUI
 
         private void CargarComboUsuarios()
         {
-            bool tienePermisoTodos = _usuarioBll.UsuarioLogueadoTienePermiso("BitacoraTodos");
+            bool tienePermisoTodos = _usuarioBll.UsuarioLogueadoTienePermiso("Ver Bitácora de Todos");
             if (tienePermisoTodos)
             {
                 lblFiltrarUsuario.Visible = true;
@@ -193,7 +193,7 @@ namespace GUI
 
             List<Bitacora> resultado = new List<Bitacora>();
 
-            bool tienePermisoTodos = _usuarioBll.UsuarioLogueadoTienePermiso("BitacoraTodos");
+            bool tienePermisoTodos = _usuarioBll.UsuarioLogueadoTienePermiso("Ver Bitácora de Todos");
             string filtroUsuario = "";
             if (tienePermisoTodos)
             {
