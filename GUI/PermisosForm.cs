@@ -39,6 +39,7 @@ namespace GUI
             cboFormularios.DataSource = formTypes;
             cboFormularios.DisplayMember = "Name";
 
+            HabilitarPanelesSegunSeleccion();
             ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
         }
 
@@ -95,9 +96,30 @@ namespace GUI
             if (e.Node != null)
             {
                 _seleccionado = e.Node.Tag as ComponentePermiso;
+                HabilitarPanelesSegunSeleccion();
                 CargarListasRelacion();
                 CargarControlesMapeados();
             }
+        }
+
+        private void HabilitarPanelesSegunSeleccion()
+        {
+            bool esRol = _seleccionado is Rol;
+            bool esPermiso = _seleccionado is Permiso;
+
+            lblCol2Titulo.Enabled = esRol;
+            lblDisponibles.Enabled = esRol;
+            lblMiembros.Enabled = esRol;
+            tblCol2Transfer.Enabled = esRol;
+            btnGuardarRelaciones.Enabled = esRol;
+
+            lblCol2ControlesTitulo.Enabled = esPermiso;
+            lblFormulario.Enabled = esPermiso;
+            cboFormularios.Enabled = esPermiso;
+            lblControlesDisponibles.Enabled = esPermiso;
+            lblControlesAsociados.Enabled = esPermiso;
+            tblCol2ControlesTransfer.Enabled = esPermiso;
+            btnGuardarControles.Enabled = esPermiso;
         }
 
         private void CargarListasRelacion()
