@@ -54,7 +54,7 @@ namespace GUI
                     return;
                 }
 
-                System.Collections.Generic.List<string> perms = new System.Collections.Generic.List<string> { "RestauracionDV", "Backups" };
+                System.Collections.Generic.List<string> perms = new System.Collections.Generic.List<string> { "Restauración DV", "Gestión de Backups" };
                 bool tienePermiso = _usuarioBll.ValidarCredencialesAdmin(username, password, perms);
 
                 if (!tienePermiso)
