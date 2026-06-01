@@ -140,6 +140,12 @@ namespace GUI
 
         private void BtnCrearPermiso_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string nombre = txtNombrePermiso.Text.Trim();
 
             if (string.IsNullOrEmpty(nombre))
@@ -162,6 +168,12 @@ namespace GUI
 
         private void BtnCrearRol_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string nombre = txtNombrePermiso.Text.Trim();
 
             if (string.IsNullOrEmpty(nombre))
@@ -184,6 +196,12 @@ namespace GUI
 
         private void BtnEliminarPermiso_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado == null)
             {
                 MessageBox.Show("Seleccione un permiso a eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -207,6 +225,12 @@ namespace GUI
 
         private void BtnAgregarRelacion_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado is Rol fam && lstDisponibles.SelectedItem is ComponentePermiso comp)
             {
                 fam.Agregar(comp);
@@ -216,6 +240,12 @@ namespace GUI
 
         private void BtnQuitarRelacion_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado is Rol fam && lstMiembros.SelectedItem is ComponentePermiso comp)
             {
                 fam.Quitar(comp);
@@ -225,6 +255,12 @@ namespace GUI
 
         private void BtnGuardarRelaciones_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado is Rol fam)
             {
                 try
@@ -269,6 +305,12 @@ namespace GUI
 
         private void BtnAsignarUsuario_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_usuarioSeleccionado == null || _seleccionado == null)
             {
                 MessageBox.Show("Seleccione un usuario y un permiso a asignar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -295,6 +337,12 @@ namespace GUI
 
         private void BtnQuitarUsuario_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_usuarioSeleccionado == null)
             {
                 MessageBox.Show("Seleccione un usuario.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -490,6 +538,12 @@ namespace GUI
 
         private void BtnAgregarControl_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado == null)
             {
                 MessageBox.Show("Seleccione un permiso o rol en la estructura.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -516,6 +570,12 @@ namespace GUI
 
         private void BtnQuitarControl_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado == null) return;
 
             Type selectedType = cboFormularios.SelectedItem as Type;
@@ -537,6 +597,12 @@ namespace GUI
 
         private void BtnGuardarControles_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado == null)
             {
                 MessageBox.Show("Seleccione un permiso o rol en la estructura.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);

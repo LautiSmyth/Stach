@@ -5,12 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using BLL;
 
 namespace GUI
 {
     public partial class IdiomaForm : Form, IObserver
     {
         private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private List<FilaTraduccion> _traduccionesBindeables;
         List<Idioma> idiomas = new List<Idioma>();
 
@@ -164,6 +166,12 @@ namespace GUI
 
         private void BtnAgregarIdioma_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Idiomas"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string nombre = txtNombre.Text.Trim();
             string codigo = txtCodigo.Text.Trim().ToLower();
             bool esDefault = chkDefault.Checked;
@@ -199,6 +207,12 @@ namespace GUI
 
         private void BtnEliminarIdioma_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Idiomas"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (lstIdiomas.SelectedItem is Idioma idioma)
             {
                 if (idioma.Default)
@@ -225,6 +239,12 @@ namespace GUI
 
         private void BtnGuardarTraducciones_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Idiomas"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (cboIdiomaDestino.SelectedItem is Idioma idioma)
             {
                 dgvTraducciones.EndEdit();

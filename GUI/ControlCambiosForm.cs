@@ -139,6 +139,12 @@ namespace GUI
 
         private void BtnRollback_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Control de Cambios"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_seleccionado == null)
             {
                 MessageBox.Show("Por favor, seleccione una versión para restaurar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);

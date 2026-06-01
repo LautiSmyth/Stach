@@ -4,6 +4,7 @@ using Servicios;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using BLL;
 
 namespace GUI
 {
@@ -11,6 +12,7 @@ namespace GUI
     {
         private readonly IBackupService _backupService = IoCContainer.Resolver<IBackupService>();
         private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
+        private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
 
         public BackupForm()
         {
@@ -32,6 +34,12 @@ namespace GUI
 
         private void BtnCrear_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Backups"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             try
             {
                 string dirBackups = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backups");
@@ -65,6 +73,12 @@ namespace GUI
 
         private void BtnRestaurar_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Backups"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
                 ofd.Filter = "Copia de Seguridad Cifrada (*.stachbak)|*.stachbak";

@@ -195,6 +195,12 @@ namespace GUI
 
         private void BtnGuardar_Click(object sender, EventArgs e)
         {
+            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Usuarios"))
+            {
+                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string username = txtUsername.Text.Trim();
             string pass = txtPassword.Text;
             string confirm = txtConfirmarPassword.Text;

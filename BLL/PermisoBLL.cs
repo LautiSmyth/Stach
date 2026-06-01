@@ -94,6 +94,10 @@ namespace BLL
         {
             try
             {
+                if (TieneDependenciaCircular(rol, new HashSet<int>()))
+                {
+                    throw new InvalidOperationException("No se permiten relaciones circulares de roles.");
+                }
                 _dal.GuardarRelaciones(rol);
                 _bitacora.Registrar(modulo, "ModificacionPermiso", $"Modificación de relaciones de la familia/rol '{rol.Nombre}'. Hijos: {rol.Hijos.Count}.", true);
             }
@@ -102,6 +106,23 @@ namespace BLL
                 _bitacora.Registrar(modulo, "ModificacionPermiso", $"Error al modificar relaciones de la familia/rol '{rol.Nombre}'.", false, ex.Message);
                 throw;
             }
+        }
+
+        private bool TieneDependenciaCircular(ComponentePermiso actual, HashSet<int> visitados)
+        {
+            if (actual == null) return false;
+            if (!visitados.Add(actual.IdPermiso))
+            {
+                return true;
+            }
+            foreach (var hijo in actual.Hijos)
+            {
+                if (TieneDependenciaCircular(hijo, new HashSet<int>(visitados)))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public List<ComponentePermiso> ObtenerPermisosUsuario(int idUsuario)
