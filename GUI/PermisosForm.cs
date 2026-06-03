@@ -118,9 +118,18 @@ namespace GUI
             bool esRol = _seleccionado is Rol;
             bool esPermiso = _seleccionado is Permiso;
 
-            lblCol2Titulo.Text = esPermiso 
-                ? (_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2ControlesTitulo") ?? "Mapeo de Controles")
-                : (esRol ? $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {_seleccionado.Nombre}" : (_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo") ?? "Configurador de Relaciones"));
+            if (esPermiso)
+            {
+                lblCol2Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2ControlesTitulo") ?? "Mapeo de Controles";
+            }
+            else if (esRol)
+            {
+                lblCol2Titulo.Text = $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {_seleccionado.Nombre}";
+            }
+            else
+            {
+                lblCol2Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo") ?? "Configurador de Relaciones";
+            }
             
             lblDisponibles.Text = esPermiso 
                 ? (_manejadorIdioma.ObtenerTexto("PermisosForm.lblControlesDisponibles") ?? "Disponibles")
@@ -630,7 +639,11 @@ namespace GUI
                     AgregarControlesRecursivo(temp.Controls, formType.Name, controles);
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                // Ignorar excepciones al intentar instanciar formularios que puedan requerir parámetros específicos de DI o fallar en tiempo de diseño/construcción
+                System.Diagnostics.Debug.WriteLine($"Error al instanciar formulario {formType.Name}: {ex.Message}");
+            }
             return controles;
         }
 

@@ -11,7 +11,7 @@ namespace Servicios
         private readonly IIdiomaDAL _idiomaDal;
         private readonly ITraduccionDAL _traduccionDal;
         private readonly List<IObserver> _observers = new List<IObserver>();
-        private Dictionary<string, string> _traduccionesActuales = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _traduccionesActuales = new Dictionary<string, string>();
         private Idioma _idiomaActual;
 
         private ManejadorIdioma(IIdiomaDAL idiomaDal, ITraduccionDAL traduccionDal)
