@@ -97,8 +97,19 @@ namespace GUI
             {
                 _seleccionado = e.Node.Tag as ComponentePermiso;
                 HabilitarPanelesSegunSeleccion();
-                CargarListasRelacion();
-                CargarControlesMapeados();
+                if (_seleccionado is Rol)
+                {
+                    CargarListasRelacion();
+                }
+                else if (_seleccionado is Permiso)
+                {
+                    CargarControlesMapeados();
+                }
+                else
+                {
+                    lstDisponibles.DataSource = null;
+                    lstMiembros.DataSource = null;
+                }
             }
         }
 
@@ -107,18 +118,27 @@ namespace GUI
             bool esRol = _seleccionado is Rol;
             bool esPermiso = _seleccionado is Permiso;
 
-            lblCol2Titulo.Enabled = esRol;
-            lblDisponibles.Enabled = esRol;
-            lblMiembros.Enabled = esRol;
-            tblCol2Transfer.Enabled = esRol;
-            btnGuardarRelaciones.Enabled = esRol;
+            lblCol2Titulo.Text = esPermiso 
+                ? (_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2ControlesTitulo") ?? "Mapeo de Controles")
+                : (esRol ? $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {_seleccionado.Nombre}" : (_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo") ?? "Configurador de Relaciones"));
+            
+            lblDisponibles.Text = esPermiso 
+                ? (_manejadorIdioma.ObtenerTexto("PermisosForm.lblControlesDisponibles") ?? "Disponibles")
+                : (_manejadorIdioma.ObtenerTexto("PermisosForm.lblDisponibles") ?? "Permisos Disponibles");
 
-            lblCol2ControlesTitulo.Enabled = esPermiso;
-            lblFormulario.Enabled = esPermiso;
-            cboFormularios.Enabled = esPermiso;
-            lblControlesDisponibles.Enabled = esPermiso;
-            lblControlesAsociados.Enabled = esPermiso;
-            tblCol2ControlesTransfer.Enabled = esPermiso;
+            lblMiembros.Text = esPermiso 
+                ? (_manejadorIdioma.ObtenerTexto("PermisosForm.lblControlesAsociados") ?? "Asociados")
+                : (_manejadorIdioma.ObtenerTexto("PermisosForm.lblMiembros") ?? "Miembros del Rol");
+
+            lblFormulario.Visible = esPermiso;
+            cboFormularios.Visible = esPermiso;
+
+            tblCol2Transfer.Enabled = esRol || esPermiso;
+
+            btnGuardarRelaciones.Visible = esRol;
+            btnGuardarRelaciones.Enabled = esRol;
+            
+            btnGuardarControles.Visible = esPermiso;
             btnGuardarControles.Enabled = esPermiso;
         }
 
@@ -258,6 +278,23 @@ namespace GUI
                 fam.Agregar(comp);
                 CargarListasRelacion();
             }
+            else if (_seleccionado is Permiso && lstDisponibles.SelectedItem is string ctrlName)
+            {
+                Type selectedType = cboFormularios.SelectedItem as Type;
+                if (selectedType == null) return;
+                string selectedFormName = selectedType.Name;
+
+                if (!_controlesDelPermiso.Any(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) && c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    _controlesDelPermiso.Add(new ControlMapeado
+                    {
+                        IdPermiso = _seleccionado.IdPermiso,
+                        Formulario = selectedFormName,
+                        NombreControl = ctrlName
+                    });
+                    ActualizarListasControles();
+                }
+            }
         }
 
         private void BtnQuitarRelacion_Click(object sender, EventArgs e)
@@ -272,6 +309,22 @@ namespace GUI
             {
                 fam.Quitar(comp);
                 CargarListasRelacion();
+            }
+            else if (_seleccionado is Permiso && lstMiembros.SelectedItem is string ctrlName)
+            {
+                Type selectedType = cboFormularios.SelectedItem as Type;
+                if (selectedType == null) return;
+                string selectedFormName = selectedType.Name;
+
+                var target = _controlesDelPermiso.FirstOrDefault(c =>
+                    c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) &&
+                    c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase));
+
+                if (target != null)
+                {
+                    _controlesDelPermiso.Remove(target);
+                    ActualizarListasControles();
+                }
             }
         }
 
@@ -415,18 +468,8 @@ namespace GUI
             btnCrearRol.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearRol");
             btnEliminarPermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnEliminarPermiso");
 
-            lblCol2Titulo.Text = _seleccionado is Rol fam
-                 ? $"{_manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo")} - {fam.Nombre}"
-                 : _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo");
-
-            lblDisponibles.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblDisponibles");
-            lblMiembros.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblMiembros");
             btnGuardarRelaciones.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnGuardarRelaciones");
-
-            lblCol2ControlesTitulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2ControlesTitulo") ?? "Mapeo de Controles";
             lblFormulario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblFormulario") ?? "Formulario:";
-            lblControlesDisponibles.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblControlesDisponibles") ?? "Disponibles";
-            lblControlesAsociados.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblControlesAsociados") ?? "Asociados";
             btnGuardarControles.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnGuardarControles") ?? "Guardar Controles";
 
             lblCol3Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol3Titulo");
@@ -434,6 +477,8 @@ namespace GUI
             lblPermisosPlanas.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblPermisosPlanas");
             btnAsignarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnAsignarUsuario");
             btnQuitarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnQuitarUsuario");
+
+            HabilitarPanelesSegunSeleccion();
         }
 
         private List<ControlMapeado> _controlesDelPermiso = new List<ControlMapeado>();
@@ -443,8 +488,8 @@ namespace GUI
             if (_seleccionado == null)
             {
                 _controlesDelPermiso = new List<ControlMapeado>();
-                lstControlesDisponibles.DataSource = null;
-                lstControlesAsociados.DataSource = null;
+                lstDisponibles.DataSource = null;
+                lstMiembros.DataSource = null;
                 return;
             }
 
@@ -461,8 +506,8 @@ namespace GUI
 
         private void ActualizarListasControles()
         {
-            lstControlesDisponibles.DataSource = null;
-            lstControlesAsociados.DataSource = null;
+            lstDisponibles.DataSource = null;
+            lstMiembros.DataSource = null;
 
             if (_seleccionado == null || cboFormularios.SelectedItem == null) return;
 
@@ -483,8 +528,8 @@ namespace GUI
                 .OrderBy(c => c)
                 .ToList();
 
-            lstControlesDisponibles.DataSource = disponibles;
-            lstControlesAsociados.DataSource = asociados.OrderBy(c => c).ToList();
+            lstDisponibles.DataSource = disponibles;
+            lstMiembros.DataSource = asociados.OrderBy(c => c).ToList();
         }
 
         private List<string> ObtenerControlesDeFormulario(Type formType)
@@ -558,64 +603,7 @@ namespace GUI
             ActualizarListasControles();
         }
 
-        private void BtnAgregarControl_Click(object sender, EventArgs e)
-        {
-            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
-            {
-                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
 
-            if (_seleccionado == null)
-            {
-                MessageBox.Show("Seleccione un permiso o rol en la estructura.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            Type selectedType = cboFormularios.SelectedItem as Type;
-            if (selectedType == null || lstControlesDisponibles.SelectedItem == null) return;
-
-            string selectedFormName = selectedType.Name;
-            string ctrlName = lstControlesDisponibles.SelectedItem.ToString();
-
-            if (!_controlesDelPermiso.Any(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) && c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase)))
-            {
-                _controlesDelPermiso.Add(new ControlMapeado
-                {
-                    IdPermiso = _seleccionado.IdPermiso,
-                    Formulario = selectedFormName,
-                    NombreControl = ctrlName
-                });
-                ActualizarListasControles();
-            }
-        }
-
-        private void BtnQuitarControl_Click(object sender, EventArgs e)
-        {
-            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
-            {
-                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (_seleccionado == null) return;
-
-            Type selectedType = cboFormularios.SelectedItem as Type;
-            if (selectedType == null || lstControlesAsociados.SelectedItem == null) return;
-
-            string selectedFormName = selectedType.Name;
-            string ctrlName = lstControlesAsociados.SelectedItem.ToString();
-
-            var target = _controlesDelPermiso.FirstOrDefault(c =>
-                c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) &&
-                c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase));
-
-            if (target != null)
-            {
-                _controlesDelPermiso.Remove(target);
-                ActualizarListasControles();
-            }
-        }
 
         private void BtnGuardarControles_Click(object sender, EventArgs e)
         {

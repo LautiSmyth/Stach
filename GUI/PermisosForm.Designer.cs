@@ -26,17 +26,8 @@ namespace GUI
             this.lblCol1Titulo = new System.Windows.Forms.Label();
             this.pnlCol2 = new System.Windows.Forms.Panel();
             this.btnGuardarRelaciones = new System.Windows.Forms.Button();
-            this.lblCol2ControlesTitulo = new System.Windows.Forms.Label();
             this.lblFormulario = new System.Windows.Forms.Label();
             this.cboFormularios = new System.Windows.Forms.ComboBox();
-            this.lblControlesDisponibles = new System.Windows.Forms.Label();
-            this.lblControlesAsociados = new System.Windows.Forms.Label();
-            this.tblCol2ControlesTransfer = new System.Windows.Forms.TableLayoutPanel();
-            this.lstControlesDisponibles = new System.Windows.Forms.ListBox();
-            this.pnlCol2ControlesButtons = new System.Windows.Forms.Panel();
-            this.btnAgregarControl = new System.Windows.Forms.Button();
-            this.btnQuitarControl = new System.Windows.Forms.Button();
-            this.lstControlesAsociados = new System.Windows.Forms.ListBox();
             this.btnGuardarControles = new System.Windows.Forms.Button();
             this.tblCol2Transfer = new System.Windows.Forms.TableLayoutPanel();
             this.lstDisponibles = new System.Windows.Forms.ListBox();
@@ -163,12 +154,8 @@ namespace GUI
             this.pnlCol2.Controls.Add(this.lblMiembros);
             this.pnlCol2.Controls.Add(this.lblDisponibles);
             this.pnlCol2.Controls.Add(this.lblCol2Titulo);
-            this.pnlCol2.Controls.Add(this.lblCol2ControlesTitulo);
             this.pnlCol2.Controls.Add(this.lblFormulario);
             this.pnlCol2.Controls.Add(this.cboFormularios);
-            this.pnlCol2.Controls.Add(this.lblControlesDisponibles);
-            this.pnlCol2.Controls.Add(this.lblControlesAsociados);
-            this.pnlCol2.Controls.Add(this.tblCol2ControlesTransfer);
             this.pnlCol2.Controls.Add(this.btnGuardarControles);
             this.pnlCol2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCol2.Location = new System.Drawing.Point(399, 3);
@@ -181,9 +168,9 @@ namespace GUI
             this.btnGuardarRelaciones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardarRelaciones.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnGuardarRelaciones.ForeColor = System.Drawing.Color.White;
-            this.btnGuardarRelaciones.Location = new System.Drawing.Point(18, 238);
+            this.btnGuardarRelaciones.Location = new System.Drawing.Point(18, 545);
             this.btnGuardarRelaciones.Name = "btnGuardarRelaciones";
-            this.btnGuardarRelaciones.Size = new System.Drawing.Size(366, 28);
+            this.btnGuardarRelaciones.Size = new System.Drawing.Size(366, 30);
             this.btnGuardarRelaciones.TabIndex = 5;
             this.btnGuardarRelaciones.Text = "Guardar Relaciones del Rol";
             this.btnGuardarRelaciones.UseVisualStyleBackColor = false;
@@ -195,11 +182,11 @@ namespace GUI
             this.tblCol2Transfer.Controls.Add(this.lstDisponibles, 0, 0);
             this.tblCol2Transfer.Controls.Add(this.pnlCol2Buttons, 1, 0);
             this.tblCol2Transfer.Controls.Add(this.lstMiembros, 2, 0);
-            this.tblCol2Transfer.Location = new System.Drawing.Point(18, 70);
+            this.tblCol2Transfer.Location = new System.Drawing.Point(18, 110);
             this.tblCol2Transfer.Name = "tblCol2Transfer";
             this.tblCol2Transfer.RowCount = 1;
             this.tblCol2Transfer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblCol2Transfer.Size = new System.Drawing.Size(366, 160);
+            this.tblCol2Transfer.Size = new System.Drawing.Size(366, 420);
             this.tblCol2Transfer.TabIndex = 4;
 
             this.lstDisponibles.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -208,7 +195,7 @@ namespace GUI
             this.lstDisponibles.ItemHeight = 15;
             this.lstDisponibles.Location = new System.Drawing.Point(3, 3);
             this.lstDisponibles.Name = "lstDisponibles";
-            this.lstDisponibles.Size = new System.Drawing.Size(151, 439);
+            this.lstDisponibles.Size = new System.Drawing.Size(151, 414);
             this.lstDisponibles.TabIndex = 0;
 
             this.pnlCol2Buttons.Controls.Add(this.btnQuitarRelacion);
@@ -216,17 +203,17 @@ namespace GUI
             this.pnlCol2Buttons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCol2Buttons.Location = new System.Drawing.Point(160, 3);
             this.pnlCol2Buttons.Name = "pnlCol2Buttons";
-            this.pnlCol2Buttons.Size = new System.Drawing.Size(45, 439);
+            this.pnlCol2Buttons.Size = new System.Drawing.Size(45, 414);
             this.pnlCol2Buttons.TabIndex = 1;
 
-            this.btnQuitarRelacion.Location = new System.Drawing.Point(2, 80);
+            this.btnQuitarRelacion.Location = new System.Drawing.Point(2, 215);
             this.btnQuitarRelacion.Name = "btnQuitarRelacion";
             this.btnQuitarRelacion.Size = new System.Drawing.Size(41, 30);
             this.btnQuitarRelacion.TabIndex = 1;
             this.btnQuitarRelacion.Text = "<<";
             this.btnQuitarRelacion.UseVisualStyleBackColor = true;
 
-            this.btnAgregarRelacion.Location = new System.Drawing.Point(2, 40);
+            this.btnAgregarRelacion.Location = new System.Drawing.Point(2, 175);
             this.btnAgregarRelacion.Name = "btnAgregarRelacion";
             this.btnAgregarRelacion.Size = new System.Drawing.Size(41, 30);
             this.btnAgregarRelacion.TabIndex = 0;
@@ -239,13 +226,13 @@ namespace GUI
             this.lstMiembros.ItemHeight = 15;
             this.lstMiembros.Location = new System.Drawing.Point(211, 3);
             this.lstMiembros.Name = "lstMiembros";
-            this.lstMiembros.Size = new System.Drawing.Size(152, 439);
+            this.lstMiembros.Size = new System.Drawing.Size(152, 414);
             this.lstMiembros.TabIndex = 2;
 
             this.lblMiembros.AutoSize = true;
             this.lblMiembros.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblMiembros.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
-            this.lblMiembros.Location = new System.Drawing.Point(226, 55);
+            this.lblMiembros.Location = new System.Drawing.Point(226, 90);
             this.lblMiembros.Name = "lblMiembros";
             this.lblMiembros.Size = new System.Drawing.Size(102, 15);
             this.lblMiembros.TabIndex = 3;
@@ -254,7 +241,7 @@ namespace GUI
             this.lblDisponibles.AutoSize = true;
             this.lblDisponibles.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblDisponibles.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
-            this.lblDisponibles.Location = new System.Drawing.Point(18, 55);
+            this.lblDisponibles.Location = new System.Drawing.Point(18, 90);
             this.lblDisponibles.Name = "lblDisponibles";
             this.lblDisponibles.Size = new System.Drawing.Size(130, 15);
             this.lblDisponibles.TabIndex = 2;
@@ -269,129 +256,23 @@ namespace GUI
             this.lblCol2Titulo.TabIndex = 0;
             this.lblCol2Titulo.Text = "Configurador de Relaciones";
 
-            // 
-            // lblCol2ControlesTitulo
-            // 
-            this.lblCol2ControlesTitulo.AutoSize = true;
-            this.lblCol2ControlesTitulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblCol2ControlesTitulo.ForeColor = System.Drawing.Color.FromArgb(94, 58, 160);
-            this.lblCol2ControlesTitulo.Location = new System.Drawing.Point(15, 275);
-            this.lblCol2ControlesTitulo.Name = "lblCol2ControlesTitulo";
-            this.lblCol2ControlesTitulo.Size = new System.Drawing.Size(161, 21);
-            this.lblCol2ControlesTitulo.TabIndex = 6;
-            this.lblCol2ControlesTitulo.Text = "Mapeo de Controles";
-            // 
-            // lblFormulario
-            // 
             this.lblFormulario.AutoSize = true;
             this.lblFormulario.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblFormulario.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
-            this.lblFormulario.Location = new System.Drawing.Point(18, 305);
+            this.lblFormulario.Location = new System.Drawing.Point(18, 55);
             this.lblFormulario.Name = "lblFormulario";
             this.lblFormulario.Size = new System.Drawing.Size(70, 15);
             this.lblFormulario.TabIndex = 7;
             this.lblFormulario.Text = "Formulario:";
-            // 
-            // cboFormularios
-            // 
+
             this.cboFormularios.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboFormularios.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cboFormularios.FormattingEnabled = true;
-            this.cboFormularios.Location = new System.Drawing.Point(100, 302);
+            this.cboFormularios.Location = new System.Drawing.Point(100, 52);
             this.cboFormularios.Name = "cboFormularios";
             this.cboFormularios.Size = new System.Drawing.Size(284, 23);
             this.cboFormularios.TabIndex = 8;
-            // 
-            // lblControlesDisponibles
-            // 
-            this.lblControlesDisponibles.AutoSize = true;
-            this.lblControlesDisponibles.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblControlesDisponibles.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
-            this.lblControlesDisponibles.Location = new System.Drawing.Point(18, 335);
-            this.lblControlesDisponibles.Name = "lblControlesDisponibles";
-            this.lblControlesDisponibles.Size = new System.Drawing.Size(70, 15);
-            this.lblControlesDisponibles.TabIndex = 9;
-            this.lblControlesDisponibles.Text = "Disponibles";
-            // 
-            // lblControlesAsociados
-            // 
-            this.lblControlesAsociados.AutoSize = true;
-            this.lblControlesAsociados.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblControlesAsociados.ForeColor = System.Drawing.Color.FromArgb(110, 85, 150);
-            this.lblControlesAsociados.Location = new System.Drawing.Point(226, 335);
-            this.lblControlesAsociados.Name = "lblControlesAsociados";
-            this.lblControlesAsociados.Size = new System.Drawing.Size(62, 15);
-            this.lblControlesAsociados.TabIndex = 10;
-            this.lblControlesAsociados.Text = "Asociados";
-            // 
-            // tblCol2ControlesTransfer
-            // 
-            this.tblCol2ControlesTransfer.ColumnCount = 3;
-            this.tblCol2ControlesTransfer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43F));
-            this.tblCol2ControlesTransfer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tblCol2ControlesTransfer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43F));
-            this.tblCol2ControlesTransfer.Controls.Add(this.lstControlesDisponibles, 0, 0);
-            this.tblCol2ControlesTransfer.Controls.Add(this.pnlCol2ControlesButtons, 1, 0);
-            this.tblCol2ControlesTransfer.Controls.Add(this.lstControlesAsociados, 2, 0);
-            this.tblCol2ControlesTransfer.Location = new System.Drawing.Point(18, 355);
-            this.tblCol2ControlesTransfer.Name = "tblCol2ControlesTransfer";
-            this.tblCol2ControlesTransfer.RowCount = 1;
-            this.tblCol2ControlesTransfer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblCol2ControlesTransfer.Size = new System.Drawing.Size(366, 175);
-            this.tblCol2ControlesTransfer.TabIndex = 11;
-            // 
-            // lstControlesDisponibles
-            // 
-            this.lstControlesDisponibles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstControlesDisponibles.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lstControlesDisponibles.FormattingEnabled = true;
-            this.lstControlesDisponibles.ItemHeight = 15;
-            this.lstControlesDisponibles.Location = new System.Drawing.Point(3, 3);
-            this.lstControlesDisponibles.Name = "lstControlesDisponibles";
-            this.lstControlesDisponibles.Size = new System.Drawing.Size(151, 169);
-            this.lstControlesDisponibles.TabIndex = 0;
-            // 
-            // pnlCol2ControlesButtons
-            // 
-            this.pnlCol2ControlesButtons.Controls.Add(this.btnQuitarControl);
-            this.pnlCol2ControlesButtons.Controls.Add(this.btnAgregarControl);
-            this.pnlCol2ControlesButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCol2ControlesButtons.Location = new System.Drawing.Point(160, 3);
-            this.pnlCol2ControlesButtons.Name = "pnlCol2ControlesButtons";
-            this.pnlCol2ControlesButtons.Size = new System.Drawing.Size(45, 169);
-            this.pnlCol2ControlesButtons.TabIndex = 1;
-            // 
-            // btnQuitarControl
-            // 
-            this.btnQuitarControl.Location = new System.Drawing.Point(2, 90);
-            this.btnQuitarControl.Name = "btnQuitarControl";
-            this.btnQuitarControl.Size = new System.Drawing.Size(41, 30);
-            this.btnQuitarControl.TabIndex = 1;
-            this.btnQuitarControl.Text = "<<";
-            this.btnQuitarControl.UseVisualStyleBackColor = true;
-            // 
-            // btnAgregarControl
-            // 
-            this.btnAgregarControl.Location = new System.Drawing.Point(2, 45);
-            this.btnAgregarControl.Name = "btnAgregarControl";
-            this.btnAgregarControl.Size = new System.Drawing.Size(41, 30);
-            this.btnAgregarControl.TabIndex = 0;
-            this.btnAgregarControl.Text = ">>";
-            this.btnAgregarControl.UseVisualStyleBackColor = true;
-            // 
-            // lstControlesAsociados
-            // 
-            this.lstControlesAsociados.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstControlesAsociados.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lstControlesAsociados.FormattingEnabled = true;
-            this.lstControlesAsociados.ItemHeight = 15;
-            this.lstControlesAsociados.Location = new System.Drawing.Point(211, 3);
-            this.lstControlesAsociados.Name = "lstControlesAsociados";
-            this.lstControlesAsociados.Size = new System.Drawing.Size(152, 169);
-            this.lstControlesAsociados.TabIndex = 2;
-            // 
-            // btnGuardarControles
-            // 
+
             this.btnGuardarControles.BackColor = System.Drawing.Color.FromArgb(126, 87, 194);
             this.btnGuardarControles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardarControles.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
@@ -505,8 +386,6 @@ namespace GUI
             this.btnAgregarRelacion.Click += new System.EventHandler(this.BtnAgregarRelacion_Click);
             this.btnQuitarRelacion.Click += new System.EventHandler(this.BtnQuitarRelacion_Click);
             this.btnGuardarRelaciones.Click += new System.EventHandler(this.BtnGuardarRelaciones_Click);
-            this.btnAgregarControl.Click += new System.EventHandler(this.BtnAgregarControl_Click);
-            this.btnQuitarControl.Click += new System.EventHandler(this.BtnQuitarControl_Click);
             this.btnGuardarControles.Click += new System.EventHandler(this.BtnGuardarControles_Click);
             this.cboFormularios.SelectedIndexChanged += new System.EventHandler(this.CboFormularios_SelectedIndexChanged);
             this.cboUsuarios.SelectedIndexChanged += new System.EventHandler(this.CboUsuarios_SelectedIndexChanged);
@@ -544,17 +423,8 @@ namespace GUI
         private System.Windows.Forms.Button btnQuitarRelacion;
         private System.Windows.Forms.ListBox lstMiembros;
         private System.Windows.Forms.Button btnGuardarRelaciones;
-        private System.Windows.Forms.Label lblCol2ControlesTitulo;
         private System.Windows.Forms.Label lblFormulario;
         private System.Windows.Forms.ComboBox cboFormularios;
-        private System.Windows.Forms.Label lblControlesDisponibles;
-        private System.Windows.Forms.Label lblControlesAsociados;
-        private System.Windows.Forms.TableLayoutPanel tblCol2ControlesTransfer;
-        private System.Windows.Forms.ListBox lstControlesDisponibles;
-        private System.Windows.Forms.Panel pnlCol2ControlesButtons;
-        private System.Windows.Forms.Button btnAgregarControl;
-        private System.Windows.Forms.Button btnQuitarControl;
-        private System.Windows.Forms.ListBox lstControlesAsociados;
         private System.Windows.Forms.Button btnGuardarControles;
         private System.Windows.Forms.Panel pnlCol3;
         private System.Windows.Forms.Label lblCol3Titulo;
