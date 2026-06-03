@@ -63,7 +63,7 @@ namespace Servicios
 
         public void Notify()
         {
-            foreach (IObserver observer in _observers)
+            foreach (IObserver observer in _observers.ToList())
             {
                 observer.ActualizarIdioma();
             }

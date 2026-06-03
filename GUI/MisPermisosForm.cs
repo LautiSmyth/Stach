@@ -22,6 +22,9 @@ namespace GUI
 
         private void MisPermisosForm_Load(object sender, EventArgs e)
         {
+            lstResueltos.MouseMove += LstListBox_MouseMove;
+            lstResueltos.HorizontalScrollbar = true;
+
             ActualizarIdioma();
             CargarPermisos();
             ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
@@ -52,6 +55,8 @@ namespace GUI
             {
                 lstResueltos.Items.Add(pat.Nombre);
             }
+
+            SetListBoxHorizontalExtent(lstResueltos);
         }
 
         private TreeNode CrearNodo(ComponentePermiso comp)
@@ -80,6 +85,51 @@ namespace GUI
         private void BtnCerrar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private int _lastHoveredIndex = -1;
+        private ToolTip _listboxToolTip = new ToolTip();
+
+        private void LstListBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (sender is ListBox listBox)
+            {
+                int index = listBox.IndexFromPoint(e.Location);
+                if (index != _lastHoveredIndex)
+                {
+                    _lastHoveredIndex = index;
+                    if (index >= 0 && index < listBox.Items.Count)
+                    {
+                        string text = listBox.GetItemText(listBox.Items[index]);
+                        _listboxToolTip.SetToolTip(listBox, text);
+                    }
+                    else
+                    {
+                        _listboxToolTip.SetToolTip(listBox, "");
+                    }
+                }
+            }
+        }
+
+        private void SetListBoxHorizontalExtent(ListBox listBox)
+        {
+            int maxExtent = listBox.Width;
+            if (listBox.Items.Count > 0)
+            {
+                using (System.Drawing.Graphics g = listBox.CreateGraphics())
+                {
+                    foreach (var item in listBox.Items)
+                    {
+                        string text = listBox.GetItemText(item);
+                        int width = (int)g.MeasureString(text, listBox.Font).Width;
+                        if (width > maxExtent)
+                        {
+                            maxExtent = width;
+                        }
+                    }
+                }
+            }
+            listBox.HorizontalExtent = maxExtent + 15;
         }
     }
 }

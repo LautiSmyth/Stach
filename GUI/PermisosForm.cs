@@ -31,13 +31,13 @@ namespace GUI
 
             txtNombrePermiso.MaxLength = 100;
 
-            var formTypes = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => typeof(Form).IsAssignableFrom(t) && !t.IsAbstract)
-                .OrderBy(t => t.Name)
-                .ToList();
+            lstDisponibles.MouseMove += LstListBox_MouseMove;
+            lstMiembros.MouseMove += LstListBox_MouseMove;
+            lstPermisosPlanas.MouseMove += LstListBox_MouseMove;
 
-            cboFormularios.DataSource = formTypes;
-            cboFormularios.DisplayMember = "Name";
+            lstDisponibles.HorizontalScrollbar = true;
+            lstMiembros.HorizontalScrollbar = true;
+            lstPermisosPlanas.HorizontalScrollbar = true;
 
             HabilitarPanelesSegunSeleccion();
             ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
@@ -168,6 +168,9 @@ namespace GUI
             {
                 lblCol2Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol2Titulo");
             }
+
+            SetListBoxHorizontalExtent(lstDisponibles);
+            SetListBoxHorizontalExtent(lstMiembros);
         }
 
         private bool EsAncestroRecursivo(ComponentePermiso parent, int idHijoBuscado)
@@ -278,11 +281,13 @@ namespace GUI
                 fam.Agregar(comp);
                 CargarListasRelacion();
             }
-            else if (_seleccionado is Permiso && lstDisponibles.SelectedItem is string ctrlName)
+            else if (_seleccionado is Permiso && lstDisponibles.SelectedItem is ControlItem controlItem)
             {
-                Type selectedType = cboFormularios.SelectedItem as Type;
-                if (selectedType == null) return;
+                FormularioItem selectedItem = cboFormularios.SelectedItem as FormularioItem;
+                if (selectedItem == null) return;
+                Type selectedType = selectedItem.FormType;
                 string selectedFormName = selectedType.Name;
+                string ctrlName = controlItem.NombreControl;
 
                 if (!_controlesDelPermiso.Any(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) && c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -310,11 +315,13 @@ namespace GUI
                 fam.Quitar(comp);
                 CargarListasRelacion();
             }
-            else if (_seleccionado is Permiso && lstMiembros.SelectedItem is string ctrlName)
+            else if (_seleccionado is Permiso && lstMiembros.SelectedItem is ControlItem controlItem)
             {
-                Type selectedType = cboFormularios.SelectedItem as Type;
-                if (selectedType == null) return;
+                FormularioItem selectedItem = cboFormularios.SelectedItem as FormularioItem;
+                if (selectedItem == null) return;
+                Type selectedType = selectedItem.FormType;
                 string selectedFormName = selectedType.Name;
+                string ctrlName = controlItem.NombreControl;
 
                 var target = _controlesDelPermiso.FirstOrDefault(c =>
                     c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) &&
@@ -376,6 +383,8 @@ namespace GUI
                     lstPermisosPlanas.Items.Add(pl.Nombre);
                 }
             }
+
+            SetListBoxHorizontalExtent(lstPermisosPlanas);
         }
 
         private void BtnAsignarUsuario_Click(object sender, EventArgs e)
@@ -478,6 +487,7 @@ namespace GUI
             btnAsignarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnAsignarUsuario");
             btnQuitarUsuario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnQuitarUsuario");
 
+            CargarFormularios();
             HabilitarPanelesSegunSeleccion();
         }
 
@@ -504,6 +514,50 @@ namespace GUI
             }
         }
 
+        private void CargarFormularios()
+        {
+            Type selectedType = null;
+            if (cboFormularios.SelectedItem is FormularioItem selectedItem)
+            {
+                selectedType = selectedItem.FormType;
+            }
+
+            var formTypes = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => typeof(Form).IsAssignableFrom(t) && !t.IsAbstract)
+                .OrderBy(t => t.Name)
+                .ToList();
+
+            var items = new List<FormularioItem>();
+            foreach (var type in formTypes)
+            {
+                string key = $"{type.Name}.Text";
+                string translatedText = _manejadorIdioma.ObtenerTexto(key);
+                string displayName = translatedText == key ? type.Name : translatedText;
+
+                items.Add(new FormularioItem
+                {
+                    FormType = type,
+                    NombreMostrar = displayName
+                });
+            }
+
+            cboFormularios.SelectedIndexChanged -= CboFormularios_SelectedIndexChanged;
+            cboFormularios.DataSource = items;
+            cboFormularios.DisplayMember = "NombreMostrar";
+
+            if (selectedType != null)
+            {
+                var toSelect = items.FirstOrDefault(i => i.FormType == selectedType);
+                if (toSelect != null)
+                {
+                    cboFormularios.SelectedItem = toSelect;
+                }
+            }
+            cboFormularios.SelectedIndexChanged += CboFormularios_SelectedIndexChanged;
+
+            ActualizarListasControles();
+        }
+
         private void ActualizarListasControles()
         {
             lstDisponibles.DataSource = null;
@@ -511,42 +565,76 @@ namespace GUI
 
             if (_seleccionado == null || cboFormularios.SelectedItem == null) return;
 
-            Type formType = cboFormularios.SelectedItem as Type;
-            if (formType == null) return;
+            FormularioItem selectedItem = cboFormularios.SelectedItem as FormularioItem;
+            if (selectedItem == null) return;
+            Type formType = selectedItem.FormType;
 
             string selectedFormName = formType.Name;
 
-            List<string> todosControles = ObtenerControlesDeFormulario(formType);
-            List<string> asociados = _controlesDelPermiso
+            List<ControlItem> todosControles = ObtenerControlesDeFormulario(formType);
+            
+            // Build asociados
+            List<ControlItem> asociados = todosControles
+                .Where(ctrl => _controlesDelPermiso.Any(c => 
+                    c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) && 
+                    c.NombreControl.Equals(ctrl.NombreControl, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            // Add any other control mapped that wasn't dynamically found (e.g. if deleted/moved but still mapped in database)
+            var mappedControlNames = _controlesDelPermiso
                 .Where(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase))
                 .Select(c => c.NombreControl)
                 .ToList();
 
-            List<string> disponibles = todosControles
-                .Where(c => !asociados.Contains(c))
-                .Distinct()
-                .OrderBy(c => c)
+            foreach (var mappedName in mappedControlNames)
+            {
+                if (!asociados.Any(a => a.NombreControl.Equals(mappedName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    asociados.Add(new ControlItem
+                    {
+                        NombreControl = mappedName,
+                        Texto = ""
+                    });
+                }
+            }
+
+            // Build disponibles
+            List<ControlItem> disponibles = todosControles
+                .Where(ctrl => !asociados.Any(a => a.NombreControl.Equals(ctrl.NombreControl, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
+            asociados = asociados.OrderBy(c => c.NombreControl).ToList();
+            disponibles = disponibles.OrderBy(c => c.NombreControl).ToList();
+
+            lstDisponibles.DisplayMember = "DisplayText";
             lstDisponibles.DataSource = disponibles;
-            lstMiembros.DataSource = asociados.OrderBy(c => c).ToList();
+
+            lstMiembros.DisplayMember = "DisplayText";
+            lstMiembros.DataSource = asociados;
+
+            SetListBoxHorizontalExtent(lstDisponibles);
+            SetListBoxHorizontalExtent(lstMiembros);
         }
 
-        private List<string> ObtenerControlesDeFormulario(Type formType)
+        private List<ControlItem> ObtenerControlesDeFormulario(Type formType)
         {
-            List<string> nombres = new List<string>();
+            List<ControlItem> controles = new List<ControlItem>();
             try
             {
                 using (Form temp = (Form)Activator.CreateInstance(formType))
                 {
-                    AgregarControlesRecursivo(temp.Controls, nombres);
+                    if (temp is IObserver obs)
+                    {
+                        _manejadorIdioma.Detach(obs);
+                    }
+                    AgregarControlesRecursivo(temp.Controls, formType.Name, controles);
                 }
             }
             catch { }
-            return nombres;
+            return controles;
         }
 
-        private void AgregarControlesRecursivo(Control.ControlCollection controls, List<string> nombres)
+        private void AgregarControlesRecursivo(Control.ControlCollection controls, string formName, List<ControlItem> list)
         {
             foreach (Control c in controls)
             {
@@ -554,46 +642,55 @@ namespace GUI
                 {
                     if (!string.IsNullOrEmpty(c.Name))
                     {
-                        nombres.Add(c.Name);
+                        string key = $"{formName}.{c.Name}";
+                        string translated = _manejadorIdioma.ObtenerTexto(key);
+                        string text = translated == key ? c.Text : translated;
+                        list.Add(new ControlItem { NombreControl = c.Name, Texto = text });
                     }
                 }
                 else if (c is ToolStrip ts)
                 {
-                    AgregarItemsToolStrip(ts, nombres);
+                    AgregarItemsToolStrip(ts, formName, list);
                 }
                 if (c.Controls.Count > 0)
                 {
-                    AgregarControlesRecursivo(c.Controls, nombres);
+                    AgregarControlesRecursivo(c.Controls, formName, list);
                 }
             }
         }
 
-        private void AgregarItemsToolStrip(ToolStrip ts, List<string> nombres)
+        private void AgregarItemsToolStrip(ToolStrip ts, string formName, List<ControlItem> list)
         {
             foreach (ToolStripItem item in ts.Items)
             {
                 if (!string.IsNullOrEmpty(item.Name))
                 {
-                    nombres.Add(item.Name);
+                    string key = $"{formName}.{item.Name}";
+                    string translated = _manejadorIdioma.ObtenerTexto(key);
+                    string text = translated == key ? item.Text : translated;
+                    list.Add(new ControlItem { NombreControl = item.Name, Texto = text });
                 }
                 if (item is ToolStripDropDownItem dropDown)
                 {
-                    AgregarItemsDropDownItem(dropDown, nombres);
+                    AgregarItemsDropDownItem(dropDown, formName, list);
                 }
             }
         }
 
-        private void AgregarItemsDropDownItem(ToolStripDropDownItem parent, List<string> nombres)
+        private void AgregarItemsDropDownItem(ToolStripDropDownItem parent, string formName, List<ControlItem> list)
         {
             foreach (ToolStripItem item in parent.DropDownItems)
             {
                 if (!string.IsNullOrEmpty(item.Name))
                 {
-                    nombres.Add(item.Name);
+                    string key = $"{formName}.{item.Name}";
+                    string translated = _manejadorIdioma.ObtenerTexto(key);
+                    string text = translated == key ? item.Text : translated;
+                    list.Add(new ControlItem { NombreControl = item.Name, Texto = text });
                 }
                 if (item is ToolStripDropDownItem dropDown)
                 {
-                    AgregarItemsDropDownItem(dropDown, nombres);
+                    AgregarItemsDropDownItem(dropDown, formName, list);
                 }
             }
         }
@@ -601,6 +698,19 @@ namespace GUI
         private void CboFormularios_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActualizarListasControles();
+        }
+
+        public class FormularioItem
+        {
+            public Type FormType { get; set; }
+            public string NombreMostrar { get; set; }
+        }
+
+        public class ControlItem
+        {
+            public string NombreControl { get; set; }
+            public string Texto { get; set; }
+            public string DisplayText => string.IsNullOrEmpty(Texto) ? NombreControl : $"{NombreControl} - {Texto}";
         }
 
 
@@ -628,6 +738,51 @@ namespace GUI
             {
                 MessageBox.Show(ex.Message, "Error al guardar controles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private int _lastHoveredIndex = -1;
+        private ToolTip _listboxToolTip = new ToolTip();
+
+        private void LstListBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (sender is ListBox listBox)
+            {
+                int index = listBox.IndexFromPoint(e.Location);
+                if (index != _lastHoveredIndex)
+                {
+                    _lastHoveredIndex = index;
+                    if (index >= 0 && index < listBox.Items.Count)
+                    {
+                        string text = listBox.GetItemText(listBox.Items[index]);
+                        _listboxToolTip.SetToolTip(listBox, text);
+                    }
+                    else
+                    {
+                        _listboxToolTip.SetToolTip(listBox, "");
+                    }
+                }
+            }
+        }
+
+        private void SetListBoxHorizontalExtent(ListBox listBox)
+        {
+            int maxExtent = listBox.Width;
+            if (listBox.Items.Count > 0)
+            {
+                using (System.Drawing.Graphics g = listBox.CreateGraphics())
+                {
+                    foreach (var item in listBox.Items)
+                    {
+                        string text = listBox.GetItemText(item);
+                        int width = (int)g.MeasureString(text, listBox.Font).Width;
+                        if (width > maxExtent)
+                        {
+                            maxExtent = width;
+                        }
+                    }
+                }
+            }
+            listBox.HorizontalExtent = maxExtent + 15;
         }
     }
 }
