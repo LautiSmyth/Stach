@@ -21,6 +21,9 @@ namespace GUI
         {
             txtUsuario.MaxLength = 100;
             txtPassword.MaxLength = 100;
+            lblMensaje.Text = "Se requieren credenciales de Administrador o la Clave de Recuperación Maestra.";
+            lblUsuario.Text = "Usuario (vacío para Clave Maestra)";
+            lblPassword.Text = "Contraseña / Clave de Recuperación";
         }
 
         private void TxtUsuario_KeyPress(object sender, KeyPressEventArgs e)
@@ -36,9 +39,9 @@ namespace GUI
             string username = txtUsuario.Text.Trim();
             string password = txtPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(password))
             {
-                MessageBox.Show("Por favor, complete todos los campos.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, ingrese la contraseña o clave de recuperación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -51,6 +54,12 @@ namespace GUI
                     Autorizado = true;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    MessageBox.Show("Por favor, ingrese el nombre de usuario.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 

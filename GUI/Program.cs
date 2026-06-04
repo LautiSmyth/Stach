@@ -16,35 +16,6 @@ namespace GUI
 
             Bootstrapper.RegistrarDependencias();
 
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            KeyValueConfigurationElement setting = config.AppSettings.Settings["MasterRecoveryKeyHash"];
-            if (setting == null || string.IsNullOrEmpty(setting.Value))
-            {
-                string recoveryKey = $"STACH-RECOVERY-{Guid.NewGuid().ToString("N").Substring(0, 4).ToUpper()}-{Guid.NewGuid().ToString("N").Substring(4, 4).ToUpper()}";
-                IEncriptador encriptador = IoCContainer.Resolver<IEncriptador>();
-                string hash = encriptador.Hash(recoveryKey);
-                if (setting == null)
-                {
-                    config.AppSettings.Settings.Add("MasterRecoveryKeyHash", hash);
-                }
-                else
-                {
-                    setting.Value = hash;
-                }
-                ConfigurationSection section = config.GetSection("appSettings");
-                if (section != null && !section.SectionInformation.IsProtected)
-                {
-                    section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider");
-                }
-                config.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection("appSettings");
-                MessageBox.Show(
-                    $"Clave de Recuperación Maestra generada. Guarde esta clave en un lugar seguro (no se volverá a mostrar):\n\n{recoveryKey}",
-                    "Clave de Recuperación Maestra",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-
             Application.ThreadException += (sender, args) => ManejarExcepcionGlobal(args.Exception);
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => ManejarExcepcionGlobal(args.ExceptionObject as Exception);
 

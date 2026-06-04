@@ -541,7 +541,33 @@ namespace GUI
             {
                 string key = $"{type.Name}.Text";
                 string translatedText = _manejadorIdioma.ObtenerTexto(key);
-                string displayName = translatedText == key ? type.Name : translatedText;
+                string displayName = type.Name;
+
+                if (translatedText != key)
+                {
+                    displayName = translatedText;
+                }
+                else
+                {
+                    try
+                    {
+                        using (Form temp = (Form)Activator.CreateInstance(type))
+                        {
+                            if (temp is IObserver obs)
+                            {
+                                _manejadorIdioma.Detach(obs);
+                            }
+                            if (!string.IsNullOrEmpty(temp.Text))
+                            {
+                                displayName = temp.Text;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // Fallback remains type.Name
+                    }
+                }
 
                 items.Add(new FormularioItem
                 {

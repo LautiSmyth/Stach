@@ -83,6 +83,11 @@ namespace GUI
                     {
                         ofd.Filter = "Copia de Seguridad Cifrada (*.stachbak)|*.stachbak";
                         ofd.Title = "Seleccionar Copia de Seguridad para Restaurar";
+                        string dirBackups = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backups");
+                        if (System.IO.Directory.Exists(dirBackups))
+                        {
+                            ofd.InitialDirectory = dirBackups;
+                        }
                         if (ofd.ShowDialog() == DialogResult.OK)
                         {
                             string confirmMsg = "¿Está seguro de restaurar la base de datos? Esta operación cerrará las sesiones activas, sobrescribirá todos los datos actuales y reiniciará la aplicación.";

@@ -90,6 +90,7 @@ namespace GUI
             try
             {
                 _usuarioBll.Login(this.Text, txtUsername.Text.Trim(), txtPassword.Text);
+                GenerarClaveRecuperacionSiCorresponde();
                 new MenuForm().Show();
                 this.Hide();
             }
@@ -207,6 +208,58 @@ namespace GUI
             chkHidePass.Text = _manejadorIdioma.ObtenerTexto("LoginForm.chkHidePass") ?? "Ocultar contraseña";
             lblBienvenida.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblBienvenida") ?? "Sistema de\nGestión";
             lblTagline.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblTagline") ?? "Acceso seguro y centralizado\na todos los módulos";
+        }
+
+        private void GenerarClaveRecuperacionSiCorresponde()
+        {
+            try
+            {
+                System.Configuration.Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+                System.Configuration.KeyValueConfigurationElement setting = config.AppSettings.Settings["MasterRecoveryKeyHash"];
+                
+                if (setting != null && !string.IsNullOrEmpty(setting.Value))
+                {
+                    return;
+                }
+
+                Usuario usuarioActual = _usuarioBll.ObtenerUsuarioLogueado();
+                if (usuarioActual != null && 
+                    (usuarioActual.Username.Equals("admin", StringComparison.OrdinalIgnoreCase) ||
+                     _usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Backups") ||
+                     _usuarioBll.UsuarioLogueadoTienePermiso("Restauración DV")))
+                {
+                    string recoveryKey = $"STACH-RECOVERY-{Guid.NewGuid().ToString("N").Substring(0, 4).ToUpper()}-{Guid.NewGuid().ToString("N").Substring(4, 4).ToUpper()}";
+                    IEncriptador encriptador = IoCContainer.Resolver<IEncriptador>();
+                    string hash = encriptador.Hash(recoveryKey);
+
+                    if (setting == null)
+                    {
+                        config.AppSettings.Settings.Add("MasterRecoveryKeyHash", hash);
+                    }
+                    else
+                    {
+                        setting.Value = hash;
+                    }
+
+                    System.Configuration.ConfigurationSection section = config.GetSection("appSettings");
+                    if (section != null && !section.SectionInformation.IsProtected)
+                    {
+                        section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider");
+                    }
+                    config.Save(System.Configuration.ConfigurationSaveMode.Modified);
+                    System.Configuration.ConfigurationManager.RefreshSection("appSettings");
+
+                    MessageBox.Show(
+                        $"Clave de Recuperación Maestra generada. Guarde esta clave en un lugar seguro (no se volverá a mostrar):\n\n{recoveryKey}",
+                        "Clave de Recuperación Maestra",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al generar la clave de recuperación maestra: {ex.Message}", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
