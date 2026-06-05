@@ -1,5 +1,6 @@
 using Abstracciones;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -22,6 +23,13 @@ namespace Servicios
 
         public void RealizarBackup(string modulo, string rutaArchivo, string claveCifrado)
         {
+            if (!_dvService.VerificarIntegridad(out List<string> errores))
+            {
+                string errorDetalle = string.Join("; ", errores);
+                _bitacora.Registrar(modulo, "Backup", "Intento de copia de seguridad fallido debido a fallas de integridad.", false, errorDetalle);
+                throw new InvalidOperationException("La base de datos tiene fallas de integridad. No se puede realizar la copia de seguridad para evitar respaldar datos corruptos.");
+            }
+
             string tempPlainPath = Path.Combine(Path.GetTempPath(), $"Stach_Backup_Temp_{Guid.NewGuid():N}.bak");
             try
             {
