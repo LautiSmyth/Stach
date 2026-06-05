@@ -94,10 +94,25 @@ namespace BLL
         {
             try
             {
-                if (TieneDependenciaCircular(rol, new HashSet<int>()))
+                List<ComponentePermiso> todos = _dal.ObtenerTodos();
+                int index = todos.FindIndex(p => p.IdPermiso == rol.IdPermiso);
+                if (index >= 0)
                 {
-                    throw new InvalidOperationException("No se permiten relaciones circulares de roles.");
+                    todos[index] = rol;
                 }
+                else
+                {
+                    todos.Add(rol);
+                }
+
+                foreach (ComponentePermiso comp in todos)
+                {
+                    if (TieneDependenciaCircular(comp, new HashSet<int>()))
+                    {
+                        throw new InvalidOperationException("No se permiten relaciones circulares de roles.");
+                    }
+                }
+
                 _dal.GuardarRelaciones(rol);
                 _bitacora.Registrar(modulo, "ModificacionPermiso", $"Modificación de relaciones de la familia/rol '{rol.Nombre}'. Hijos: {rol.Hijos.Count}.", true);
             }

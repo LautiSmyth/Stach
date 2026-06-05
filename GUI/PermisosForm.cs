@@ -287,6 +287,11 @@ namespace GUI
 
             if (_seleccionado is Rol fam && lstDisponibles.SelectedItem is ComponentePermiso comp)
             {
+                if (EsAncestroRecursivo(comp, fam.IdPermiso))
+                {
+                    MessageBox.Show("No se puede agregar este permiso/rol porque generaría una referencia circular.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 fam.Agregar(comp);
                 CargarListasRelacion();
             }
