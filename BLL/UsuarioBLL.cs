@@ -140,6 +140,26 @@ namespace BLL
                 };
                 _dal.Insertar(usuario);
                 _dvService.InicializarDVs();
+
+                Usuario insertado = _dal.ObtenerPorUsername(username);
+                if (insertado != null)
+                {
+                    string actor = ObtenerUsernameEnSesion();
+                    if (string.IsNullOrEmpty(actor)) actor = "Sistema";
+
+                    VersionUsuario v = new VersionUsuario
+                    {
+                        IdUsuario = insertado.IdUsuario,
+                        Username = insertado.Username,
+                        PasswordHash = insertado.PasswordHash,
+                        Estado = insertado.Estado,
+                        ModificadoPor = actor,
+                        FechaModificacion = DateTime.Now,
+                        DetalleCambios = "Alta de usuario (Estado inicial)."
+                    };
+                    _versionDal.Insertar(v);
+                }
+
                 _bitacora.Registrar(modulo, "Alta", $"Alta de usuario '{username}'.", true);
             }
             catch (ArgumentException)
@@ -303,6 +323,25 @@ namespace BLL
                 RegistrarLoginExitoso(usuario);
                 _contadorSesion.Resetear();
                 _sessionManager.Login(usuario);
+
+                if (usuario.IdIdioma.HasValue)
+                {
+                    try
+                    {
+                        IManejadorIdioma manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
+                        List<Idioma> idiomas = manejadorIdioma.ObtenerIdiomas();
+                        Idioma preferido = idiomas.FirstOrDefault(i => i.IdIdioma == usuario.IdIdioma.Value);
+                        if (preferido != null)
+                        {
+                            manejadorIdioma.CambiarIdioma(preferido);
+                        }
+                    }
+                    catch
+                    {
+                        // Ignorar errores al resolver dependencias durante login
+                    }
+                }
+
                 _bitacora.Registrar(modulo, "Login", "Login exitoso.", true);
             }
             catch (UnauthorizedAccessException)
@@ -383,6 +422,7 @@ namespace BLL
         public void RegistrarLoginExitoso(Usuario usuario)
         {
             usuario.IntentosFallidos = 0;
+            usuario.CantidadBloqueos = 0;
             usuario.UltimoLogin = DateTime.Now;
             _dal.Actualizar(usuario);
             _dvService.InicializarDVs();

@@ -38,6 +38,19 @@ namespace BLL
 
                 Usuario usuario = _usuarioDal.ObtenerPorId(version.IdUsuario) ?? throw new ArgumentException("El usuario de esta versión ya no existe.");
 
+                // Guardar el estado actual del usuario como una nueva versión histórica para poder revertir el rollback (rollback del rollback)
+                VersionUsuario vActual = new VersionUsuario
+                {
+                    IdUsuario = usuario.IdUsuario,
+                    Username = usuario.Username,
+                    PasswordHash = usuario.PasswordHash,
+                    Estado = usuario.Estado,
+                    ModificadoPor = actor,
+                    FechaModificacion = DateTime.Now,
+                    DetalleCambios = $"Antes de rollback a versión {idVersion}."
+                };
+                _dal.Insertar(vActual);
+
                 usuario.Username = version.Username;
                 usuario.PasswordHash = version.PasswordHash;
                 usuario.Estado = version.Estado;
