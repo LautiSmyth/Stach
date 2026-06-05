@@ -74,6 +74,21 @@ namespace Servicios
             _idiomaActual = idioma;
             CargarTraducciones();
             Notify();
+
+            try
+            {
+                ISessionManager session = IoCContainer.Resolver<ISessionManager>();
+                if (session != null && session.Usuario != null)
+                {
+                    session.Usuario.IdIdioma = idioma.IdIdioma;
+                    IUsuarioDAL usuarioDal = IoCContainer.Resolver<IUsuarioDAL>();
+                    usuarioDal.Actualizar(session.Usuario);
+                }
+            }
+            catch
+            {
+                // Ignorar excepciones al resolver dependencias en la inicialización inicial del sistema
+            }
         }
 
         public string ObtenerTexto(string clave)
@@ -93,11 +108,13 @@ namespace Servicios
         public void InsertarIdioma(Idioma idioma)
         {
             _idiomaDal.Insertar(idioma);
+            Notify();
         }
 
         public void EliminarIdioma(int idIdioma)
         {
             _idiomaDal.Eliminar(idIdioma);
+            Notify();
         }
 
         public List<Componente> ObtenerComponentes()
@@ -118,7 +135,7 @@ namespace Servicios
         public void GuardarTraducciones(List<Traduccion> traducciones)
         {
             _traduccionDal.GuardarTraducciones(traducciones);
-            if (_idiomaActual != null && traducciones.Any(t => t.IdIdioma == _idiomaActual.IdIdioma))
+            if (_idiomaActual != null)
             {
                 CargarTraducciones();
                 Notify();
@@ -130,15 +147,35 @@ namespace Servicios
             _traduccionesActuales.Clear();
             if (_idiomaActual == null) return;
 
-            List<Traduccion> traducciones = _traduccionDal.ObtenerTraduccionesPorIdioma(_idiomaActual.IdIdioma);
             List<Componente> componentes = _traduccionDal.ObtenerComponentes();
+            List<Idioma> idiomas = _idiomaDal.ObtenerTodos();
+            Idioma defaultLang = idiomas.FirstOrDefault(i => i.Default) ?? idiomas.FirstOrDefault();
 
-            foreach (Traduccion t in traducciones)
+            // 1. Cargar traducción por defecto (fallback)
+            if (defaultLang != null)
             {
-                Componente comp = componentes.FirstOrDefault(c => c.IdComponente == t.IdComponente);
-                if (comp != null)
+                List<Traduccion> traduccionesDefault = _traduccionDal.ObtenerTraduccionesPorIdioma(defaultLang.IdIdioma);
+                foreach (Traduccion t in traduccionesDefault)
                 {
-                    _traduccionesActuales[comp.Nombre] = t.Texto;
+                    Componente comp = componentes.FirstOrDefault(c => c.IdComponente == t.IdComponente);
+                    if (comp != null && !string.IsNullOrWhiteSpace(t.Texto))
+                    {
+                        _traduccionesActuales[comp.Nombre] = t.Texto;
+                    }
+                }
+            }
+
+            // 2. Si el idioma actual no es el default, sobreescribir con las traducciones del idioma actual
+            if (defaultLang == null || _idiomaActual.IdIdioma != defaultLang.IdIdioma)
+            {
+                List<Traduccion> traduccionesActual = _traduccionDal.ObtenerTraduccionesPorIdioma(_idiomaActual.IdIdioma);
+                foreach (Traduccion t in traduccionesActual)
+                {
+                    Componente comp = componentes.FirstOrDefault(c => c.IdComponente == t.IdComponente);
+                    if (comp != null && !string.IsNullOrWhiteSpace(t.Texto))
+                    {
+                        _traduccionesActuales[comp.Nombre] = t.Texto;
+                    }
                 }
             }
         }

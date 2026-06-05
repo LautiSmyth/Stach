@@ -208,6 +208,7 @@ namespace GUI
             chkHidePass.Text = _manejadorIdioma.ObtenerTexto("LoginForm.chkHidePass") ?? "Ocultar contraseña";
             lblBienvenida.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblBienvenida") ?? "Sistema de\nGestión";
             lblTagline.Text = _manejadorIdioma.ObtenerTexto("LoginForm.lblTagline") ?? "Acceso seguro y centralizado\na todos los módulos";
+            CargarComboIdioma();
         }
 
         private void GenerarClaveRecuperacionSiCorresponde()
