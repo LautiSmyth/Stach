@@ -1,4 +1,4 @@
-namespace GUI
+﻿namespace GUI
 {
     partial class BitacoraForm
     {
@@ -81,9 +81,9 @@ namespace GUI
             this.tblDetalle.SuspendLayout();
             this.pnlEstado.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblFiltrarUsuario
-            // 
+            
+            
+            
             this.lblFiltrarUsuario.AutoSize = true;
             this.lblFiltrarUsuario.BackColor = System.Drawing.Color.Transparent;
             this.lblFiltrarUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -95,9 +95,9 @@ namespace GUI
             this.lblFiltrarUsuario.TabIndex = 1;
             this.lblFiltrarUsuario.Text = "Usuario:";
             this.lblFiltrarUsuario.Visible = false;
-            // 
-            // cboFiltrarUsuario
-            // 
+            
+            
+            
             this.cboFiltrarUsuario.BackColor = System.Drawing.Color.White;
             this.cboFiltrarUsuario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cboFiltrarUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -108,9 +108,9 @@ namespace GUI
             this.cboFiltrarUsuario.Size = new System.Drawing.Size(120, 25);
             this.cboFiltrarUsuario.TabIndex = 1;
             this.cboFiltrarUsuario.Visible = false;
-            // 
-            // pnlFiltros
-            // 
+            
+            
+            
             this.pnlFiltros.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.pnlFiltros.Controls.Add(this.tlpFiltros);
             this.pnlFiltros.Dock = System.Windows.Forms.DockStyle.Top;
@@ -118,9 +118,9 @@ namespace GUI
             this.pnlFiltros.Name = "pnlFiltros";
             this.pnlFiltros.Size = new System.Drawing.Size(1068, 78);
             this.pnlFiltros.TabIndex = 2;
-            // 
-            // tlpFiltros
-            // 
+            
+            
+            
             this.tlpFiltros.ColumnCount = 7;
             this.tlpFiltros.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFiltros.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -150,9 +150,9 @@ namespace GUI
             this.tlpFiltros.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpFiltros.Size = new System.Drawing.Size(1068, 78);
             this.tlpFiltros.TabIndex = 0;
-            // 
-            // lblBuscar
-            // 
+            
+            
+            
             this.lblBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblBuscar.BackColor = System.Drawing.Color.Transparent;
             this.lblBuscar.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -163,9 +163,9 @@ namespace GUI
             this.lblBuscar.TabIndex = 0;
             this.lblBuscar.Text = "Buscar:";
             this.lblBuscar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtBuscar
-            // 
+            
+            
+            
             this.txtBuscar.BackColor = System.Drawing.Color.White;
             this.txtBuscar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBuscar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -176,9 +176,9 @@ namespace GUI
             this.txtBuscar.Name = "txtBuscar";
             this.txtBuscar.Size = new System.Drawing.Size(287, 24);
             this.txtBuscar.TabIndex = 1;
-            // 
-            // flpCheckboxes
-            // 
+            
+            
+            
             this.flpCheckboxes.Controls.Add(this.chkUsername);
             this.flpCheckboxes.Controls.Add(this.chkDetalle);
             this.flpCheckboxes.Controls.Add(this.chkError);
@@ -189,9 +189,9 @@ namespace GUI
             this.flpCheckboxes.Size = new System.Drawing.Size(303, 34);
             this.flpCheckboxes.TabIndex = 2;
             this.flpCheckboxes.WrapContents = false;
-            // 
-            // chkUsername
-            // 
+            
+            
+            
             this.chkUsername.AutoSize = true;
             this.chkUsername.BackColor = System.Drawing.Color.Transparent;
             this.chkUsername.Checked = true;
@@ -205,9 +205,9 @@ namespace GUI
             this.chkUsername.TabIndex = 0;
             this.chkUsername.Text = "Username";
             this.chkUsername.UseVisualStyleBackColor = false;
-            // 
-            // chkDetalle
-            // 
+            
+            
+            
             this.chkDetalle.AutoSize = true;
             this.chkDetalle.BackColor = System.Drawing.Color.Transparent;
             this.chkDetalle.Checked = true;
@@ -221,9 +221,9 @@ namespace GUI
             this.chkDetalle.TabIndex = 1;
             this.chkDetalle.Text = "Detalle";
             this.chkDetalle.UseVisualStyleBackColor = false;
-            // 
-            // chkError
-            // 
+            
+            
+            
             this.chkError.AutoSize = true;
             this.chkError.BackColor = System.Drawing.Color.Transparent;
             this.chkError.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -235,9 +235,9 @@ namespace GUI
             this.chkError.TabIndex = 2;
             this.chkError.Text = "Error";
             this.chkError.UseVisualStyleBackColor = false;
-            // 
-            // lblCriticidad
-            // 
+            
+            
+            
             this.lblCriticidad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCriticidad.BackColor = System.Drawing.Color.Transparent;
             this.lblCriticidad.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -249,9 +249,9 @@ namespace GUI
             this.lblCriticidad.TabIndex = 3;
             this.lblCriticidad.Text = "Criticidad:";
             this.lblCriticidad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cboCriticidad
-            // 
+            
+            
+            
             this.cboCriticidad.BackColor = System.Drawing.Color.White;
             this.cboCriticidad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboCriticidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -263,9 +263,9 @@ namespace GUI
             this.cboCriticidad.Name = "cboCriticidad";
             this.cboCriticidad.Size = new System.Drawing.Size(106, 25);
             this.cboCriticidad.TabIndex = 1;
-            // 
-            // lblActividad
-            // 
+            
+            
+            
             this.lblActividad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblActividad.BackColor = System.Drawing.Color.Transparent;
             this.lblActividad.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -277,9 +277,9 @@ namespace GUI
             this.lblActividad.TabIndex = 4;
             this.lblActividad.Text = "Actividad:";
             this.lblActividad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cboActividad
-            // 
+            
+            
+            
             this.cboActividad.BackColor = System.Drawing.Color.White;
             this.cboActividad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboActividad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -291,9 +291,9 @@ namespace GUI
             this.cboActividad.Name = "cboActividad";
             this.cboActividad.Size = new System.Drawing.Size(115, 25);
             this.cboActividad.TabIndex = 1;
-            // 
-            // flpExitoso
-            // 
+            
+            
+            
             this.flpExitoso.Controls.Add(this.chkExitoso);
             this.flpExitoso.Controls.Add(this.lblFiltrarUsuario);
             this.flpExitoso.Controls.Add(this.cboFiltrarUsuario);
@@ -303,9 +303,9 @@ namespace GUI
             this.flpExitoso.Name = "flpExitoso";
             this.flpExitoso.Size = new System.Drawing.Size(296, 34);
             this.flpExitoso.TabIndex = 5;
-            // 
-            // chkExitoso
-            // 
+            
+            
+            
             this.chkExitoso.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkExitoso.AutoSize = true;
             this.chkExitoso.BackColor = System.Drawing.Color.Transparent;
@@ -320,9 +320,9 @@ namespace GUI
             this.chkExitoso.TabIndex = 0;
             this.chkExitoso.ThreeState = true;
             this.chkExitoso.UseVisualStyleBackColor = false;
-            // 
-            // flpFechas
-            // 
+            
+            
+            
             this.flpFechas.Controls.Add(this.lblDesde);
             this.flpFechas.Controls.Add(this.dtpDesde);
             this.flpFechas.Controls.Add(this.lblHasta);
@@ -334,9 +334,9 @@ namespace GUI
             this.flpFechas.Size = new System.Drawing.Size(303, 34);
             this.flpFechas.TabIndex = 6;
             this.flpFechas.WrapContents = false;
-            // 
-            // lblDesde
-            // 
+            
+            
+            
             this.lblDesde.AutoSize = true;
             this.lblDesde.BackColor = System.Drawing.Color.Transparent;
             this.lblDesde.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -347,18 +347,18 @@ namespace GUI
             this.lblDesde.Size = new System.Drawing.Size(48, 17);
             this.lblDesde.TabIndex = 0;
             this.lblDesde.Text = "Desde:";
-            // 
-            // dtpDesde
-            // 
+            
+            
+            
             this.dtpDesde.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.dtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpDesde.Location = new System.Drawing.Point(57, 3);
             this.dtpDesde.Name = "dtpDesde";
             this.dtpDesde.Size = new System.Drawing.Size(93, 24);
             this.dtpDesde.TabIndex = 1;
-            // 
-            // lblHasta
-            // 
+            
+            
+            
             this.lblHasta.AutoSize = true;
             this.lblHasta.BackColor = System.Drawing.Color.Transparent;
             this.lblHasta.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -369,18 +369,18 @@ namespace GUI
             this.lblHasta.Size = new System.Drawing.Size(44, 17);
             this.lblHasta.TabIndex = 2;
             this.lblHasta.Text = "Hasta:";
-            // 
-            // dtpHasta
-            // 
+            
+            
+            
             this.dtpHasta.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.dtpHasta.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpHasta.Location = new System.Drawing.Point(206, 3);
             this.dtpHasta.Name = "dtpHasta";
             this.dtpHasta.Size = new System.Drawing.Size(89, 24);
             this.dtpHasta.TabIndex = 3;
-            // 
-            // lblLimite
-            // 
+            
+            
+            
             this.lblLimite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLimite.BackColor = System.Drawing.Color.Transparent;
             this.lblLimite.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -392,9 +392,9 @@ namespace GUI
             this.lblLimite.TabIndex = 7;
             this.lblLimite.Text = "Límite:";
             this.lblLimite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cboLimite
-            // 
+            
+            
+            
             this.cboLimite.BackColor = System.Drawing.Color.White;
             this.cboLimite.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboLimite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -406,9 +406,9 @@ namespace GUI
             this.cboLimite.Name = "cboLimite";
             this.cboLimite.Size = new System.Drawing.Size(106, 25);
             this.cboLimite.TabIndex = 1;
-            // 
-            // flpBotones
-            // 
+            
+            
+            
             this.tlpFiltros.SetColumnSpan(this.flpBotones, 2);
             this.flpBotones.Controls.Add(this.btnBuscar);
             this.flpBotones.Controls.Add(this.btnLimpiar);
@@ -421,9 +421,9 @@ namespace GUI
             this.flpBotones.Size = new System.Drawing.Size(188, 34);
             this.flpBotones.TabIndex = 8;
             this.flpBotones.WrapContents = false;
-            // 
-            // btnBuscar
-            // 
+            
+            
+            
             this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnBuscar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBuscar.FlatAppearance.BorderSize = 0;
@@ -439,9 +439,9 @@ namespace GUI
             this.btnBuscar.Text = "Buscar";
             this.btnBuscar.UseVisualStyleBackColor = false;
             this.btnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
-            // 
-            // btnLimpiar
-            // 
+            
+            
+            
             this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLimpiar.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(182)))), ((int)(((byte)(228)))));
@@ -457,9 +457,9 @@ namespace GUI
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = false;
             this.btnLimpiar.Click += new System.EventHandler(this.BtnLimpiar_Click);
-            // 
-            // btnExportar
-            // 
+            
+            
+            
             this.btnExportar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnExportar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnExportar.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(182)))), ((int)(((byte)(228)))));
@@ -475,9 +475,9 @@ namespace GUI
             this.btnExportar.Text = "📥 CSV";
             this.btnExportar.UseVisualStyleBackColor = false;
             this.btnExportar.Click += new System.EventHandler(this.BtnExportar_Click);
-            // 
-            // label1
-            // 
+            
+            
+            
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -488,29 +488,29 @@ namespace GUI
             this.label1.TabIndex = 9;
             this.label1.Text = "Exitoso:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // splitCuerpo
-            // 
+            
+            
+            
             this.splitCuerpo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitCuerpo.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitCuerpo.Location = new System.Drawing.Point(0, 78);
             this.splitCuerpo.Name = "splitCuerpo";
-            // 
-            // splitCuerpo.Panel1
-            // 
+            
+            
+            
             this.splitCuerpo.Panel1.Controls.Add(this.dgvBitacora);
-            // 
-            // splitCuerpo.Panel2
-            // 
+            
+            
+            
             this.splitCuerpo.Panel2.Controls.Add(this.grpDetalle);
             this.splitCuerpo.Panel2.Padding = new System.Windows.Forms.Padding(7);
             this.splitCuerpo.Size = new System.Drawing.Size(1068, 570);
             this.splitCuerpo.SplitterDistance = 724;
             this.splitCuerpo.SplitterWidth = 3;
             this.splitCuerpo.TabIndex = 0;
-            // 
-            // dgvBitacora
-            // 
+            
+            
+            
             this.dgvBitacora.AllowUserToAddRows = false;
             this.dgvBitacora.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
@@ -553,9 +553,9 @@ namespace GUI
             this.dgvBitacora.Size = new System.Drawing.Size(724, 570);
             this.dgvBitacora.TabIndex = 0;
             this.dgvBitacora.SelectionChanged += new System.EventHandler(this.DgvBitacora_SelectionChanged);
-            // 
-            // grpDetalle
-            // 
+            
+            
+            
             this.grpDetalle.Controls.Add(this.tblDetalle);
             this.grpDetalle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpDetalle.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
@@ -567,9 +567,9 @@ namespace GUI
             this.grpDetalle.TabIndex = 0;
             this.grpDetalle.TabStop = false;
             this.grpDetalle.Text = "Detalle del Registro";
-            // 
-            // tblDetalle
-            // 
+            
+            
+            
             this.tblDetalle.ColumnCount = 2;
             this.tblDetalle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblDetalle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -605,9 +605,9 @@ namespace GUI
             this.tblDetalle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
             this.tblDetalle.Size = new System.Drawing.Size(313, 522);
             this.tblDetalle.TabIndex = 0;
-            // 
-            // lblDetFecha
-            // 
+            
+            
+            
             this.lblDetFecha.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetFecha.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -617,9 +617,9 @@ namespace GUI
             this.lblDetFecha.Size = new System.Drawing.Size(156, 14);
             this.lblDetFecha.TabIndex = 0;
             this.lblDetFecha.Text = "Fecha y Hora";
-            // 
-            // lblDetUsuario
-            // 
+            
+            
+            
             this.lblDetUsuario.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetUsuario.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -629,9 +629,9 @@ namespace GUI
             this.lblDetUsuario.Size = new System.Drawing.Size(152, 14);
             this.lblDetUsuario.TabIndex = 1;
             this.lblDetUsuario.Text = "Usuario";
-            // 
-            // txtDetFecha
-            // 
+            
+            
+            
             this.txtDetFecha.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetFecha.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDetFecha.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -643,9 +643,9 @@ namespace GUI
             this.txtDetFecha.ReadOnly = true;
             this.txtDetFecha.Size = new System.Drawing.Size(151, 23);
             this.txtDetFecha.TabIndex = 2;
-            // 
-            // txtDetUsuario
-            // 
+            
+            
+            
             this.txtDetUsuario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetUsuario.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDetUsuario.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -657,9 +657,9 @@ namespace GUI
             this.txtDetUsuario.ReadOnly = true;
             this.txtDetUsuario.Size = new System.Drawing.Size(152, 23);
             this.txtDetUsuario.TabIndex = 3;
-            // 
-            // lblDetModulo
-            // 
+            
+            
+            
             this.lblDetModulo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetModulo.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetModulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -669,9 +669,9 @@ namespace GUI
             this.lblDetModulo.Size = new System.Drawing.Size(156, 14);
             this.lblDetModulo.TabIndex = 4;
             this.lblDetModulo.Text = "Módulo";
-            // 
-            // lblDetActividad
-            // 
+            
+            
+            
             this.lblDetActividad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetActividad.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetActividad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -681,9 +681,9 @@ namespace GUI
             this.lblDetActividad.Size = new System.Drawing.Size(152, 14);
             this.lblDetActividad.TabIndex = 5;
             this.lblDetActividad.Text = "Actividad";
-            // 
-            // txtDetModulo
-            // 
+            
+            
+            
             this.txtDetModulo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetModulo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDetModulo.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -695,9 +695,9 @@ namespace GUI
             this.txtDetModulo.ReadOnly = true;
             this.txtDetModulo.Size = new System.Drawing.Size(151, 23);
             this.txtDetModulo.TabIndex = 6;
-            // 
-            // txtDetActividad
-            // 
+            
+            
+            
             this.txtDetActividad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetActividad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDetActividad.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -709,9 +709,9 @@ namespace GUI
             this.txtDetActividad.ReadOnly = true;
             this.txtDetActividad.Size = new System.Drawing.Size(152, 23);
             this.txtDetActividad.TabIndex = 7;
-            // 
-            // lblDetCriticidad
-            // 
+            
+            
+            
             this.lblDetCriticidad.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetCriticidad.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetCriticidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -721,9 +721,9 @@ namespace GUI
             this.lblDetCriticidad.Size = new System.Drawing.Size(156, 14);
             this.lblDetCriticidad.TabIndex = 8;
             this.lblDetCriticidad.Text = "Criticidad";
-            // 
-            // lblDetResultado
-            // 
+            
+            
+            
             this.lblDetResultado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetResultado.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
             this.lblDetResultado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -733,9 +733,9 @@ namespace GUI
             this.lblDetResultado.Size = new System.Drawing.Size(152, 14);
             this.lblDetResultado.TabIndex = 9;
             this.lblDetResultado.Text = "Resultado";
-            // 
-            // txtDetCriticidad
-            // 
+            
+            
+            
             this.txtDetCriticidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetCriticidad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDetCriticidad.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -747,9 +747,9 @@ namespace GUI
             this.txtDetCriticidad.ReadOnly = true;
             this.txtDetCriticidad.Size = new System.Drawing.Size(151, 23);
             this.txtDetCriticidad.TabIndex = 10;
-            // 
-            // txtDetResultado
-            // 
+            
+            
+            
             this.txtDetResultado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetResultado.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDetResultado.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -761,9 +761,9 @@ namespace GUI
             this.txtDetResultado.ReadOnly = true;
             this.txtDetResultado.Size = new System.Drawing.Size(152, 23);
             this.txtDetResultado.TabIndex = 11;
-            // 
-            // lblDetDetalle
-            // 
+            
+            
+            
             this.tblDetalle.SetColumnSpan(this.lblDetDetalle, 2);
             this.lblDetDetalle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetDetalle.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
@@ -774,9 +774,9 @@ namespace GUI
             this.lblDetDetalle.Size = new System.Drawing.Size(313, 13);
             this.lblDetDetalle.TabIndex = 12;
             this.lblDetDetalle.Text = "Detalle";
-            // 
-            // txtDetDetalle
-            // 
+            
+            
+            
             this.txtDetDetalle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetDetalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblDetalle.SetColumnSpan(this.txtDetDetalle, 2);
@@ -790,9 +790,9 @@ namespace GUI
             this.txtDetDetalle.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtDetDetalle.Size = new System.Drawing.Size(307, 158);
             this.txtDetDetalle.TabIndex = 13;
-            // 
-            // lblDetError
-            // 
+            
+            
+            
             this.tblDetalle.SetColumnSpan(this.lblDetError, 2);
             this.lblDetError.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetError.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
@@ -803,9 +803,9 @@ namespace GUI
             this.lblDetError.Size = new System.Drawing.Size(313, 13);
             this.lblDetError.TabIndex = 14;
             this.lblDetError.Text = "Detalle del Error";
-            // 
-            // txtDetError
-            // 
+            
+            
+            
             this.txtDetError.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));
             this.txtDetError.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblDetalle.SetColumnSpan(this.txtDetError, 2);
@@ -819,9 +819,9 @@ namespace GUI
             this.txtDetError.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtDetError.Size = new System.Drawing.Size(307, 195);
             this.txtDetError.TabIndex = 15;
-            // 
-            // pnlEstado
-            // 
+            
+            
+            
             this.pnlEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.pnlEstado.Controls.Add(this.lblContador);
             this.pnlEstado.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -830,9 +830,9 @@ namespace GUI
             this.pnlEstado.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.pnlEstado.Size = new System.Drawing.Size(1068, 21);
             this.pnlEstado.TabIndex = 1;
-            // 
-            // lblContador
-            // 
+            
+            
+            
             this.lblContador.AutoSize = true;
             this.lblContador.BackColor = System.Drawing.Color.Transparent;
             this.lblContador.Dock = System.Windows.Forms.DockStyle.Left;
@@ -843,9 +843,9 @@ namespace GUI
             this.lblContador.Size = new System.Drawing.Size(140, 17);
             this.lblContador.TabIndex = 0;
             this.lblContador.Text = "Mostrando 0 registros";
-            // 
-            // BitacoraForm
-            // 
+            
+            
+            
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));

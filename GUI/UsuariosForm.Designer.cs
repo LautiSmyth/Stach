@@ -1,4 +1,4 @@
-namespace GUI
+﻿namespace GUI
 {
     partial class UsuariosForm
     {
@@ -49,30 +49,30 @@ namespace GUI
             this.tblGestion.SuspendLayout();
             this.tblBotones.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // splitPrincipal
-            // 
+            
+            
+            
             this.splitPrincipal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitPrincipal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitPrincipal.Location = new System.Drawing.Point(0, 0);
             this.splitPrincipal.Name = "splitPrincipal";
-            // 
-            // splitPrincipal.Panel1
-            // 
+            
+            
+            
             this.splitPrincipal.Panel1.Controls.Add(this.dgvUsuarios);
             this.splitPrincipal.Panel1.Controls.Add(this.pnlEncabezado);
-            // 
-            // splitPrincipal.Panel2
-            // 
+            
+            
+            
             this.splitPrincipal.Panel2.Controls.Add(this.grpGestion);
             this.splitPrincipal.Panel2.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.splitPrincipal.Size = new System.Drawing.Size(814, 433);
             this.splitPrincipal.SplitterDistance = 475;
             this.splitPrincipal.SplitterWidth = 3;
             this.splitPrincipal.TabIndex = 0;
-            // 
-            // dgvUsuarios
-            // 
+            
+            
+            
             this.dgvUsuarios.AllowUserToAddRows = false;
             this.dgvUsuarios.AllowUserToDeleteRows = false;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
@@ -117,9 +117,9 @@ namespace GUI
             this.dgvUsuarios.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvUsuarios_CellClick);
             this.dgvUsuarios.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvUsuarios_CellMouseDown);
             this.dgvUsuarios.SelectionChanged += new System.EventHandler(this.DgvUsuarios_SelectionChanged);
-            // 
-            // pnlEncabezado
-            // 
+            
+            
+            
             this.pnlEncabezado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
             this.pnlEncabezado.Controls.Add(this.tblEncabezado);
             this.pnlEncabezado.Dock = System.Windows.Forms.DockStyle.Top;
@@ -127,9 +127,9 @@ namespace GUI
             this.pnlEncabezado.Name = "pnlEncabezado";
             this.pnlEncabezado.Size = new System.Drawing.Size(475, 37);
             this.pnlEncabezado.TabIndex = 0;
-            // 
-            // tblEncabezado
-            // 
+            
+            
+            
             this.tblEncabezado.ColumnCount = 4;
             this.tblEncabezado.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tblEncabezado.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -147,9 +147,9 @@ namespace GUI
             this.tblEncabezado.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblEncabezado.Size = new System.Drawing.Size(475, 37);
             this.tblEncabezado.TabIndex = 0;
-            // 
-            // lblTituloGrilla
-            // 
+            
+            
+            
             this.lblTituloGrilla.BackColor = System.Drawing.Color.Transparent;
             this.lblTituloGrilla.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTituloGrilla.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
@@ -160,9 +160,9 @@ namespace GUI
             this.lblTituloGrilla.TabIndex = 0;
             this.lblTituloGrilla.Text = "Usuarios";
             this.lblTituloGrilla.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblBuscarUsuario
-            // 
+            
+            
+            
             this.lblBuscarUsuario.BackColor = System.Drawing.Color.Transparent;
             this.lblBuscarUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblBuscarUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -172,9 +172,9 @@ namespace GUI
             this.lblBuscarUsuario.TabIndex = 1;
             this.lblBuscarUsuario.Text = "🔍 Buscar:";
             this.lblBuscarUsuario.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // txtBuscarUsuario
-            // 
+            
+            
+            
             this.txtBuscarUsuario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBuscarUsuario.BackColor = System.Drawing.Color.White;
             this.txtBuscarUsuario.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -186,9 +186,9 @@ namespace GUI
             this.txtBuscarUsuario.Size = new System.Drawing.Size(184, 24);
             this.txtBuscarUsuario.TabIndex = 0;
             this.txtBuscarUsuario.TextChanged += new System.EventHandler(this.TxtBuscarUsuario_TextChanged);
-            // 
-            // btnRefrescar
-            // 
+            
+            
+            
             this.btnRefrescar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnRefrescar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRefrescar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -205,9 +205,9 @@ namespace GUI
             this.btnRefrescar.Text = "↻ Actualizar";
             this.btnRefrescar.UseVisualStyleBackColor = false;
             this.btnRefrescar.Click += new System.EventHandler(this.BtnRefrescar_Click);
-            // 
-            // grpGestion
-            // 
+            
+            
+            
             this.grpGestion.BackColor = System.Drawing.Color.Transparent;
             this.grpGestion.Controls.Add(this.tblGestion);
             this.grpGestion.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -220,9 +220,9 @@ namespace GUI
             this.grpGestion.TabIndex = 0;
             this.grpGestion.TabStop = false;
             this.grpGestion.Text = "Gestión de Usuario";
-            // 
-            // tblGestion
-            // 
+            
+            
+            
             this.tblGestion.ColumnCount = 1;
             this.tblGestion.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblGestion.Controls.Add(this.lblUsername, 0, 0);
@@ -252,9 +252,9 @@ namespace GUI
             this.tblGestion.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblGestion.Size = new System.Drawing.Size(306, 381);
             this.tblGestion.TabIndex = 0;
-            // 
-            // lblUsername
-            // 
+            
+            
+            
             this.lblUsername.AutoSize = true;
             this.lblUsername.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.lblUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -264,9 +264,9 @@ namespace GUI
             this.lblUsername.Size = new System.Drawing.Size(127, 17);
             this.lblUsername.TabIndex = 0;
             this.lblUsername.Text = "Nombre de usuario";
-            // 
-            // txtUsername
-            // 
+            
+            
+            
             this.txtUsername.BackColor = System.Drawing.Color.White;
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtUsername.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -277,9 +277,9 @@ namespace GUI
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(300, 24);
             this.txtUsername.TabIndex = 0;
-            // 
-            // lblPassword
-            // 
+            
+            
+            
             this.lblPassword.AutoSize = true;
             this.lblPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -289,9 +289,9 @@ namespace GUI
             this.lblPassword.Size = new System.Drawing.Size(77, 17);
             this.lblPassword.TabIndex = 1;
             this.lblPassword.Text = "Contraseña";
-            // 
-            // txtPassword
-            // 
+            
+            
+            
             this.txtPassword.BackColor = System.Drawing.Color.White;
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -303,9 +303,9 @@ namespace GUI
             this.txtPassword.Size = new System.Drawing.Size(300, 24);
             this.txtPassword.TabIndex = 1;
             this.txtPassword.UseSystemPasswordChar = true;
-            // 
-            // lblConfirmarPassword
-            // 
+            
+            
+            
             this.lblConfirmarPassword.AutoSize = true;
             this.lblConfirmarPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.lblConfirmarPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -315,9 +315,9 @@ namespace GUI
             this.lblConfirmarPassword.Size = new System.Drawing.Size(141, 17);
             this.lblConfirmarPassword.TabIndex = 2;
             this.lblConfirmarPassword.Text = "Confirmar contraseña";
-            // 
-            // txtConfirmarPassword
-            // 
+            
+            
+            
             this.txtConfirmarPassword.BackColor = System.Drawing.Color.White;
             this.txtConfirmarPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtConfirmarPassword.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -330,9 +330,9 @@ namespace GUI
             this.txtConfirmarPassword.Size = new System.Drawing.Size(300, 24);
             this.txtConfirmarPassword.TabIndex = 2;
             this.txtConfirmarPassword.UseSystemPasswordChar = true;
-            // 
-            // lblRequisitos
-            // 
+            
+            
+            
             this.lblRequisitos.AutoSize = true;
             this.lblRequisitos.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblRequisitos.Font = new System.Drawing.Font("Segoe UI", 8F);
@@ -344,9 +344,9 @@ namespace GUI
             this.lblRequisitos.TabIndex = 3;
             this.lblRequisitos.Text = "Para modificar, deje vacío para mantener la contraseña.\nDebe tener al menos 6 car" +
     "acteres, 1 mayúscula y 1 número.";
-            // 
-            // lblEstado
-            // 
+            
+            
+            
             this.lblEstado.AutoSize = true;
             this.lblEstado.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
@@ -356,9 +356,9 @@ namespace GUI
             this.lblEstado.Size = new System.Drawing.Size(49, 17);
             this.lblEstado.TabIndex = 4;
             this.lblEstado.Text = "Estado";
-            // 
-            // cboEstado
-            // 
+            
+            
+            
             this.cboEstado.BackColor = System.Drawing.Color.White;
             this.cboEstado.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -370,9 +370,9 @@ namespace GUI
             this.cboEstado.Name = "cboEstado";
             this.cboEstado.Size = new System.Drawing.Size(300, 25);
             this.cboEstado.TabIndex = 3;
-            // 
-            // tblBotones
-            // 
+            
+            
+            
             this.tblBotones.ColumnCount = 2;
             this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -385,9 +385,9 @@ namespace GUI
             this.tblBotones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblBotones.Size = new System.Drawing.Size(300, 29);
             this.tblBotones.TabIndex = 5;
-            // 
-            // btnGuardar
-            // 
+            
+            
+            
             this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnGuardar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnGuardar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -404,9 +404,9 @@ namespace GUI
             this.btnGuardar.Text = "Crear usuario";
             this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
-            // 
-            // btnLimpiar
-            // 
+            
+            
+            
             this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLimpiar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -424,8 +424,8 @@ namespace GUI
             this.btnLimpiar.UseVisualStyleBackColor = false;
             this.btnLimpiar.Click += new System.EventHandler(this.BtnLimpiar_Click);
 
-            // UsuariosForm
-            // 
+            
+            
             this.AcceptButton = this.btnGuardar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

@@ -1,4 +1,4 @@
-namespace GUI
+﻿namespace GUI
 {
     partial class LoginForm
     {
@@ -36,9 +36,9 @@ namespace GUI
             this.pnlDerecha.SuspendLayout();
             this.pnlCard.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tblRaiz
-            // 
+            
+            
+            
             this.tblRaiz.ColumnCount = 2;
             this.tblRaiz.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tblRaiz.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
@@ -51,9 +51,9 @@ namespace GUI
             this.tblRaiz.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblRaiz.Size = new System.Drawing.Size(771, 485);
             this.tblRaiz.TabIndex = 0;
-            // 
-            // pnlIzquierda
-            // 
+            
+            
+            
             this.pnlIzquierda.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.pnlIzquierda.Controls.Add(this.lblStach);
             this.pnlIzquierda.Controls.Add(this.lblBienvenida);
@@ -65,9 +65,9 @@ namespace GUI
             this.pnlIzquierda.Size = new System.Drawing.Size(302, 479);
             this.pnlIzquierda.TabIndex = 0;
             this.pnlIzquierda.Paint += new System.Windows.Forms.PaintEventHandler(this.PnlIzquierda_Paint);
-            // 
-            // lblStach
-            // 
+            
+            
+            
             this.lblStach.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStach.BackColor = System.Drawing.Color.Transparent;
             this.lblStach.Font = new System.Drawing.Font("Segoe UI", 28F, System.Drawing.FontStyle.Bold);
@@ -78,9 +78,9 @@ namespace GUI
             this.lblStach.TabIndex = 2;
             this.lblStach.Text = "Stach";
             this.lblStach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblBienvenida
-            // 
+            
+            
+            
             this.lblBienvenida.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblBienvenida.BackColor = System.Drawing.Color.Transparent;
             this.lblBienvenida.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
@@ -90,9 +90,9 @@ namespace GUI
             this.lblBienvenida.Size = new System.Drawing.Size(223, 70);
             this.lblBienvenida.TabIndex = 0;
             this.lblBienvenida.Text = "Sistema de\nGestión";
-            // 
-            // lblTagline
-            // 
+            
+            
+            
             this.lblTagline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTagline.BackColor = System.Drawing.Color.Transparent;
             this.lblTagline.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -102,9 +102,9 @@ namespace GUI
             this.lblTagline.Size = new System.Drawing.Size(223, 52);
             this.lblTagline.TabIndex = 1;
             this.lblTagline.Text = "Acceso seguro y centralizado\na todos los módulos";
-            // 
-            // pnlDerecha
-            // 
+            
+            
+            
             this.pnlDerecha.ColumnCount = 3;
             this.pnlDerecha.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.pnlDerecha.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -120,9 +120,9 @@ namespace GUI
             this.pnlDerecha.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.pnlDerecha.Size = new System.Drawing.Size(457, 479);
             this.pnlDerecha.TabIndex = 1;
-            // 
-            // pnlCard
-            // 
+            
+            
+            
             this.pnlCard.BackColor = System.Drawing.Color.White;
             this.pnlCard.Controls.Add(this.lblErrorValidacion);
             this.pnlCard.Controls.Add(this.btnSalir);
@@ -141,9 +141,9 @@ namespace GUI
             this.pnlCard.Size = new System.Drawing.Size(331, 353);
             this.pnlCard.TabIndex = 0;
             this.pnlCard.Paint += new System.Windows.Forms.PaintEventHandler(this.PnlCard_Paint);
-            // 
-            // lblErrorValidacion
-            // 
+            
+            
+            
             this.lblErrorValidacion.BackColor = System.Drawing.Color.Transparent;
             this.lblErrorValidacion.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.lblErrorValidacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(115)))), ((int)(((byte)(115)))));
@@ -152,9 +152,9 @@ namespace GUI
             this.lblErrorValidacion.Size = new System.Drawing.Size(266, 36);
             this.lblErrorValidacion.TabIndex = 9;
             this.lblErrorValidacion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnSalir
-            // 
+            
+            
+            
             this.btnSalir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSalir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnSalir.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -171,9 +171,9 @@ namespace GUI
             this.btnSalir.Text = "Cancelar";
             this.btnSalir.UseVisualStyleBackColor = false;
             this.btnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
-            // 
-            // btnIngresar
-            // 
+            
+            
+            
             this.btnIngresar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIngresar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnIngresar.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -189,9 +189,9 @@ namespace GUI
             this.btnIngresar.Text = "Ingresar";
             this.btnIngresar.UseVisualStyleBackColor = false;
             this.btnIngresar.Click += new System.EventHandler(this.BtnIngresar_Click);
-            // 
-            // chkHidePass
-            // 
+            
+            
+            
             this.chkHidePass.AutoSize = true;
             this.chkHidePass.BackColor = System.Drawing.Color.Transparent;
             this.chkHidePass.Checked = true;
@@ -205,9 +205,9 @@ namespace GUI
             this.chkHidePass.Text = "Ocultar contraseña";
             this.chkHidePass.UseVisualStyleBackColor = false;
             this.chkHidePass.CheckedChanged += new System.EventHandler(this.ChkHidePass_CheckedChanged);
-            // 
-            // txtPassword
-            // 
+            
+            
+            
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPassword.BackColor = System.Drawing.Color.White;
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -221,9 +221,9 @@ namespace GUI
             this.txtPassword.UseSystemPasswordChar = true;
             this.txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtPassword_KeyDown);
             this.txtPassword.TextChanged += new System.EventHandler(this.TxtInput_TextChanged);
-            // 
-            // lblPassword
-            // 
+            
+            
+            
             this.lblPassword.AutoSize = true;
             this.lblPassword.BackColor = System.Drawing.Color.Transparent;
             this.lblPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
@@ -233,9 +233,9 @@ namespace GUI
             this.lblPassword.Size = new System.Drawing.Size(77, 17);
             this.lblPassword.TabIndex = 5;
             this.lblPassword.Text = "Contraseña";
-            // 
-            // txtUsername
-            // 
+            
+            
+            
             this.txtUsername.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUsername.BackColor = System.Drawing.Color.White;
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -248,9 +248,9 @@ namespace GUI
             this.txtUsername.TabIndex = 0;
             this.txtUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtUsername_KeyDown);
             this.txtUsername.TextChanged += new System.EventHandler(this.TxtInput_TextChanged);
-            // 
-            // lblUsername
-            // 
+            
+            
+            
             this.lblUsername.AutoSize = true;
             this.lblUsername.BackColor = System.Drawing.Color.Transparent;
             this.lblUsername.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
@@ -260,9 +260,9 @@ namespace GUI
             this.lblUsername.Size = new System.Drawing.Size(55, 17);
             this.lblUsername.TabIndex = 6;
             this.lblUsername.Text = "Usuario";
-            // 
-            // lblSubtitulo
-            // 
+            
+            
+            
             this.lblSubtitulo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSubtitulo.BackColor = System.Drawing.Color.Transparent;
             this.lblSubtitulo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -273,9 +273,9 @@ namespace GUI
             this.lblSubtitulo.TabIndex = 7;
             this.lblSubtitulo.Text = "Ingrese sus credenciales para acceder";
             this.lblSubtitulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblTitulo
-            // 
+            
+            
+            
             this.lblTitulo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitulo.BackColor = System.Drawing.Color.Transparent;
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
@@ -286,9 +286,9 @@ namespace GUI
             this.lblTitulo.TabIndex = 8;
             this.lblTitulo.Text = "Iniciar sesión";
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cboIdioma
-            // 
+            
+            
+            
             this.cboIdioma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cboIdioma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboIdioma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -300,9 +300,9 @@ namespace GUI
             this.cboIdioma.Size = new System.Drawing.Size(95, 25);
             this.cboIdioma.TabIndex = 5;
             this.cboIdioma.SelectedIndexChanged += new System.EventHandler(this.CboIdioma_SelectedIndexChanged);
-            // 
-            // LoginForm
-            // 
+            
+            
+            
             this.AcceptButton = this.btnIngresar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

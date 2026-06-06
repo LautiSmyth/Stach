@@ -1,4 +1,4 @@
-using BE;
+﻿using BE;
 using BE.Enums;
 using Abstracciones;
 using System;
@@ -338,7 +338,7 @@ namespace BLL
                     }
                     catch
                     {
-                        // Ignorar errores al resolver dependencias durante login
+                        
                     }
                 }
 

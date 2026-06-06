@@ -1,4 +1,4 @@
-using Abstracciones;
+﻿using Abstracciones;
 using BE;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,7 +87,7 @@ namespace Servicios
             }
             catch
             {
-                // Ignorar excepciones al resolver dependencias en la inicialización inicial del sistema
+                
             }
         }
 
@@ -151,7 +151,7 @@ namespace Servicios
             List<Idioma> idiomas = _idiomaDal.ObtenerTodos();
             Idioma defaultLang = idiomas.FirstOrDefault(i => i.Default) ?? idiomas.FirstOrDefault();
 
-            // 1. Cargar traducción por defecto (fallback)
+            
             if (defaultLang != null)
             {
                 List<Traduccion> traduccionesDefault = _traduccionDal.ObtenerTraduccionesPorIdioma(defaultLang.IdIdioma);
@@ -165,7 +165,7 @@ namespace Servicios
                 }
             }
 
-            // 2. Si el idioma actual no es el default, sobreescribir con las traducciones del idioma actual
+            
             if (defaultLang == null || _idiomaActual.IdIdioma != defaultLang.IdIdioma)
             {
                 List<Traduccion> traduccionesActual = _traduccionDal.ObtenerTraduccionesPorIdioma(_idiomaActual.IdIdioma);

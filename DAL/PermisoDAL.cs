@@ -1,4 +1,4 @@
-using BE;
+﻿using BE;
 using Abstracciones;
 using System;
 using System.Collections.Generic;
@@ -156,7 +156,7 @@ namespace DAL
             }
         }
 
-        // Control mapping database operations
+        
         public void GuardarControlesAsociados(int idPermiso, List<ControlMapeado> controles)
         {
             SqlParameter[] pDel = new SqlParameter[] { new SqlParameter("@IdPermiso", idPermiso) };

@@ -1,4 +1,4 @@
-namespace GUI
+﻿namespace GUI
 {
     partial class RestauracionForm
     {
@@ -28,9 +28,9 @@ namespace GUI
             this.pnlHeader.SuspendLayout();
             this.tblBotones.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tblRaiz
-            // 
+            
+            
+            
             this.tblRaiz.ColumnCount = 1;
             this.tblRaiz.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblRaiz.Controls.Add(this.pnlHeader, 0, 0);
@@ -45,9 +45,9 @@ namespace GUI
             this.tblRaiz.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tblRaiz.Size = new System.Drawing.Size(600, 400);
             this.tblRaiz.TabIndex = 0;
-            // 
-            // pnlHeader
-            // 
+            
+            
+            
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
             this.pnlHeader.Controls.Add(this.lblTitulo);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -56,9 +56,9 @@ namespace GUI
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(600, 60);
             this.pnlHeader.TabIndex = 0;
-            // 
-            // lblTitulo
-            // 
+            
+            
+            
             this.lblTitulo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor = System.Drawing.Color.White;
@@ -68,9 +68,9 @@ namespace GUI
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "  Fallo de Integridad - Restauracion";
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lstErrores
-            // 
+            
+            
+            
             this.lstErrores.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lstErrores.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstErrores.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -82,9 +82,9 @@ namespace GUI
             this.lstErrores.Name = "lstErrores";
             this.lstErrores.Size = new System.Drawing.Size(580, 260);
             this.lstErrores.TabIndex = 1;
-            // 
-            // tblBotones
-            // 
+            
+            
+            
             this.tblBotones.ColumnCount = 5;
             this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
@@ -103,9 +103,9 @@ namespace GUI
             this.tblBotones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblBotones.Size = new System.Drawing.Size(600, 60);
             this.tblBotones.TabIndex = 2;
-            // 
-            // btnVerDetalles
-            // 
+            
+            
+            
             this.btnVerDetalles.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnVerDetalles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnVerDetalles.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -120,9 +120,9 @@ namespace GUI
             this.btnVerDetalles.Text = "Ver Detalles";
             this.btnVerDetalles.UseVisualStyleBackColor = false;
             this.btnVerDetalles.Click += new System.EventHandler(this.BtnVerDetalles_Click);
-            // 
-            // btnRestaurarBackup
-            // 
+            
+            
+            
             this.btnRestaurarBackup.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnRestaurarBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnRestaurarBackup.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -137,9 +137,9 @@ namespace GUI
             this.btnRestaurarBackup.Text = "Restaurar Backup";
             this.btnRestaurarBackup.UseVisualStyleBackColor = false;
             this.btnRestaurarBackup.Click += new System.EventHandler(this.BtnRestaurarBackup_Click);
-            // 
-            // btnRecalcular
-            // 
+            
+            
+            
             this.btnRecalcular.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnRecalcular.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnRecalcular.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -154,9 +154,9 @@ namespace GUI
             this.btnRecalcular.Text = "Recalcular Digitos";
             this.btnRecalcular.UseVisualStyleBackColor = false;
             this.btnRecalcular.Click += new System.EventHandler(this.BtnRecalcular_Click);
-            // 
-            // btnSalir
-            // 
+            
+            
+            
             this.btnSalir.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnSalir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnSalir.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -171,10 +171,10 @@ namespace GUI
             this.btnSalir.Text = "Cerrar Aplicacion";
             this.btnSalir.UseVisualStyleBackColor = false;
             this.btnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
-            // 
-            // 
-            // RestauracionForm
-            // 
+            
+            
+            
+            
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(244)))), ((int)(((byte)(255)))));

@@ -1,4 +1,4 @@
-using BE;
+﻿using BE;
 using Abstracciones;
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace BLL
 
                 Usuario usuario = _usuarioDal.ObtenerPorId(version.IdUsuario) ?? throw new ArgumentException("El usuario de esta versión ya no existe.");
 
-                // Guardar el estado actual del usuario como una nueva versión histórica para poder revertir el rollback (rollback del rollback)
+                
                 VersionUsuario vActual = new VersionUsuario
                 {
                     IdUsuario = usuario.IdUsuario,

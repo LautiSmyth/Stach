@@ -1,4 +1,4 @@
-namespace GUI
+﻿namespace GUI
 {
     partial class ConfirmarAdminForm
     {
@@ -26,9 +26,9 @@ namespace GUI
             this.lblTitulo = new System.Windows.Forms.Label();
             this.pnlHeader.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblMensaje
-            // 
+            
+            
+            
             this.lblMensaje.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblMensaje.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(20)))), ((int)(((byte)(70)))));
             this.lblMensaje.Location = new System.Drawing.Point(18, 70);
@@ -36,9 +36,9 @@ namespace GUI
             this.lblMensaje.Size = new System.Drawing.Size(314, 40);
             this.lblMensaje.TabIndex = 0;
             this.lblMensaje.Text = "Se requieren credenciales de Administrador para realizar esta acción.";
-            // 
-            // lblUsuario
-            // 
+            
+            
+            
             this.lblUsuario.AutoSize = true;
             this.lblUsuario.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(85)))), ((int)(((byte)(150)))));
@@ -47,18 +47,18 @@ namespace GUI
             this.lblUsuario.Size = new System.Drawing.Size(49, 15);
             this.lblUsuario.TabIndex = 1;
             this.lblUsuario.Text = "Usuario";
-            // 
-            // txtUsuario
-            // 
+            
+            
+            
             this.txtUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.txtUsuario.Location = new System.Drawing.Point(18, 140);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(314, 24);
             this.txtUsuario.TabIndex = 2;
             this.txtUsuario.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtUsuario_KeyPress);
-            // 
-            // lblPassword
-            // 
+            
+            
+            
             this.lblPassword.AutoSize = true;
             this.lblPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(85)))), ((int)(((byte)(150)))));
@@ -67,18 +67,18 @@ namespace GUI
             this.lblPassword.Size = new System.Drawing.Size(69, 15);
             this.lblPassword.TabIndex = 3;
             this.lblPassword.Text = "Contraseña";
-            // 
-            // txtPassword
-            // 
+            
+            
+            
             this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.txtPassword.Location = new System.Drawing.Point(18, 200);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(314, 24);
             this.txtPassword.TabIndex = 4;
-            // 
-            // btnConfirmar
-            // 
+            
+            
+            
             this.btnConfirmar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.btnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConfirmar.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
@@ -90,9 +90,9 @@ namespace GUI
             this.btnConfirmar.Text = "Confirmar";
             this.btnConfirmar.UseVisualStyleBackColor = false;
             this.btnConfirmar.Click += new System.EventHandler(this.BtnConfirmar_Click);
-            // 
-            // btnCancelar
-            // 
+            
+            
+            
             this.btnCancelar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(231)))), ((int)(((byte)(249)))));
             this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -104,9 +104,9 @@ namespace GUI
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = false;
             this.btnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
-            // 
-            // pnlHeader
-            // 
+            
+            
+            
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(126)))), ((int)(((byte)(87)))), ((int)(((byte)(194)))));
             this.pnlHeader.Controls.Add(this.lblTitulo);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -114,9 +114,9 @@ namespace GUI
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(350, 50);
             this.pnlHeader.TabIndex = 7;
-            // 
-            // lblTitulo
-            // 
+            
+            
+            
             this.lblTitulo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor = System.Drawing.Color.White;
@@ -126,9 +126,9 @@ namespace GUI
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "  Autorización requerida";
             this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ConfirmarAdminForm
-            // 
+            
+            
+            
             this.AcceptButton = this.btnConfirmar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
