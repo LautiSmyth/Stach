@@ -143,12 +143,6 @@ namespace GUI
             cboFormularios.Visible = esPermiso;
 
             tblCol2Transfer.Enabled = esRol || esPermiso;
-
-            btnGuardarRelaciones.Visible = esRol;
-            btnGuardarRelaciones.Enabled = esRol;
-            
-            btnGuardarControles.Visible = esPermiso;
-            btnGuardarControles.Enabled = esPermiso;
         }
 
         private void CargarListasRelacion()
@@ -293,7 +287,21 @@ namespace GUI
                     return;
                 }
                 fam.Agregar(comp);
-                CargarListasRelacion();
+                try
+                {
+                    _permisoBll.GuardarRelaciones(this.Text, fam);
+                    int idSeleccionado = fam.IdPermiso;
+                    CargarDatos();
+                    SeleccionarNodoPorId(idSeleccionado);
+                    RefrescarUsuarioLogueado();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error al guardar relación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    int idSeleccionado = fam.IdPermiso;
+                    CargarDatos();
+                    SeleccionarNodoPorId(idSeleccionado);
+                }
             }
             else if (_seleccionado is Permiso && lstDisponibles.SelectedItem is ControlItem controlItem)
             {
@@ -305,13 +313,25 @@ namespace GUI
 
                 if (!_controlesDelPermiso.Any(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) && c.NombreControl.Equals(ctrlName, StringComparison.OrdinalIgnoreCase)))
                 {
-                    _controlesDelPermiso.Add(new ControlMapeado
+                    var nuevoControl = new ControlMapeado
                     {
                         IdPermiso = _seleccionado.IdPermiso,
                         Formulario = selectedFormName,
                         NombreControl = ctrlName
-                    });
-                    ActualizarListasControles();
+                    };
+                    _controlesDelPermiso.Add(nuevoControl);
+                    try
+                    {
+                        _permisoBll.GuardarControlesAsociados(_seleccionado.IdPermiso, _controlesDelPermiso);
+                        ActualizarListasControles();
+                        RefrescarUsuarioLogueado();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error al guardar controles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _controlesDelPermiso.Remove(nuevoControl);
+                        ActualizarListasControles();
+                    }
                 }
             }
         }
@@ -327,7 +347,21 @@ namespace GUI
             if (_seleccionado is Rol fam && lstMiembros.SelectedItem is ComponentePermiso comp)
             {
                 fam.Quitar(comp);
-                CargarListasRelacion();
+                try
+                {
+                    _permisoBll.GuardarRelaciones(this.Text, fam);
+                    int idSeleccionado = fam.IdPermiso;
+                    CargarDatos();
+                    SeleccionarNodoPorId(idSeleccionado);
+                    RefrescarUsuarioLogueado();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error al guardar relación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    int idSeleccionado = fam.IdPermiso;
+                    CargarDatos();
+                    SeleccionarNodoPorId(idSeleccionado);
+                }
             }
             else if (_seleccionado is Permiso && lstMiembros.SelectedItem is ControlItem controlItem)
             {
@@ -344,30 +378,18 @@ namespace GUI
                 if (target != null)
                 {
                     _controlesDelPermiso.Remove(target);
-                    ActualizarListasControles();
-                }
-            }
-        }
-
-        private void BtnGuardarRelaciones_Click(object sender, EventArgs e)
-        {
-            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
-            {
-                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (_seleccionado is Rol fam)
-            {
-                try
-                {
-                    _permisoBll.GuardarRelaciones(this.Text, fam);
-                    CargarDatos();
-                    MessageBox.Show("Relaciones guardadas con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    try
+                    {
+                        _permisoBll.GuardarControlesAsociados(_seleccionado.IdPermiso, _controlesDelPermiso);
+                        ActualizarListasControles();
+                        RefrescarUsuarioLogueado();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error al guardar controles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _controlesDelPermiso.Add(target);
+                        ActualizarListasControles();
+                    }
                 }
             }
         }
@@ -426,10 +448,13 @@ namespace GUI
             {
                 _permisoBll.GuardarPermisosUsuario(this.Text, _usuarioSeleccionado.IdUsuario, _usuarioSeleccionado.Username, _usuarioSeleccionado.Permisos);
                 CargarPermisosUsuario();
+                RefrescarUsuarioLogueado();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _usuarioSeleccionado.Permisos.Remove(_seleccionado);
+                CargarPermisosUsuario();
             }
         }
 
@@ -475,10 +500,13 @@ namespace GUI
             {
                 _permisoBll.GuardarPermisosUsuario(this.Text, _usuarioSeleccionado.IdUsuario, _usuarioSeleccionado.Username, _usuarioSeleccionado.Permisos);
                 CargarPermisosUsuario();
+                RefrescarUsuarioLogueado();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _usuarioSeleccionado.Permisos.Add(p);
+                CargarPermisosUsuario();
             }
         }
 
@@ -491,9 +519,7 @@ namespace GUI
             btnCrearRol.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnCrearRol");
             btnEliminarPermiso.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnEliminarPermiso");
 
-            btnGuardarRelaciones.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnGuardarRelaciones");
             lblFormulario.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblFormulario") ?? "Formulario:";
-            btnGuardarControles.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.btnGuardarControles") ?? "Guardar Controles";
 
             lblCol3Titulo.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblCol3Titulo");
             lblUserPerms.Text = _manejadorIdioma.ObtenerTexto("PermisosForm.lblUserPerms");
@@ -570,7 +596,7 @@ namespace GUI
                     }
                     catch
                     {
-                        // Fallback remains type.Name
+                        
                     }
                 }
 
@@ -613,14 +639,14 @@ namespace GUI
 
             List<ControlItem> todosControles = ObtenerControlesDeFormulario(formType);
             
-            // Build asociados
+            
             List<ControlItem> asociados = todosControles
                 .Where(ctrl => _controlesDelPermiso.Any(c => 
                     c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase) && 
                     c.NombreControl.Equals(ctrl.NombreControl, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
-            // Add any other control mapped that wasn't dynamically found (e.g. if deleted/moved but still mapped in database)
+            
             var mappedControlNames = _controlesDelPermiso
                 .Where(c => c.Formulario.Equals(selectedFormName, StringComparison.OrdinalIgnoreCase))
                 .Select(c => c.NombreControl)
@@ -638,7 +664,7 @@ namespace GUI
                 }
             }
 
-            // Build disponibles
+            
             List<ControlItem> disponibles = todosControles
                 .Where(ctrl => !asociados.Any(a => a.NombreControl.Equals(ctrl.NombreControl, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
@@ -672,7 +698,7 @@ namespace GUI
             }
             catch (Exception ex)
             {
-                // Ignorar excepciones al intentar instanciar formularios que puedan requerir parámetros específicos de DI o fallar en tiempo de diseño/construcción
+                
                 System.Diagnostics.Debug.WriteLine($"Error al instanciar formulario {formType.Name}: {ex.Message}");
             }
             return controles;
@@ -759,28 +785,38 @@ namespace GUI
 
 
 
-        private void BtnGuardarControles_Click(object sender, EventArgs e)
+        private void SeleccionarNodoPorId(int idPermiso)
         {
-            if (!_usuarioBll.UsuarioLogueadoTienePermiso("Gestión de Permisos"))
+            if (idPermiso == -1) return;
+            TreeNode nodo = BuscarNodoPorIdRecursivo(tvEstructura.Nodes, idPermiso);
+            if (nodo != null)
             {
-                MessageBox.Show("No tiene autorización para realizar esta acción.", "Autorización", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                tvEstructura.SelectedNode = nodo;
+                tvEstructura.Focus();
             }
+        }
 
-            if (_seleccionado == null)
+        private TreeNode BuscarNodoPorIdRecursivo(TreeNodeCollection nodos, int idPermiso)
+        {
+            foreach (TreeNode nodo in nodos)
             {
-                MessageBox.Show("Seleccione un permiso o rol en la estructura.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (nodo.Tag is ComponentePermiso comp && comp.IdPermiso == idPermiso)
+                {
+                    return nodo;
+                }
+                TreeNode subNodo = BuscarNodoPorIdRecursivo(nodo.Nodes, idPermiso);
+                if (subNodo != null) return subNodo;
             }
+            return null;
+        }
 
-            try
+        private void RefrescarUsuarioLogueado()
+        {
+            Usuario logueado = SessionManager.GetInstance().Usuario;
+            if (logueado != null)
             {
-                _permisoBll.GuardarControlesAsociados(_seleccionado.IdPermiso, _controlesDelPermiso);
-                MessageBox.Show("Controles guardados con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error al guardar controles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                logueado.Permisos = _permisoBll.ObtenerPermisosUsuario(logueado.IdUsuario);
+                ManejadorSeguridad.ActualizarSeguridadFormulariosAbiertos(logueado);
             }
         }
 

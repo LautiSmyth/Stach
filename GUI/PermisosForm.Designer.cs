@@ -25,10 +25,8 @@ namespace GUI
             this.tvEstructura = new System.Windows.Forms.TreeView();
             this.lblCol1Titulo = new System.Windows.Forms.Label();
             this.pnlCol2 = new System.Windows.Forms.Panel();
-            this.btnGuardarRelaciones = new System.Windows.Forms.Button();
             this.lblFormulario = new System.Windows.Forms.Label();
             this.cboFormularios = new System.Windows.Forms.ComboBox();
-            this.btnGuardarControles = new System.Windows.Forms.Button();
             this.tblCol2Transfer = new System.Windows.Forms.TableLayoutPanel();
             this.lstDisponibles = new System.Windows.Forms.ListBox();
             this.pnlCol2Buttons = new System.Windows.Forms.Panel();
@@ -149,31 +147,18 @@ namespace GUI
             this.lblCol1Titulo.Text = "Estructura de Permisos";
 
             this.pnlCol2.BackColor = System.Drawing.Color.White;
-            this.pnlCol2.Controls.Add(this.btnGuardarRelaciones);
             this.pnlCol2.Controls.Add(this.tblCol2Transfer);
             this.pnlCol2.Controls.Add(this.lblMiembros);
             this.pnlCol2.Controls.Add(this.lblDisponibles);
             this.pnlCol2.Controls.Add(this.lblCol2Titulo);
             this.pnlCol2.Controls.Add(this.lblFormulario);
             this.pnlCol2.Controls.Add(this.cboFormularios);
-            this.pnlCol2.Controls.Add(this.btnGuardarControles);
             this.pnlCol2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCol2.Location = new System.Drawing.Point(399, 3);
             this.pnlCol2.Name = "pnlCol2";
             this.pnlCol2.Padding = new System.Windows.Forms.Padding(15);
             this.pnlCol2.Size = new System.Drawing.Size(402, 594);
             this.pnlCol2.TabIndex = 1;
-
-            this.btnGuardarRelaciones.BackColor = System.Drawing.Color.FromArgb(126, 87, 194);
-            this.btnGuardarRelaciones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGuardarRelaciones.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnGuardarRelaciones.ForeColor = System.Drawing.Color.White;
-            this.btnGuardarRelaciones.Location = new System.Drawing.Point(18, 545);
-            this.btnGuardarRelaciones.Name = "btnGuardarRelaciones";
-            this.btnGuardarRelaciones.Size = new System.Drawing.Size(366, 30);
-            this.btnGuardarRelaciones.TabIndex = 5;
-            this.btnGuardarRelaciones.Text = "Guardar Relaciones del Rol";
-            this.btnGuardarRelaciones.UseVisualStyleBackColor = false;
 
             this.tblCol2Transfer.ColumnCount = 3;
             this.tblCol2Transfer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43F));
@@ -186,7 +171,7 @@ namespace GUI
             this.tblCol2Transfer.Name = "tblCol2Transfer";
             this.tblCol2Transfer.RowCount = 1;
             this.tblCol2Transfer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblCol2Transfer.Size = new System.Drawing.Size(366, 420);
+            this.tblCol2Transfer.Size = new System.Drawing.Size(366, 465);
             this.tblCol2Transfer.TabIndex = 4;
 
             this.lstDisponibles.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -273,16 +258,7 @@ namespace GUI
             this.cboFormularios.Size = new System.Drawing.Size(284, 23);
             this.cboFormularios.TabIndex = 8;
 
-            this.btnGuardarControles.BackColor = System.Drawing.Color.FromArgb(126, 87, 194);
-            this.btnGuardarControles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGuardarControles.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnGuardarControles.ForeColor = System.Drawing.Color.White;
-            this.btnGuardarControles.Location = new System.Drawing.Point(18, 545);
-            this.btnGuardarControles.Name = "btnGuardarControles";
-            this.btnGuardarControles.Size = new System.Drawing.Size(366, 30);
-            this.btnGuardarControles.TabIndex = 12;
-            this.btnGuardarControles.Text = "Guardar Controles";
-            this.btnGuardarControles.UseVisualStyleBackColor = false;
+
 
             this.pnlCol3.BackColor = System.Drawing.Color.FromArgb(248, 244, 255);
             this.pnlCol3.Controls.Add(this.btnQuitarUsuario);
@@ -355,7 +331,9 @@ namespace GUI
             this.lblUserPerms.TabIndex = 2;
             this.lblUserPerms.Text = "Permisos del Usuario";
 
-            this.cboUsuarios.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboUsuarios.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboUsuarios.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboUsuarios.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
             this.cboUsuarios.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.cboUsuarios.FormattingEnabled = true;
             this.cboUsuarios.Location = new System.Drawing.Point(18, 65);
@@ -385,8 +363,7 @@ namespace GUI
             this.btnEliminarPermiso.Click += new System.EventHandler(this.BtnEliminarPermiso_Click);
             this.btnAgregarRelacion.Click += new System.EventHandler(this.BtnAgregarRelacion_Click);
             this.btnQuitarRelacion.Click += new System.EventHandler(this.BtnQuitarRelacion_Click);
-            this.btnGuardarRelaciones.Click += new System.EventHandler(this.BtnGuardarRelaciones_Click);
-            this.btnGuardarControles.Click += new System.EventHandler(this.BtnGuardarControles_Click);
+
             this.cboFormularios.SelectedIndexChanged += new System.EventHandler(this.CboFormularios_SelectedIndexChanged);
             this.cboUsuarios.SelectedIndexChanged += new System.EventHandler(this.CboUsuarios_SelectedIndexChanged);
             this.btnAsignarUsuario.Click += new System.EventHandler(this.BtnAsignarUsuario_Click);
@@ -422,10 +399,8 @@ namespace GUI
         private System.Windows.Forms.Button btnAgregarRelacion;
         private System.Windows.Forms.Button btnQuitarRelacion;
         private System.Windows.Forms.ListBox lstMiembros;
-        private System.Windows.Forms.Button btnGuardarRelaciones;
         private System.Windows.Forms.Label lblFormulario;
         private System.Windows.Forms.ComboBox cboFormularios;
-        private System.Windows.Forms.Button btnGuardarControles;
         private System.Windows.Forms.Panel pnlCol3;
         private System.Windows.Forms.Label lblCol3Titulo;
         private System.Windows.Forms.ComboBox cboUsuarios;

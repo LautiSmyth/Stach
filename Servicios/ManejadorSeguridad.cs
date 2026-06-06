@@ -9,6 +9,16 @@ namespace Servicios
 {
     public static class ManejadorSeguridad
     {
+        private static readonly HashSet<string> _controlesControlados = new HashSet<string>();
+
+        public static void ActualizarSeguridadFormulariosAbiertos(Usuario usuario)
+        {
+            foreach (Form form in Application.OpenForms.Cast<Form>().ToList())
+            {
+                AplicarSeguridad(form, usuario);
+            }
+        }
+
         public static void AplicarSeguridad(Form formulario, Usuario usuario)
         {
             if (formulario == null || usuario == null) return;
@@ -19,12 +29,15 @@ namespace Servicios
                 List<ControlMapeado> todosControles = permisoDal.ObtenerTodosLosControlesProtegidos();
 
                 var controlesForm = todosControles.Where(c => c.Formulario.Equals(formulario.Name, StringComparison.OrdinalIgnoreCase)).ToList();
-                if (controlesForm.Count == 0) return;
 
+                HashSet<string> controlesActuales = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 HashSet<int> permisosUsuario = ObtenerIdsPermisosUsuario(usuario.Permisos);
 
                 foreach (var mapping in controlesForm)
                 {
+                    string key = $"{formulario.Name}.{mapping.NombreControl}";
+                    controlesActuales.Add(key);
+
                     object controlFisico = EncontrarControl(formulario, mapping.NombreControl);
                     if (controlFisico != null)
                     {
@@ -38,7 +51,36 @@ namespace Servicios
                         {
                             tsi.Visible = tieneAcceso;
                         }
+
+                        _controlesControlados.Add(key);
                     }
+                }
+
+                List<string> aRemover = new List<string>();
+                foreach (string key in _controlesControlados)
+                {
+                    if (key.StartsWith(formulario.Name + ".", StringComparison.OrdinalIgnoreCase) && !controlesActuales.Contains(key))
+                    {
+                        string ctrlName = key.Substring(formulario.Name.Length + 1);
+                        object controlFisico = EncontrarControl(formulario, ctrlName);
+                        if (controlFisico != null)
+                        {
+                            if (controlFisico is Control c)
+                            {
+                                c.Visible = true;
+                            }
+                            else if (controlFisico is ToolStripItem tsi)
+                            {
+                                tsi.Visible = true;
+                            }
+                        }
+                        aRemover.Add(key);
+                    }
+                }
+
+                foreach (string key in aRemover)
+                {
+                    _controlesControlados.Remove(key);
                 }
             }
             catch (Exception ex)

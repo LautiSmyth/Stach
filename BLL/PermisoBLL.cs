@@ -113,6 +113,30 @@ namespace BLL
                     }
                 }
 
+                Usuario logueado = _sessionManager.Usuario;
+                if (logueado != null)
+                {
+                    List<ComponentePermiso> componentesPropuestosUsuario = new List<ComponentePermiso>();
+                    foreach (var userPerm in logueado.Permisos)
+                    {
+                        var propuesto = todos.FirstOrDefault(p => p.IdPermiso == userPerm.IdPermiso);
+                        if (propuesto != null)
+                        {
+                            componentesPropuestosUsuario.Add(propuesto);
+                        }
+                        else
+                        {
+                            componentesPropuestosUsuario.Add(userPerm);
+                        }
+                    }
+
+                    List<Permiso> resolvedPropuestos = ResolverPermisos(componentesPropuestosUsuario);
+                    if (!resolvedPropuestos.Any(p => p.Nombre.Equals("Gestión de Permisos", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        throw new InvalidOperationException("No puedes modificar las relaciones de este rol porque te quitaría el permiso de Gestión de Permisos de tu propia cuenta.");
+                    }
+                }
+
                 _dal.GuardarRelaciones(rol);
                 _bitacora.Registrar(modulo, "ModificacionPermiso", $"Modificación de relaciones de la familia/rol '{rol.Nombre}'. Hijos: {rol.Hijos.Count}.", true);
             }
