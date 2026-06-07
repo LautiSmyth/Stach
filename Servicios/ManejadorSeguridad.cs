@@ -7,11 +7,11 @@ using System.Windows.Forms;
 
 namespace Servicios
 {
-    public static class ManejadorSeguridad
+    public class ManejadorSeguridad : IManejadorSeguridad
     {
-        private static readonly HashSet<string> _controlesControlados = new HashSet<string>();
+        private readonly HashSet<string> _controlesControlados = new HashSet<string>();
 
-        public static void ActualizarSeguridadFormulariosAbiertos(Usuario usuario)
+        public void ActualizarSeguridadFormulariosAbiertos(Usuario usuario)
         {
             foreach (Form form in Application.OpenForms.Cast<Form>().ToList())
             {
@@ -19,7 +19,7 @@ namespace Servicios
             }
         }
 
-        public static void AplicarSeguridad(Form formulario, Usuario usuario)
+        public void AplicarSeguridad(Form formulario, Usuario usuario)
         {
             if (formulario == null || usuario == null) return;
 
@@ -89,7 +89,7 @@ namespace Servicios
             }
         }
 
-        private static HashSet<int> ObtenerIdsPermisosUsuario(List<ComponentePermiso> componentes)
+        private HashSet<int> ObtenerIdsPermisosUsuario(List<ComponentePermiso> componentes)
         {
             HashSet<int> ids = new HashSet<int>();
             if (componentes == null) return ids;
@@ -101,7 +101,7 @@ namespace Servicios
             return ids;
         }
 
-        private static void AgregarIdsRecursivo(ComponentePermiso comp, HashSet<int> ids)
+        private void AgregarIdsRecursivo(ComponentePermiso comp, HashSet<int> ids)
         {
             if (comp == null) return;
             if (ids.Add(comp.IdPermiso))
@@ -113,7 +113,7 @@ namespace Servicios
             }
         }
 
-        private static object EncontrarControl(Form form, string name)
+        private object EncontrarControl(Form form, string name)
         {
             Control[] match = form.Controls.Find(name, true);
             if (match.Length > 0) return match[0];
@@ -130,7 +130,7 @@ namespace Servicios
             return null;
         }
 
-        private static object EncontrarEnToolStrip(ToolStrip ts, string name)
+        private object EncontrarEnToolStrip(ToolStrip ts, string name)
         {
             foreach (ToolStripItem item in ts.Items)
             {
@@ -147,7 +147,7 @@ namespace Servicios
             return null;
         }
 
-        private static object EncontrarEnItem(ToolStripDropDownItem parent, string name)
+        private object EncontrarEnItem(ToolStripDropDownItem parent, string name)
         {
             foreach (ToolStripItem item in parent.DropDownItems)
             {

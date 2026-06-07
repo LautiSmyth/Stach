@@ -1,7 +1,6 @@
 using BE;
 using BLL;
 using Abstracciones;
-using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,8 @@ namespace GUI
         private readonly PermisoBLL _permisoBll = IoCContainer.Resolver<PermisoBLL>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
+        private readonly IManejadorSeguridad _manejadorSeguridad = IoCContainer.Resolver<IManejadorSeguridad>();
+        private readonly ISessionManager _sessionManager = IoCContainer.Resolver<ISessionManager>();
         private List<ComponentePermiso> _todosPermisos;
         private ComponentePermiso _seleccionado;
         private Usuario _usuarioSeleccionado;
@@ -40,7 +41,7 @@ namespace GUI
             lstPermisosPlanas.HorizontalScrollbar = true;
 
             HabilitarPanelesSegunSeleccion();
-            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
+            _manejadorSeguridad.AplicarSeguridad(this, _sessionManager.Usuario);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -812,11 +813,11 @@ namespace GUI
 
         private void RefrescarUsuarioLogueado()
         {
-            Usuario logueado = SessionManager.GetInstance().Usuario;
+            Usuario logueado = _sessionManager.Usuario;
             if (logueado != null)
             {
                 logueado.Permisos = _permisoBll.ObtenerPermisosUsuario(logueado.IdUsuario);
-                ManejadorSeguridad.ActualizarSeguridadFormulariosAbiertos(logueado);
+                _manejadorSeguridad.ActualizarSeguridadFormulariosAbiertos(logueado);
             }
         }
 

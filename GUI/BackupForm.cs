@@ -1,6 +1,5 @@
 using BE;
 using Abstracciones;
-using Servicios;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -12,6 +11,8 @@ namespace GUI
     {
         private readonly IBackupService _backupService = IoCContainer.Resolver<IBackupService>();
         private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
+        private readonly IManejadorSeguridad _manejadorSeguridad = IoCContainer.Resolver<IManejadorSeguridad>();
+        private readonly ISessionManager _sessionManager = IoCContainer.Resolver<ISessionManager>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
 
         public BackupForm()
@@ -23,7 +24,7 @@ namespace GUI
         private void BackupForm_Load(object sender, EventArgs e)
         {
             ActualizarIdioma();
-            ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
+            _manejadorSeguridad.AplicarSeguridad(this, _sessionManager.Usuario);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)

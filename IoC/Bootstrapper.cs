@@ -21,6 +21,7 @@ namespace IoC
             IoCContainer.RegistrarSingleton<IEncriptador>(() => new Servicios.Encriptador());
             IoCContainer.RegistrarSingleton<ISessionManager>(() => Servicios.SessionManager.GetInstance());
             IoCContainer.RegistrarSingleton<IManejadorIdioma>(() => Servicios.ManejadorIdioma.Instancia);
+            IoCContainer.RegistrarSingleton<IManejadorSeguridad>(() => new Servicios.ManejadorSeguridad());
 
             IoCContainer.RegistrarSingleton<IBitacoraService>(() => new Servicios.BitacoraService(
                 IoCContainer.Resolver<IBitacoraDAL>(),

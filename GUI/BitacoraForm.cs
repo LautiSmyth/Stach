@@ -2,7 +2,6 @@ using BE;
 using BE.Enums;
 using BLL;
 using Abstracciones;
-using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,6 +15,8 @@ namespace GUI
         private readonly ICriticidadService _criticidadServicio = IoCContainer.Resolver<ICriticidadService>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
+        private readonly IManejadorSeguridad _manejadorSeguridad = IoCContainer.Resolver<IManejadorSeguridad>();
+        private readonly ISessionManager _sessionManager = IoCContainer.Resolver<ISessionManager>();
         private List<Bitacora> _listaCompleta = new List<Bitacora>();
         private readonly Timer _timerBusqueda = new Timer();
 
@@ -45,7 +46,7 @@ namespace GUI
                 SuscribirFiltros();
                 ActualizarIdioma();
                 DesactivarTabStopReadOnly(this);
-                ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
+                _manejadorSeguridad.AplicarSeguridad(this, _sessionManager.Usuario);
             }
             catch (Exception ex)
             {

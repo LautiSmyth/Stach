@@ -1,7 +1,6 @@
 using Abstracciones;
 using BE;
 using BLL;
-using Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,8 @@ namespace GUI
     public partial class IdiomaForm : Form, IObserver
     {
         private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
+        private readonly IManejadorSeguridad _manejadorSeguridad = IoCContainer.Resolver<IManejadorSeguridad>();
+        private readonly ISessionManager _sessionManager = IoCContainer.Resolver<ISessionManager>();
         private readonly UsuarioBLL _usuarioBll = IoCContainer.Resolver<UsuarioBLL>();
         private List<FilaTraduccion> _traduccionesBindeables;
         List<Idioma> idiomas = new List<Idioma>();
@@ -33,7 +34,7 @@ namespace GUI
 
                 txtNombre.MaxLength = 100;
                 txtCodigo.MaxLength = 10;
-                ManejadorSeguridad.AplicarSeguridad(this, SessionManager.GetInstance().Usuario);
+                _manejadorSeguridad.AplicarSeguridad(this, _sessionManager.Usuario);
             }
             catch (Exception ex)
             {
