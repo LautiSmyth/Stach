@@ -205,6 +205,19 @@ namespace DAL
             seed("MisPermisosForm.lblDirectos", "Roles y Permisos Asignados", "Assigned Roles & Permissions", "Perfis e Permissões Atribuídos");
             seed("MisPermisosForm.lblResueltos", "Permisos Finales (Resueltos)", "Final Permissions (Resolved)", "Permissões Finais (Resolvidas)");
             seed("MisPermisosForm.btnCerrar", "Cerrar", "Close", "Fechar");
+            seed("RestauracionWizardForm.Text", "Asistente de Restauración", "Restoration Wizard", "Assistente de Restauração");
+            seed("RestauracionWizardForm.lblTitle", "Asistente de Restauración de Base de Datos", "Database Restoration Wizard", "Assistente de Restauração de Banco de Dados");
+            seed("RestauracionWizardForm.lblFile", "Archivo de Copia de Seguridad:", "Backup File:", "Arquivo de Cópia de Segurança:");
+            seed("RestauracionWizardForm.btnBrowse", "Examinar...", "Browse...", "Examinar...");
+            seed("RestauracionWizardForm.lblPassword", "Contraseña de cifrado:", "Encryption Password:", "Senha de Criptografia:");
+            seed("RestauracionWizardForm.btnBack", "< Atrás", "< Back", "< Voltar");
+            seed("RestauracionWizardForm.btnCancel", "Cancelar", "Cancel", "Cancelar");
+            seed("RestauracionWizardForm.lblStep1Info", "Seleccione el archivo de respaldo (.stachbak) y escriba la contraseña de cifrado asociada para continuar.", "Select the backup file (.stachbak) and enter the associated encryption password to continue.", "Selecione o arquivo de backup (.stachbak) e insira a senha de criptografia associada para continuar.");
+            seed("RestauracionWizardForm.lblStep2Warning", "ADVERTENCIA DE PÉRDIDA DE INFORMACIÓN", "DATA LOSS WARNING", "AVISO DE PERDA DE DADOS");
+            seed("RestauracionWizardForm.lblStep1Indicator", "Paso 1 de 2: Selección de Archivo y Contraseña", "Step 1 of 2: File Selection & Password", "Passo 1 de 2: Seleção de Arquivo e Senha");
+            seed("RestauracionWizardForm.btnNextSiguiente", "Siguiente >", "Next >", "Avançar >");
+            seed("RestauracionWizardForm.lblStep2Indicator", "Paso 2 de 2: Análisis y Confirmación de Pérdida", "Step 2 of 2: Loss Analysis & Confirmation", "Passo 2 de 2: Análise de Perda e Confirmação");
+            seed("RestauracionWizardForm.btnNextRestaurar", "Restaurar", "Restore", "Restaurar");
         }
 
         private void AgregarSeed(string nombreComponente, string textoEs, string textoEn, string textoPt)

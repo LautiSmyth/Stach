@@ -72,5 +72,15 @@ namespace Servicios
                 }
             }
         }
+
+        public int ObtenerCantRegistrosBitacoraNuevos(DateTime fecha)
+        {
+            return _dal.ObtenerCantRegistrosBitacoraNuevos(fecha);
+        }
+
+        public int ObtenerCantRegistrosCambiosNuevos(DateTime fecha)
+        {
+            return _dal.ObtenerCantRegistrosCambiosNuevos(fecha);
+        }
     }
 }

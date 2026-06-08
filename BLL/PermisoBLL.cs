@@ -1,4 +1,5 @@
 using BE;
+using BE.Enums;
 using Abstracciones;
 using System;
 using System.Collections.Generic;
@@ -137,6 +138,9 @@ namespace BLL
                     }
                 }
 
+                
+                ValidarUltimoAdminActivo(rolModificado: rol);
+
                 _dal.GuardarRelaciones(rol);
                 _bitacora.Registrar(modulo, "ModificacionPermiso", $"Modificación de relaciones de la familia/rol '{rol.Nombre}'. Hijos: {rol.Hijos.Count}.", true);
             }
@@ -183,6 +187,9 @@ namespace BLL
                     }
                 }
 
+                
+                ValidarUltimoAdminActivo(idUsuarioAfectado: idUsuario, permisosPropuestosAfectado: permisos);
+
                 _dal.GuardarPermisosUsuario(idUsuario, permisos);
                 _bitacora.Registrar(modulo, "ModificacionPermisosUsuario", $"Asignación de permisos al usuario '{username}'.", true);
             }
@@ -224,6 +231,70 @@ namespace BLL
         public List<ControlMapeado> ObtenerTodosLosControlesProtegidos()
         {
             return _dal.ObtenerTodosLosControlesProtegidos();
+        }
+
+        private void ValidarUltimoAdminActivo(int? idUsuarioAfectado = null, List<ComponentePermiso> permisosPropuestosAfectado = null, Rol rolModificado = null)
+        {
+            var usuarioDal = IoCContainer.Resolver<IUsuarioDAL>();
+            List<Usuario> todosLosUsuarios = usuarioDal.ObtenerTodos();
+            int adminsActivosCount = 0;
+
+            foreach (Usuario u in todosLosUsuarios)
+            {
+                if (u.Estado == EstadoUsuario.Activo)
+                {
+                    
+                    List<ComponentePermiso> permsUser;
+                    if (idUsuarioAfectado.HasValue && u.IdUsuario == idUsuarioAfectado.Value)
+                    {
+                        permsUser = permisosPropuestosAfectado != null ? new List<ComponentePermiso>(permisosPropuestosAfectado) : new List<ComponentePermiso>();
+                    }
+                    else
+                    {
+                        permsUser = _dal.ObtenerPermisosUsuario(u.IdUsuario);
+                    }
+
+                    
+                    if (rolModificado != null)
+                    {
+                        ActualizarRolEnLista(permsUser, rolModificado);
+                    }
+
+                    List<Permiso> resolved = ResolverPermisos(permsUser);
+                    bool esAdmin = u.Username.Equals("admin", StringComparison.OrdinalIgnoreCase) ||
+                                   resolved.Any(p => p.Nombre.Equals("Gestión de Usuarios", StringComparison.OrdinalIgnoreCase)) ||
+                                   resolved.Any(p => p.Nombre.Equals("Gestión de Permisos", StringComparison.OrdinalIgnoreCase));
+                    if (esAdmin)
+                    {
+                        adminsActivosCount++;
+                    }
+                }
+            }
+
+            if (adminsActivosCount == 0)
+            {
+                throw new InvalidOperationException("No se permite realizar esta acción porque dejaría al sistema sin ningún administrador activo.");
+            }
+        }
+
+        private void ActualizarRolEnLista(List<ComponentePermiso> perms, Rol rolModificado)
+        {
+            if (perms == null) return;
+            for (int i = 0; i < perms.Count; i++)
+            {
+                if (perms[i].IdPermiso == rolModificado.IdPermiso)
+                {
+                    perms[i] = rolModificado;
+                }
+                else
+                {
+                    var hijos = perms[i].Hijos;
+                    if (hijos != null && hijos.Count > 0)
+                    {
+                        ActualizarRolEnLista(hijos, rolModificado);
+                    }
+                }
+            }
         }
     }
 }

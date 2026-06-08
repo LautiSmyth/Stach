@@ -1,4 +1,4 @@
-﻿using BE;
+using BE;
 using BE.Enums;
 using Abstracciones;
 using System;
@@ -185,6 +185,11 @@ namespace BLL
                     throw new ArgumentException("No puedes desactivar o bloquear tu propia cuenta.");
                 }
 
+                if (nuevoEstado != EstadoUsuario.Activo && EsUltimoAdministradorActivo(idUsuario))
+                {
+                    throw new ArgumentException("No puedes desactivar o bloquear este usuario porque es el último administrador activo en el sistema.");
+                }
+
                 string actor = ObtenerUsernameEnSesion();
                 if (string.IsNullOrEmpty(actor)) actor = "Sistema";
 
@@ -255,6 +260,11 @@ namespace BLL
         {
             Usuario usuario = _dal.ObtenerPorId(idUsuario);
             if (usuario == null) return;
+
+            if (nuevoEstado != EstadoUsuario.Activo && EsUltimoAdministradorActivo(idUsuario))
+            {
+                throw new ArgumentException("No puedes desactivar o bloquear este usuario porque es el último administrador activo en el sistema.");
+            }
 
             string actor = ObtenerUsernameEnSesion();
             if (string.IsNullOrEmpty(actor)) actor = "Sistema";
@@ -426,6 +436,30 @@ namespace BLL
             usuario.UltimoLogin = DateTime.Now;
             _dal.Actualizar(usuario);
             _dvService.InicializarDVs();
+        }
+
+        private bool EsUltimoAdministradorActivo(int idUsuario)
+        {
+            List<Usuario> todosLosUsuarios = _dal.ObtenerTodos();
+            List<Usuario> adminsActivos = new List<Usuario>();
+            PermisoBLL permisoBll = new PermisoBLL(_permisoDal);
+
+            foreach (Usuario u in todosLosUsuarios)
+            {
+                if (u.Estado == EstadoUsuario.Activo)
+                {
+                    u.Permisos = permisoBll.ObtenerPermisosUsuario(u.IdUsuario);
+                    bool esAdmin = u.Username.Equals("admin", StringComparison.OrdinalIgnoreCase) ||
+                                   permisoBll.UsuarioTienePermiso(u, "Gestión de Usuarios") ||
+                                   permisoBll.UsuarioTienePermiso(u, "Gestión de Permisos");
+                    if (esAdmin)
+                    {
+                        adminsActivos.Add(u);
+                    }
+                }
+            }
+
+            return adminsActivos.Count == 1 && adminsActivos[0].IdUsuario == idUsuario;
         }
     }
 }

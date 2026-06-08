@@ -139,5 +139,41 @@ namespace DAL
                 }
             }
         }
+
+        public int ObtenerCantRegistrosBitacoraNuevos(DateTime fecha)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConexionSQL"].ConnectionString))
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Bitacora WHERE Fecha > @Fecha", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Fecha", fecha);
+                    conn.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public int ObtenerCantRegistrosCambiosNuevos(DateTime fecha)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConexionSQL"].ConnectionString))
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM VersionUsuario WHERE FechaModificacion > @Fecha", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Fecha", fecha);
+                    conn.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }
