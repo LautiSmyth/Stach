@@ -83,7 +83,7 @@ namespace GUI
             if (nombre.StartsWith("Stach_Backup_") && nombre.Length >= 28)
             {
                 string datePart = nombre.Substring(13, 15); 
-                if (DateTime.TryParseExact(datePart, "yyyyMMdd_HHmmss", null, System.Globalization.DateTimeStyles.None, out DateTime parsed))
+                if (DateTime.TryParseExact(datePart, "yyyyMMdd_HHmmss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime parsed))
                 {
                     return parsed;
                 }
@@ -95,74 +95,83 @@ namespace GUI
         {
             if (_currentStep == 1)
             {
-                if (string.IsNullOrEmpty(_rutaArchivo))
-                {
-                    MessageBox.Show("Por favor, seleccione un archivo de backup.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                _password = txtPassword.Text;
-                if (string.IsNullOrWhiteSpace(_password))
-                {
-                    MessageBox.Show("Por favor, ingrese la contraseña de descifrado del backup.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                
-                DateTime fechaBackup = ObtenerFechaDeBackup(_rutaArchivo);
-                int logsPerdidos = 0;
-                int cambiosPerdidos = 0;
-                string fechaDetalle = "Desconocida (nombre de archivo modificado)";
-
-                if (fechaBackup != DateTime.MinValue)
-                {
-                    fechaDetalle = fechaBackup.ToString("dd/MM/yyyy HH:mm:ss");
-                    logsPerdidos = _backupService.ObtenerCantRegistrosBitacoraNuevos(fechaBackup);
-                    cambiosPerdidos = _backupService.ObtenerCantRegistrosCambiosNuevos(fechaBackup);
-                }
-
-                txtLossDetail.Clear();
-                txtLossDetail.AppendText("==============================================" + Environment.NewLine);
-                txtLossDetail.AppendText($"Fecha de copia seleccionada: {fechaDetalle}" + Environment.NewLine);
-                txtLossDetail.AppendText("==============================================" + Environment.NewLine + Environment.NewLine);
-                txtLossDetail.AppendText("La restauración de este respaldo sobrescribirá la base de datos actual." + Environment.NewLine);
-                txtLossDetail.AppendText("Se perderán permanentemente los siguientes registros locales:" + Environment.NewLine + Environment.NewLine);
-                
-                if (fechaBackup == DateTime.MinValue)
-                {
-                    txtLossDetail.AppendText("⚠️ ADVERTENCIA: No se pudo determinar la fecha del backup." + Environment.NewLine);
-                    txtLossDetail.AppendText("Se perderán TODOS los registros creados después de la fecha del respaldo." + Environment.NewLine);
-                }
-                else
-                {
-                    txtLossDetail.AppendText($"* Registros de Auditoría (Bitácora) que se perderán: {logsPerdidos}" + Environment.NewLine);
-                    txtLossDetail.AppendText($"* Cambios e Historial de Usuarios que se perderán: {cambiosPerdidos}" + Environment.NewLine + Environment.NewLine);
-                    txtLossDetail.AppendText("Verifique que posee un respaldo alternativo reciente si desea conservar estos datos.");
-                }
-
-                CargarPaso(2);
+                ProcesarPaso1();
             }
             else if (_currentStep == 2)
             {
-                string confirmMsg = "¿Está completamente seguro de continuar con la restauración? " +
-                                    "Esta acción es irreversible, sobrescribirá todos los datos actuales y reiniciará la aplicación.";
-                
-                if (MessageBox.Show(confirmMsg, "Confirmación Final de Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                ProcesarPaso2();
+            }
+        }
+
+        private void ProcesarPaso1()
+        {
+            if (string.IsNullOrEmpty(_rutaArchivo))
+            {
+                MessageBox.Show("Por favor, seleccione un archivo de backup.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            _password = txtPassword.Text;
+            if (string.IsNullOrWhiteSpace(_password))
+            {
+                MessageBox.Show("Por favor, ingrese la contraseña de descifrado del backup.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DateTime fechaBackup = ObtenerFechaDeBackup(_rutaArchivo);
+            int logsPerdidos = 0;
+            int cambiosPerdidos = 0;
+            string fechaDetalle = "Desconocida (nombre de archivo modificado)";
+
+            if (fechaBackup != DateTime.MinValue)
+            {
+                fechaDetalle = fechaBackup.ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                logsPerdidos = _backupService.ObtenerCantRegistrosBitacoraNuevos(fechaBackup);
+                cambiosPerdidos = _backupService.ObtenerCantRegistrosCambiosNuevos(fechaBackup);
+            }
+
+            txtLossDetail.Clear();
+            txtLossDetail.AppendText("==============================================" + Environment.NewLine);
+            txtLossDetail.AppendText($"Fecha de copia seleccionada: {fechaDetalle}" + Environment.NewLine);
+            txtLossDetail.AppendText("==============================================" + Environment.NewLine + Environment.NewLine);
+            txtLossDetail.AppendText("La restauración de este respaldo sobrescribirá la base de datos actual." + Environment.NewLine);
+            txtLossDetail.AppendText("Se perderán permanentemente los siguientes registros locales:" + Environment.NewLine + Environment.NewLine);
+            
+            if (fechaBackup == DateTime.MinValue)
+            {
+                txtLossDetail.AppendText("⚠️ ADVERTENCIA: No se pudo determinar la fecha del backup." + Environment.NewLine);
+                txtLossDetail.AppendText("Se perderán TODOS los registros creados después de la fecha del respaldo." + Environment.NewLine);
+            }
+            else
+            {
+                txtLossDetail.AppendText($"* Registros de Auditoría (Bitácora) que se perderán: {logsPerdidos}" + Environment.NewLine);
+                txtLossDetail.AppendText($"* Cambios e Historial de Usuarios que se perderán: {cambiosPerdidos}" + Environment.NewLine + Environment.NewLine);
+                txtLossDetail.AppendText("Verifique que posee un respaldo alternativo reciente si desea conservar estos datos.");
+            }
+
+            CargarPaso(2);
+        }
+
+        private void ProcesarPaso2()
+        {
+            string confirmMsg = "¿Está completamente seguro de continuar con la restauración? " +
+                                "Esta acción es irreversible, sobrescribirá todos los datos actuales y reiniciará la aplicación.";
+            
+            if (MessageBox.Show(confirmMsg, "Confirmación Final de Restauración", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                try
                 {
-                    try
-                    {
-                        _backupService.RestaurarBackup("RestauracionWizard", _rutaArchivo, _password);
-                        MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        RestauradoExitosamente = true;
-                        this.DialogResult = DialogResult.OK;
-                        this.Close();
-                        Application.Restart();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error al restaurar base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        CargarPaso(1);
-                    }
+                    _backupService.RestaurarBackup("RestauracionWizard", _rutaArchivo, _password);
+                    MessageBox.Show("Base de datos restaurada con éxito. La aplicación se reiniciará.", "Restauración Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RestauradoExitosamente = true;
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                    Application.Restart();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al restaurar base de datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    CargarPaso(1);
                 }
             }
         }
