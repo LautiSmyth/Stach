@@ -163,7 +163,7 @@ namespace DAL
             try
             {
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConexionSQL"].ConnectionString))
-                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM VersionUsuario WHERE FechaModificacion > @Fecha", conn))
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM HistorialUsuario WHERE Fecha > @Fecha", conn))
                 {
                     cmd.Parameters.AddWithValue("@Fecha", fecha);
                     conn.Open();
