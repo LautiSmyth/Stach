@@ -32,21 +32,9 @@ namespace GUI
 
             IDigitoVerificadorService dvServicio = IoCContainer.Resolver<IDigitoVerificadorService>();
             System.Collections.Generic.List<string> errores;
-            if (!dvServicio.VerificarIntegridad(out errores))
-            {
-                MessageBox.Show("Se ha detectado un fallo de integridad en el sistema. Se abrira el panel de restauracion.", "Fallo de Integridad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                RestauracionForm restForm = new RestauracionForm(errores);
-                Application.Run(restForm);
+            bool integridadOk = dvServicio.VerificarIntegridad(out errores);
+            Application.Run(new LoginForm(integridadOk ? null : errores));
 
-                if (restForm.RestauradoExitosamente)
-                {
-                    Application.Run(new LoginForm());
-                }
-            }
-            else
-            {
-                Application.Run(new LoginForm());
-            }
         }
 
         private static void ManejarExcepcionGlobal(Exception ex)

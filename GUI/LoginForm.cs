@@ -15,9 +15,13 @@ namespace GUI
         private readonly IConexionService _conexionService = IoCContainer.Resolver<IConexionService>();
         private readonly IManejadorIdioma _manejadorIdioma = IoCContainer.Resolver<IManejadorIdioma>();
         private bool _cargandoIdioma = false;
+        private List<string> _erroresIntegridad;
 
-        public LoginForm()
+        public LoginForm() : this(null) { }
+
+        public LoginForm(List<string> erroresIntegridad)
         {
+            _erroresIntegridad = erroresIntegridad;
             InitializeComponent();
             _manejadorIdioma.Attach(this);
             ActualizarIdioma();
@@ -61,6 +65,33 @@ namespace GUI
         private void BtnIngresar_Click(object sender, EventArgs e)
         {
             lblErrorValidacion.Text = "";
+
+            if (_erroresIntegridad != null)
+            {
+                if (string.IsNullOrWhiteSpace(txtUsername.Text) && !string.IsNullOrWhiteSpace(txtPassword.Text))
+                {
+                    try
+                    {
+                        string hashRecuperacion = System.Configuration.ConfigurationManager.AppSettings["MasterRecoveryKeyHash"];
+                        IEncriptador encriptador = IoCContainer.Resolver<IEncriptador>();
+                        if (!string.IsNullOrEmpty(hashRecuperacion) && encriptador.Verificar(txtPassword.Text, hashRecuperacion))
+                        {
+                            using (RestauracionForm restForm = new RestauracionForm(_erroresIntegridad))
+                            {
+                                restForm.ShowDialog(this);
+                                if (restForm.RestauradoExitosamente)
+                                    _erroresIntegridad = null;
+                            }
+                            return;
+                        }
+                    }
+                    catch { }
+                    lblErrorValidacion.Text = "Acceso denegado.";
+                    return;
+                }
+                lblErrorValidacion.Text = "El sistema se encuentra temporalmente fuera de servicio. Contacte al administrador.";
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(txtUsername.Text) && string.IsNullOrWhiteSpace(txtPassword.Text))
             {
