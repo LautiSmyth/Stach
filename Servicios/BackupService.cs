@@ -1,4 +1,4 @@
-using Abstracciones;
+﻿using Abstracciones;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +41,14 @@ namespace Servicios
             {
                 if (File.Exists(tempPlainPath))
                 {
-                    try { File.Delete(tempPlainPath); } catch { }
+                    try
+                    {
+                        File.Delete(tempPlainPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.TraceWarning($"[BackupService] No se pudo eliminar archivo temporal: {ex.Message}");
+                    }
                 }
             }
         }
@@ -68,7 +75,14 @@ namespace Servicios
             {
                 if (File.Exists(tempPlainPath))
                 {
-                    try { File.Delete(tempPlainPath); } catch { }
+                    try
+                    {
+                        File.Delete(tempPlainPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.TraceWarning($"[BackupService] No se pudo eliminar archivo temporal: {ex.Message}");
+                    }
                 }
             }
         }

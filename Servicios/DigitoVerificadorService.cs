@@ -1,4 +1,4 @@
-using BE;
+﻿using BE;
 using Abstracciones;
 using System.Collections.Generic;
 
@@ -17,7 +17,7 @@ namespace Servicios
             _encriptador = encriptador;
         }
 
-        public string CalcularDVH(Usuario usuario)
+        private string CalcularDVH(Usuario usuario)
         {
             long sumTotal = 0;
             sumTotal += CalcularValorAtributo(usuario.IdUsuario.ToString(), 1);
@@ -38,7 +38,7 @@ namespace Servicios
             return suma;
         }
 
-        public string CalcularDVV(List<Usuario> usuarios)
+        private string CalcularDVV(List<Usuario> usuarios)
         {
             List<Usuario> ordenados = new List<Usuario>(usuarios);
             ordenados.Sort((a, b) => a.IdUsuario.CompareTo(b.IdUsuario));
@@ -69,7 +69,7 @@ namespace Servicios
             string storedDvv = _dal.ObtenerDVV();
             Dictionary<int, string> storedDvhs = _dal.ObtenerDVHs();
 
-            if (string.IsNullOrEmpty(storedDvv) && storedDvhs.Count == 0)
+            if (string.IsNullOrEmpty(storedDvv) || storedDvhs.Count == 0)
             {
                 InicializarDVs();
                 return true;

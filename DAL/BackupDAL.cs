@@ -1,7 +1,8 @@
-using Abstracciones;
+﻿using Abstracciones;
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -23,6 +24,15 @@ namespace DAL
                 };
                 _cadenaConexionMaster = builder.ConnectionString;
             }
+        }
+
+        private string ObtenerNombreBaseDatos()
+        {
+            ConnectionStringSettings entrada = ConfigurationManager.ConnectionStrings["ConexionSQL"];
+            if (entrada == null)
+                throw new InvalidOperationException("Cadena de conexión 'ConexionSQL' no encontrada en configuración.");
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(entrada.ConnectionString);
+            return builder.InitialCatalog;
         }
 
         private static string ObtenerDirectorioBackupDefault()
@@ -57,7 +67,7 @@ namespace DAL
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Trace.TraceError(ex.Message);
+                    Trace.TraceError(ex.Message);
                 }
             }
             return dir;
@@ -67,13 +77,15 @@ namespace DAL
         {
             if (string.IsNullOrEmpty(_cadenaConexionMaster))
                 throw new InvalidOperationException("Cadena de conexión no configurada.");
+            string nombreBD = ObtenerNombreBaseDatos();
             string dirBackupDefault = ObtenerDirectorioBackupDefault();
             string nombreArchivoTemp = $"Stach_Temp_{Guid.NewGuid():N}.bak";
             string rutaTemp = Path.Combine(dirBackupDefault, nombreArchivoTemp);
             try
             {
+                string sqlBackup = $"BACKUP DATABASE [{nombreBD}] TO DISK = @Ruta WITH FORMAT, INIT, NAME = '{nombreBD}Backup';";
                 using (SqlConnection conn = new SqlConnection(_cadenaConexionMaster))
-                using (SqlCommand cmd = new SqlCommand("BACKUP DATABASE Stach TO DISK = @Ruta WITH FORMAT, INIT, NAME = 'StachBackup';", conn))
+                using (SqlCommand cmd = new SqlCommand(sqlBackup, conn))
                 {
                     cmd.Parameters.AddWithValue("@Ruta", rutaTemp);
                     cmd.CommandTimeout = 120;
@@ -96,7 +108,7 @@ namespace DAL
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Trace.TraceError(ex.Message);
+                        Trace.TraceError(ex.Message);
                     }
                 }
             }
@@ -106,15 +118,16 @@ namespace DAL
         {
             if (string.IsNullOrEmpty(_cadenaConexionMaster))
                 throw new InvalidOperationException("Cadena de conexión no configurada.");
+            string nombreBD = ObtenerNombreBaseDatos();
             string dirBackupDefault = ObtenerDirectorioBackupDefault();
             string nombreArchivoTemp = $"Stach_Restore_Temp_{Guid.NewGuid():N}.bak";
             string rutaTemp = Path.Combine(dirBackupDefault, nombreArchivoTemp);
             try
             {
                 File.Copy(rutaOrigen, rutaTemp, true);
-                const string query = "ALTER DATABASE Stach SET SINGLE_USER WITH ROLLBACK IMMEDIATE; " +
-                                     "RESTORE DATABASE Stach FROM DISK = @Ruta WITH REPLACE; " +
-                                     "ALTER DATABASE Stach SET MULTI_USER;";
+                string query = $"ALTER DATABASE [{nombreBD}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; " +
+                               $"RESTORE DATABASE [{nombreBD}] FROM DISK = @Ruta WITH REPLACE; " +
+                               $"ALTER DATABASE [{nombreBD}] SET MULTI_USER;";
                 using (SqlConnection conn = new SqlConnection(_cadenaConexionMaster))
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -134,7 +147,7 @@ namespace DAL
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Trace.TraceError(ex.Message);
+                        Trace.TraceError(ex.Message);
                     }
                 }
             }
@@ -144,7 +157,9 @@ namespace DAL
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConexionSQL"].ConnectionString))
+                string connStr = ConfigurationManager.ConnectionStrings["ConexionSQL"]?.ConnectionString
+                    ?? throw new InvalidOperationException("Cadena de conexión 'ConexionSQL' no encontrada en configuración.");
+                using (SqlConnection conn = new SqlConnection(connStr))
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Bitacora WHERE Fecha > @Fecha", conn))
                 {
                     cmd.Parameters.AddWithValue("@Fecha", fecha);
@@ -152,9 +167,10 @@ namespace DAL
                     return Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return 0;
+                Trace.TraceError($"[BackupDAL] Error al obtener cantidad de registros: {ex.Message}");
+                throw;
             }
         }
 
@@ -162,7 +178,9 @@ namespace DAL
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConexionSQL"].ConnectionString))
+                string connStr = ConfigurationManager.ConnectionStrings["ConexionSQL"]?.ConnectionString
+                    ?? throw new InvalidOperationException("Cadena de conexión 'ConexionSQL' no encontrada en configuración.");
+                using (SqlConnection conn = new SqlConnection(connStr))
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM HistorialUsuario WHERE Fecha > @Fecha", conn))
                 {
                     cmd.Parameters.AddWithValue("@Fecha", fecha);
@@ -170,9 +188,10 @@ namespace DAL
                     return Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return 0;
+                Trace.TraceError($"[BackupDAL] Error al obtener cantidad de registros: {ex.Message}");
+                throw;
             }
         }
     }

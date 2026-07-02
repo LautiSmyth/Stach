@@ -1,4 +1,4 @@
-using Abstracciones;
+﻿using Abstracciones;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -41,21 +41,18 @@ namespace DAL
                 _acceso.Escribir("UPDATE Usuario SET DVH = @DVH WHERE IdUsuario = @IdUsuario", p);
             }
 
-            SqlParameter[] pDvv = new SqlParameter[]
+            SqlParameter[] pMerge = new SqlParameter[]
             {
                 new SqlParameter("@Tabla", "Usuario"),
                 new SqlParameter("@DVV", dvv)
             };
-            int rows = _acceso.Escribir("UPDATE VerificacionVertical SET DVV = @DVV WHERE Tabla = @Tabla", pDvv);
-            if (rows == 0)
-            {
-                SqlParameter[] pIns = new SqlParameter[]
-                {
-                    new SqlParameter("@Tabla", "Usuario"),
-                    new SqlParameter("@DVV", dvv)
-                };
-                _acceso.Escribir("INSERT INTO VerificacionVertical (Tabla, DVV) VALUES (@Tabla, @DVV)", pIns);
-            }
+            _acceso.Escribir(
+                "MERGE INTO VerificacionVertical AS target " +
+                "USING (VALUES (@Tabla, @DVV)) AS source(Tabla, DVV) " +
+                "ON target.Tabla = source.Tabla " +
+                "WHEN MATCHED THEN UPDATE SET DVV = source.DVV " +
+                "WHEN NOT MATCHED THEN INSERT (Tabla, DVV) VALUES (source.Tabla, source.DVV);",
+                pMerge);
         }
     }
 }

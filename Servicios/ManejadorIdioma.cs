@@ -8,6 +8,7 @@ namespace Servicios
     public class ManejadorIdioma : IManejadorIdioma
     {
         private static ManejadorIdioma _instancia;
+        private static readonly object _instanceLock = new object();
         private readonly IIdiomaDAL _idiomaDal;
         private readonly ITraduccionDAL _traduccionDal;
         private readonly List<IObserver> _observers = new List<IObserver>();
@@ -32,9 +33,15 @@ namespace Servicios
             {
                 if (_instancia == null)
                 {
-                    IIdiomaDAL idiomaDal = IoCContainer.Resolver<IIdiomaDAL>();
-                    ITraduccionDAL traduccionDal = IoCContainer.Resolver<ITraduccionDAL>();
-                    _instancia = new ManejadorIdioma(idiomaDal, traduccionDal);
+                    lock (_instanceLock)
+                    {
+                        if (_instancia == null)
+                        {
+                            IIdiomaDAL idiomaDal = IoCContainer.Resolver<IIdiomaDAL>();
+                            ITraduccionDAL traduccionDal = IoCContainer.Resolver<ITraduccionDAL>();
+                            _instancia = new ManejadorIdioma(idiomaDal, traduccionDal);
+                        }
+                    }
                 }
                 return _instancia;
             }
@@ -85,9 +92,9 @@ namespace Servicios
                     usuarioDal.Actualizar(session.Usuario);
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
-                
+                System.Diagnostics.Trace.TraceWarning($"[ManejadorIdioma] No se pudo persistir el idioma preferido del usuario: {ex.Message}");
             }
         }
 
