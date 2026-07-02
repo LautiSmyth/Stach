@@ -1,15 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BE
 {
     public class Permiso : ComponentePermiso
     {
-        private readonly List<ComponentePermiso> _hijos = new List<ComponentePermiso>();
-
         public override List<ComponentePermiso> Hijos
         {
-            get { return _hijos; }
+            get { return new List<ComponentePermiso>(); }
         }
 
         public override void Agregar(ComponentePermiso c)

@@ -9,24 +9,29 @@ namespace DAL
 {
     public class PermisoDAL : IPermisoDAL
     {
+        private const int IdPermisoBase = 7;
+        private const int IdPermisoExtra = 8;
+        private const int IdRolAdminBase = 100;
+        private const int IdRolAdminExtra = 101;
+
         private readonly Acceso _acceso = Acceso.GetInstance();
 
         public List<ComponentePermiso> ObtenerTodos()
         {
-            DataTable dtCount = _acceso.Leer("SELECT COUNT(*) FROM Permiso WHERE IdPermiso = 7", null);
+            DataTable dtCount = _acceso.Leer($"SELECT COUNT(*) FROM Permiso WHERE IdPermiso = {IdPermisoBase}", null);
             if (Convert.ToInt32(dtCount.Rows[0][0]) == 0)
             {
-                _acceso.Escribir("SET IDENTITY_INSERT Permiso ON; INSERT INTO Permiso (IdPermiso, Nombre, EsRol) VALUES (7, N'Ver Bitácora de Todos', 0); SET IDENTITY_INSERT Permiso OFF;", null);
-                _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 7);", null);
-                _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (101, 7);", null);
+                _acceso.Escribir($"SET IDENTITY_INSERT Permiso ON; INSERT INTO Permiso (IdPermiso, Nombre, EsRol, EsSistema) VALUES ({IdPermisoBase}, N'Ver Bitácora de Todos', 0, 1); SET IDENTITY_INSERT Permiso OFF;", null);
+                _acceso.Escribir($"INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES ({IdRolAdminBase}, {IdPermisoBase});", null);
+                _acceso.Escribir($"INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES ({IdRolAdminExtra}, {IdPermisoBase});", null);
             }
-            DataTable dtCount8 = _acceso.Leer("SELECT COUNT(*) FROM Permiso WHERE IdPermiso = 8", null);
+            DataTable dtCount8 = _acceso.Leer($"SELECT COUNT(*) FROM Permiso WHERE IdPermiso = {IdPermisoExtra}", null);
             if (Convert.ToInt32(dtCount8.Rows[0][0]) == 0)
             {
-                _acceso.Escribir("SET IDENTITY_INSERT Permiso ON; INSERT INTO Permiso (IdPermiso, Nombre, EsRol) VALUES (8, N'Gestión de Backups', 0); SET IDENTITY_INSERT Permiso OFF;", null);
-                _acceso.Escribir("INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES (100, 8);", null);
+                _acceso.Escribir($"SET IDENTITY_INSERT Permiso ON; INSERT INTO Permiso (IdPermiso, Nombre, EsRol, EsSistema) VALUES ({IdPermisoExtra}, N'Gestión de Backups', 0, 1); SET IDENTITY_INSERT Permiso OFF;", null);
+                _acceso.Escribir($"INSERT INTO PermisoRelacion (IdPadre, IdHijo) VALUES ({IdRolAdminBase}, {IdPermisoExtra});", null);
             }
-            DataTable dt = _acceso.Leer("SELECT IdPermiso, Nombre, EsRol FROM Permiso", null);
+            DataTable dt = _acceso.Leer("SELECT IdPermiso, Nombre, EsRol, EsSistema FROM Permiso", null);
             Dictionary<int, ComponentePermiso> nodes = new Dictionary<int, ComponentePermiso>();
 
             foreach (DataRow r in dt.Rows)
@@ -37,11 +42,13 @@ namespace DAL
 
                 if (esRol)
                 {
-                    nodes[id] = new Rol { IdPermiso = id, Nombre = nombre };
+                    bool esSistema = r["EsSistema"] != DBNull.Value && Convert.ToBoolean(r["EsSistema"]);
+                    nodes[id] = new Rol { IdPermiso = id, Nombre = nombre, EsSistema = esSistema };
                 }
                 else
                 {
-                    nodes[id] = new Permiso { IdPermiso = id, Nombre = nombre };
+                    bool esSistema = r["EsSistema"] != DBNull.Value && Convert.ToBoolean(r["EsSistema"]);
+                    nodes[id] = new Permiso { IdPermiso = id, Nombre = nombre, EsSistema = esSistema };
                 }
             }
 

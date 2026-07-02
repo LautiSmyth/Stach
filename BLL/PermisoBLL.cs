@@ -45,54 +45,62 @@ namespace BLL
 
         public void CrearPermiso(string modulo, string nombre)
         {
+            if (_bitacora == null) throw new InvalidOperationException("Esta instancia de PermisoBLL no tiene servicio de bitacora configurado. Use el constructor completo.");
             try
             {
                 Permiso p = new Permiso { Nombre = nombre };
                 Insertar(p);
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de permiso '{nombre}'.", true);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, string.Format("Creacion de permiso '{0}'.", nombre), true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear permiso '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, string.Format("Error al crear permiso '{0}'.", nombre), false, ex.Message);
                 throw;
             }
         }
 
         public void CrearRol(string modulo, string nombre)
         {
+            if (_bitacora == null) throw new InvalidOperationException("Esta instancia de PermisoBLL no tiene servicio de bitacora configurado. Use el constructor completo.");
             try
             {
                 Rol r = new Rol { Nombre = nombre };
                 Insertar(r);
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Creación de rol '{nombre}'.", true);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, string.Format("Creacion de rol '{0}'.", nombre), true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, AltaPermisoActividad, $"Error al crear rol '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, AltaPermisoActividad, string.Format("Error al crear rol '{0}'.", nombre), false, ex.Message);
                 throw;
             }
         }
 
         public void EliminarPermiso(string modulo, int idPermiso, string nombre)
         {
+            if (_bitacora == null) throw new InvalidOperationException("Esta instancia de PermisoBLL no tiene servicio de bitacora configurado. Use el constructor completo.");
             try
             {
+                var todos = _dal.ObtenerTodos();
+                var target = todos.FirstOrDefault(p => p.IdPermiso == idPermiso);
+                if (target != null && target.EsSistema)
+                    throw new InvalidOperationException($"El permiso '{target.Nombre}' es un permiso de sistema y no puede ser eliminado.");
                 if (_dal.EstaEnUso(idPermiso))
                 {
-                    throw new InvalidOperationException("No se puede eliminar el permiso/rol porque está asignado a un usuario o forma parte de otro rol.");
+                    throw new InvalidOperationException("No se puede eliminar el permiso/rol porque esta asignado a un usuario o forma parte de otro rol.");
                 }
                 _dal.Eliminar(idPermiso);
-                _bitacora.Registrar(modulo, "BajaPermiso", $"Eliminación de permiso/rol '{nombre}'.", true);
+                _bitacora.Registrar(modulo, "BajaPermiso", string.Format("Eliminacion de permiso/rol '{0}'.", nombre), true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, "BajaPermiso", $"Error al eliminar permiso/rol '{nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, "BajaPermiso", string.Format("Error al eliminar permiso/rol '{0}'.", nombre), false, ex.Message);
                 throw;
             }
         }
 
         public void GuardarRelaciones(string modulo, Rol rol)
         {
+            if (_bitacora == null) throw new InvalidOperationException("Esta instancia de PermisoBLL no tiene servicio de bitacora configurado. Use el constructor completo.");
             try
             {
                 List<ComponentePermiso> todos = _dal.ObtenerTodos();
@@ -132,21 +140,20 @@ namespace BLL
                     }
 
                     List<Permiso> resolvedPropuestos = ResolverPermisos(componentesPropuestosUsuario);
-                    if (!resolvedPropuestos.Any(p => p.Nombre.Equals("Gestión de Permisos", StringComparison.OrdinalIgnoreCase)))
+                    if (!resolvedPropuestos.Any(p => p.Nombre.Equals(PermisosNombres.GestionPermisos, StringComparison.OrdinalIgnoreCase)))
                     {
-                        throw new InvalidOperationException("No puedes modificar las relaciones de este rol porque te quitaría el permiso de Gestión de Permisos de tu propia cuenta.");
+                        throw new InvalidOperationException("No puedes modificar las relaciones de este rol porque te quitaria el permiso de Gestion de Permisos de tu propia cuenta.");
                     }
                 }
 
-                
                 ValidarUltimoAdminActivo(rolModificado: rol);
 
                 _dal.GuardarRelaciones(rol);
-                _bitacora.Registrar(modulo, "ModificacionPermiso", $"Modificación de relaciones de la familia/rol '{rol.Nombre}'. Hijos: {rol.Hijos.Count}.", true);
+                _bitacora.Registrar(modulo, "ModificacionPermiso", string.Format("Modificacion de relaciones de la familia/rol '{0}'. Hijos: {1}.", rol.Nombre, rol.Hijos.Count), true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, "ModificacionPermiso", $"Error al modificar relaciones de la familia/rol '{rol.Nombre}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, "ModificacionPermiso", string.Format("Error al modificar relaciones de la familia/rol '{0}'.", rol.Nombre), false, ex.Message);
                 throw;
             }
         }
@@ -175,27 +182,27 @@ namespace BLL
 
         public void GuardarPermisosUsuario(string modulo, int idUsuario, string username, List<ComponentePermiso> permisos)
         {
+            if (_bitacora == null) throw new InvalidOperationException("Esta instancia de PermisoBLL no tiene servicio de bitacora configurado. Use el constructor completo.");
             try
             {
                 Usuario logueado = _sessionManager.Usuario;
                 if (logueado != null && logueado.IdUsuario == idUsuario)
                 {
                     List<Permiso> resolved = ResolverPermisos(permisos);
-                    if (!resolved.Any(p => p.Nombre.Equals("Gestión de Permisos", StringComparison.OrdinalIgnoreCase)))
+                    if (!resolved.Any(p => p.Nombre.Equals(PermisosNombres.GestionPermisos, StringComparison.OrdinalIgnoreCase)))
                     {
-                        throw new ArgumentException("No puedes remover el permiso de Gestión de Permisos de tu propia cuenta.");
+                        throw new ArgumentException("No puedes remover el permiso de Gestion de Permisos de tu propia cuenta.");
                     }
                 }
 
-                
                 ValidarUltimoAdminActivo(idUsuarioAfectado: idUsuario, permisosPropuestosAfectado: permisos);
 
                 _dal.GuardarPermisosUsuario(idUsuario, permisos);
-                _bitacora.Registrar(modulo, "ModificacionPermisosUsuario", $"Asignación de permisos al usuario '{username}'.", true);
+                _bitacora.Registrar(modulo, "ModificacionPermisosUsuario", string.Format("Asignacion de permisos al usuario '{0}'.", username), true);
             }
             catch (Exception ex)
             {
-                _bitacora.Registrar(modulo, "ModificacionPermisosUsuario", $"Error al asignar permisos al usuario '{username}'.", false, ex.Message);
+                _bitacora.Registrar(modulo, "ModificacionPermisosUsuario", string.Format("Error al asignar permisos al usuario '{0}'.", username), false, ex.Message);
                 throw;
             }
         }
@@ -243,7 +250,6 @@ namespace BLL
             {
                 if (u.Estado == EstadoUsuario.Activo)
                 {
-                    
                     List<ComponentePermiso> permsUser;
                     if (idUsuarioAfectado.HasValue && u.IdUsuario == idUsuarioAfectado.Value)
                     {
@@ -254,7 +260,6 @@ namespace BLL
                         permsUser = _dal.ObtenerPermisosUsuario(u.IdUsuario);
                     }
 
-                    
                     if (rolModificado != null)
                     {
                         ActualizarRolEnLista(permsUser, rolModificado);
@@ -262,8 +267,8 @@ namespace BLL
 
                     List<Permiso> resolved = ResolverPermisos(permsUser);
                     bool esAdmin = u.Username.Equals("admin", StringComparison.OrdinalIgnoreCase) ||
-                                   resolved.Any(p => p.Nombre.Equals("Gestión de Usuarios", StringComparison.OrdinalIgnoreCase)) ||
-                                   resolved.Any(p => p.Nombre.Equals("Gestión de Permisos", StringComparison.OrdinalIgnoreCase));
+                                   resolved.Any(p => p.Nombre.Equals(PermisosNombres.GestionUsuarios, StringComparison.OrdinalIgnoreCase)) ||
+                                   resolved.Any(p => p.Nombre.Equals(PermisosNombres.GestionPermisos, StringComparison.OrdinalIgnoreCase));
                     if (esAdmin)
                     {
                         adminsActivosCount++;
@@ -273,7 +278,7 @@ namespace BLL
 
             if (adminsActivosCount == 0)
             {
-                throw new InvalidOperationException("No se permite realizar esta acción porque dejaría al sistema sin ningún administrador activo.");
+                throw new InvalidOperationException("No se permite realizar esta accion porque dejaria al sistema sin ningun administrador activo.");
             }
         }
 

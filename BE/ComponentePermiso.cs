@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BE
 {
@@ -6,6 +6,7 @@ namespace BE
     {
         public int IdPermiso { get; set; }
         public string Nombre { get; set; }
+        public bool EsSistema { get; set; }
         public abstract List<ComponentePermiso> Hijos { get; }
 
         public abstract void Agregar(ComponentePermiso c);

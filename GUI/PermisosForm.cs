@@ -144,6 +144,9 @@ namespace GUI
             cboFormularios.Visible = esPermiso;
 
             tblCol2Transfer.Enabled = esRol || esPermiso;
+
+            bool esProtegido = esPermiso && _seleccionado is Permiso pSel && pSel.EsSistema;
+            btnEliminarPermiso.Enabled = !esProtegido;
         }
 
         private void CargarListasRelacion()
@@ -254,6 +257,12 @@ namespace GUI
             if (_seleccionado == null)
             {
                 MessageBox.Show("Seleccione un permiso a eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (_seleccionado is Permiso perm && perm.EsSistema)
+            {
+                MessageBox.Show("Este permiso es de sistema y no puede eliminarse.", "Operación no permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
